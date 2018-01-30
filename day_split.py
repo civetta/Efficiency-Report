@@ -4,7 +4,7 @@ from openpyxl import load_workbook
 #To Do - Do Not Paste Rows were there are 0,0,0,0,0,0 create start day switch. When turned on, copy everything.
 def find_days(wb):
 
-    search_day=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+    search_day=["Mon","Tue","Wed","Thu","Fri","Sat","Sun",""]
     ws = wb.get_sheet_by_name("Raw Changes")
     max_row=ws.max_row
     max_column=ws.max_column

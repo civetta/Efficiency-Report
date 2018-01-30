@@ -17,10 +17,14 @@ for x in range(len(Lead_Names)-1):
     end=Lead_Names[x+1]
     wb = call_function(start,end)
     print "Archived Sheet Completed"
-    wb=make_sheet()
+
+
+    wb=make_sheet(wb)
     print "Difference Sheet Completed"
-    print "Saved"
+
+
     wb=find_days(wb)
+    
     print "Days of Week Sheets Completed"
     wb=define_blocks(wb)
     print "Blocks Bolded and Conditional Formatted"
@@ -31,7 +35,7 @@ for x in range(len(Lead_Names)-1):
     find_row(wb)
     print "Final Summary Page Completed"
     print "Program Completed"
-    wb.save(Lead_Names[x][0:3]+'.xlsx')
+    wb.save(Lead_Names[x][0:5]+'.xlsx')
 
     
 

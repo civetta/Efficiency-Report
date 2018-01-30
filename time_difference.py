@@ -29,8 +29,7 @@ def find_difference(old,new):
             new.cell(row=row,column=col,value=difference)
 
             
-def make_sheet():
-    wb = openpyxl.load_workbook(filename='LeadBook.xlsx')
+def make_sheet(wb):
     old = wb.get_sheet_by_name("Raw Pulls")
     new = wb.create_sheet('Raw Changes')
     first_two_columns(old,new)

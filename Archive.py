@@ -28,9 +28,9 @@ def creat_worksheets(wb):
     return ws
 
 #Saves the workbook    
-def workbook_save(wb,ws):
+"""def workbook_save(wb,ws):
         test_save_name = os.path.join('C:\\Users\\kheyden\\Documents\\Program\\2017\\WeeklySummary\\', 'Leadbook' + '.xlsx')
-        wb.save(test_save_name)
+        wb.save(test_save_name)"""
 #########################################################################################
 
         
@@ -55,7 +55,7 @@ def copy_in_excel(wsheet,wb,ws,ranger,n):
             row = row+1
         col = col+1
         n=1
-    workbook_save(wb,ws)
+    #workbook_save(wb,ws)
 
 
 def find_team_range(wsheet,start,end):
@@ -74,11 +74,11 @@ def call_function(start,end):
     wsheet = authorize()
     wb=create_workbooks()
     ws=creat_worksheets(wb)
-    workbook_save(wb,ws)
+    #workbook_save(wb,ws)
     ranger=find_team_range(wsheet,start,end)
     copy_in_excel(wsheet,wb,ws,[0,2],0)
     copy_in_excel(wsheet,wb,ws,ranger,1)
-    workbook_save(wb,ws)
+    #workbook_save(wb,ws)
     #wsheet_clean_up(wsheet)
     return wb
 
