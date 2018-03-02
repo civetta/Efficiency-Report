@@ -13,8 +13,13 @@ import re
 """Starting in row 2, it creates an array for the column"""
 def create_list(ws,col):
     column_list=[]
-    for i in range (3,ws.max_row+1):
-        column_list.append(int(ws.cell(row=i,column=col).value))
+    for i in range (1,ws.max_row+1):
+        valv=ws.cell(row=i,column=col).value
+        try:
+            valv=int(valv)
+            column_list.append(valv)
+        except:
+            continue
     return column_list
 
 
@@ -22,7 +27,7 @@ def create_list(ws,col):
 """Finds the numbers of chunks and about where they are, then uses trim, to define them exactly"""
 def find_teacher_chunks(lister):
     o_lister=str(lister)
-    lister=o_lister.replace('0, 0, 0, 0','-')
+    lister=o_lister.replace('0, 0, 0','-')
     list_of_blocks =re.split('-,', lister)
     final_array=[]
     for i in list_of_blocks:
@@ -54,7 +59,7 @@ def chunk_location(lister,o_lister,ws,col):
 
         for i in range(len(o_lister)):
             if o_lister[i:i+len(sub_list)] == sub_list and len(sub_list)>2 and sum(sub_list)>2:
-                bolder(ws,(i+3),(i+3+len(sub_list)),col)
+                bolder(ws,(i+2),(i+2+len(sub_list)),col)
 
 """This function takes the list of strings"""        
 def integer_list(lister):
@@ -92,15 +97,17 @@ def bolder(ws,start_index,end_index,column):
 def define_blocks(wb):
     week=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
     for day in week:
-        ws = wb.get_sheet_by_name(day)
-        counter = ws.max_column
-        i=3
-        while i <= counter:
-            lister=create_list(ws,i)
-            new_list=find_teacher_chunks(lister)
-            chunk_location(new_list,lister,ws,i)
-            i=i+1
+        try:
+            ws = wb.get_sheet_by_name(day)
+            counter = ws.max_column+1
+            i=3
+            while i <= counter:
+                lister=create_list(ws,i)
+                new_list=find_teacher_chunks(lister)
+                chunk_location(new_list,lister,ws,i)
+                i=i+1
+        except:
+            continue
     return wb
-
 
 

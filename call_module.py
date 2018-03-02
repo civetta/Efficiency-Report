@@ -9,10 +9,13 @@ from break_down import create_summary
 from weekly_summary import find_row
 from time_difference import make_sheet
 from Archive import call_function
+from formatter import formatter
 
 Lead_Names=["Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",'']
-
+#
 for x in range(len(Lead_Names)-1):
+    print "------------------------------------------------------------"
+    print Lead_Names[x]
     start=Lead_Names[x]
     end=Lead_Names[x+1]
     wb = call_function(start,end)
@@ -35,7 +38,15 @@ for x in range(len(Lead_Names)-1):
     find_row(wb)
     print "Final Summary Page Completed"
     print "Program Completed"
-    wb.save(Lead_Names[x][0:5]+'.xlsx')
+    std=wb.get_sheet_by_name('Sheet')
+    wb.remove_sheet(std)
+    formatter(wb)
+    raw_sheet = wb.get_sheet_by_name("Raw Changes")
+    first_date=str(raw_sheet.cell(row=2,column=1).value)
+    date=first_date[:first_date.index(" ")]
+    date=date.replace("/","-")
+    wb.save(Lead_Names[x]+"_"+date+".xlsx")
+    print "\n"
 
     
 
