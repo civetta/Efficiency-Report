@@ -13,4 +13,7 @@ auth_url = client.auth_provider.get_auth_url(redirect_uri)
 #this will block until we have the code
 code = GetAuthCodeServer.get_auth_code(auth_url, redirect_uri)
 
+
+
+
 client.auth_provider.authenticate(code, redirect_uri, client_secret)
