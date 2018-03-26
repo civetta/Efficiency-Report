@@ -14,7 +14,7 @@ def create_books(max_col,wb):
         info=current_teacher.create_sheet('FAQ')
         teacher_sheet=current_teacher.create_sheet('Data')
         summary=current_teacher.create_sheet('Weekly Summary')
-        copy_summary(summary,max_col,teacher_col,wb)
+        find_summary(summary,max_col,teacher_col,wb)
         img = Image('faq.png')
         info.add_image(img,'A1' )
         std=current_teacher.get_sheet_by_name('Sheet')
@@ -29,10 +29,26 @@ def create_books(max_col,wb):
     return current_teacher
 
 
-def copy_summary(summary,max_col,teacher_col,wb):
+def find_summary(summary,max_col,teacher_col,wb):
+    summary_row_count=1
     for i in range(4,(len((wb.get_sheet_names())))):
             ws = wb.worksheets[i]
-    print ws.cell(row=1,column=teacher_col).value
+            teacher_name=ws.cell(row=1,column=teacher_col).value
+            for row in range(1,100):
+                try:
+                    if teacher_name in ws.cell(row=row,column=max_col+2).value:
+                        summary_row_count=copy_summary(row,max_col+2,ws,summary,summary_row_count)
+                except:
+                    pass
+
+
+def copy_summary(row,col,ws,summary,summary_row_count):
+    for column in range(col,col+4):
+        for r in range (row,row+8):
+            print ws.cell(row=r,column=col).value
+    return summary_row_count
+    
+                    
 
 
 def copy_columns(teacher_sheet,ws,new_col,teacher_col):
@@ -40,7 +56,7 @@ def copy_columns(teacher_sheet,ws,new_col,teacher_col):
     num=0
     sub_count=0
     grayFill=PatternFill("solid", fgColor="efefef")
-    for row in range(2,ws.max_row):
+    for row in range(2,75):
         try:
             num=int(ws.cell(row=row,column=teacher_col).value)
         except:

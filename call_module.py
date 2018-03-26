@@ -54,10 +54,10 @@ for x in range(len(Lead_Names)-1):
         os.makedirs(folder_location)
     final_save_name = os.path.join(folder_location,Lead_Names[x]+"_"+date+".xlsx")
     wb.save(final_save_name)
+    wb.save("THEWORKBOOK.xlsx")
     
     teacher=create_books(max_col,wb)
     teacher.save(final_save_name)
-    teacher.save("Test.xlsx")
 
     
 
