@@ -13,8 +13,8 @@ from Archive import call_function
 from formatter import formatter
 from teacher_books import create_books
 
-Lead_Names=["Caren Glowa",'']
-#"Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly",
+Lead_Names=["Jeremy Shock","Melissa Mitchell"]
+#"Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",''
 for x in range(len(Lead_Names)-1):
     print "------------------------------------------------------------"
     print Lead_Names[x]
@@ -47,12 +47,12 @@ for x in range(len(Lead_Names)-1):
     first_date=str(raw_sheet.cell(row=2,column=1).value)
     date=first_date[:first_date.index(" ")]
     date=date.replace("/","-")
-    folder_name = date+"--EReport"
+    folder_name = date+"-6min--EReport"
     folder_location = os.path.join('C:\Users\kheyden\Documents\Program\2017\WeeklySummary', folder_name)
     #folder_location = os.path.join('C:\Users\kheyden\OneDrive - Imagine Learning\Efficiency Report', folder_name)
     if not os.path.exists(folder_location):
         os.makedirs(folder_location)
-    final_save_name = os.path.join(folder_location,Lead_Names[x]+"_"+date+".xlsx")
+    final_save_name = os.path.join(folder_location,Lead_Names[x]+"_6min_"+date+".xlsx")
     wb.save(final_save_name)
     wb.save("THEWORKBOOK.xlsx")
     
