@@ -13,51 +13,60 @@ from Archive import call_function
 from formatter import formatter
 from teacher_books import create_books
 
-Lead_Names=["Jeremy Shock","Melissa Mitchell"]
+
+
+def create_dir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    else:
+        pass
+
+
+
+def clean_up(wb):
+    raw_sheet = wb.get_sheet_by_name("Raw Changes")
+    first_date=str(raw_sheet.cell(row=2,column=1).value)
+    date=first_date[:first_date.index(" ")]
+    date=date.replace("/","-")
+
+def save_files(wb,Lead_Name):
+    date=get_date(wb)
+    folder_location = os.path.join('C:\Users\kheyden\OneDrive - Imagine Learning\Reports\Efficiency Reports',Lead_Name)
+    create_dir(folder_location)
+    lead_book_location=os.path.join(folder_location,"TEAM E-REPORTS")
+    create_dir(lead_book_location)
+    final_save_name = os.path.join(lead_book_location,Lead_Name+"_"+date+"-LEADBOOK.xlsx")
+    wb.save(final_save_name)
+    create_books(max_col,wb,folder_location,date)
+    
+
+def get_date(wb):
+    raw_sheet = wb.get_sheet_by_name("Raw Changes")
+    first_date=str(raw_sheet.cell(row=2,column=1).value)
+    date=first_date[:first_date.index(" ")]
+    date=date.replace("/","-")
+    return date
+
+
+Lead_Names=["Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",'']
 #"Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",''
 for x in range(len(Lead_Names)-1):
     print "------------------------------------------------------------"
     print Lead_Names[x]
     start=Lead_Names[x]
     end=Lead_Names[x+1]
+    current_lead=Lead_Names[x]
+    if current_lead=="Salome Saenz":
+        current_lead="Jill Szafranski"
     wb = call_function(start,end)
-    print "Archived Sheet Completed"
-
-
     wb=make_sheet(wb)
-    print "Difference Sheet Completed"
-
-
     wb=find_days(wb)
-    
-    print "Days of Week Sheets Completed"
     wb=define_blocks(wb)
-    print "Blocks Bolded and Conditional Formatted"
     max_col=create_block_table(wb,start)
-    print "Blocks Calculated"
     create_summary(wb,max_col)
-    print "Summary Breakdown Completed"
     find_row(wb)
-    print "Final Summary Page Completed"
-    print "Program Completed"
     std=wb.get_sheet_by_name('Sheet')
     wb.remove_sheet(std)
     formatter(wb)
-    raw_sheet = wb.get_sheet_by_name("Raw Changes")
-    first_date=str(raw_sheet.cell(row=2,column=1).value)
-    date=first_date[:first_date.index(" ")]
-    date=date.replace("/","-")
-    folder_name = date+"-6min--EReport"
-    folder_location = os.path.join('C:\Users\kheyden\Documents\Program\2017\WeeklySummary', folder_name)
-    #folder_location = os.path.join('C:\Users\kheyden\OneDrive - Imagine Learning\Efficiency Report', folder_name)
-    if not os.path.exists(folder_location):
-        os.makedirs(folder_location)
-    final_save_name = os.path.join(folder_location,Lead_Names[x]+"_6min_"+date+".xlsx")
-    wb.save(final_save_name)
-    wb.save("THEWORKBOOK.xlsx")
-    
-    teacher=create_books(max_col,wb)
-    teacher.save(final_save_name)
-
-    
-
+    clean_up(wb)
+    folder_location=save_files(wb,current_lead)

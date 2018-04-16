@@ -40,13 +40,31 @@ def find_blocks(ws,day):
                     block_tables(col,max_col,time_block,tab_block,cell_block,block_count,ws,teacher_name,day)
                     time_block, tab_block, cell_block = [], [], []
                     block_on=False
-            row=row+1  
+            row=row+1
+        sum_tables(col,max_col,time_block,tab_block,cell_block,block_count,ws,teacher_name,day)  
         col=col+1
                   
 
+def sum_tables(col,max_col,time_block,tab_block,cell_block,block_count,ws,teacher_name,day):
+    col=col-2
+    s_row=(col*9)-7
+    ws.cell(row=s_row+block_count+1,column=max_col+2, value="Day Average")
+    ws.cell(row=s_row+block_count+2,column=max_col+2, value="Night Average")
+    day_list=[]
+    night_list=[]
+    for block in range(1,block_count+1):
+        if ws.cell(row=s_row+block,column=max_col+5).fill==PatternFill("solid", fgColor="c6c0ed"):
+            night_list.append(ws.cell(row=s_row+block,column=max_col+5).value)
+        else:
+            day_list.append(ws.cell(row=s_row+block,column=max_col+5).value)
+    if len(day_list)>0:
+        ws.cell(row=s_row+block_count+1,column=max_col+5,value = round(sum(day_list)/len(day_list),2))
+    if len(night_list)>0:
+        ws.cell(row=s_row+block_count+2,column=max_col+5,value = round(sum(night_list)/len(night_list),2))
+    
 def create_tables(teacher_name,col,max_column,ws,day):
     col=col-2
-    s_row=(col*8)-7
+    s_row=(col*9)-7
     ws.cell(row=s_row,column=max_column+2, value = teacher_name)
     ws.cell(row=s_row,column=max_column+3, value = "Average Students")
     ws.cell(row=s_row,column=max_column+4, value ="Average Tabby")
@@ -55,32 +73,19 @@ def create_tables(teacher_name,col,max_column,ws,day):
     ws.cell(row=15,column=max_column+7+col, value=teacher_name).fill=PatternFill("solid", fgColor="c6c0ed")
 
 def create_summary_tables(ws,max_column,day):
-
-    
     ws.cell(row=2,column=max_column+7, value ="Name").fill=PatternFill("solid", fgColor="f7d28a")
     ws.cell(row=3,column=max_column+7, value =str(day)+" Day Average").fill=PatternFill("solid", fgColor="f7d28a")
-    ws.cell(row=4,column=max_column+7, value ="Block 1").fill=PatternFill("solid", fgColor="f7d28a")
-    ws.cell(row=5,column=max_column+7, value ="Block 2").fill=PatternFill("solid", fgColor="f7d28a")
-    ws.cell(row=6,column=max_column+7, value ="Block 3").fill=PatternFill("solid", fgColor="f7d28a")
-    ws.cell(row=7,column=max_column+7, value ="Block 4").fill=PatternFill("solid", fgColor="f7d28a")
-    ws.cell(row=8,column=max_column+7, value ="Block 5").fill=PatternFill("solid", fgColor="f7d28a")
-    ws.cell(row=9,column=max_column+7, value ="Block 6").fill=PatternFill("solid", fgColor="f7d28a")
-
-    
+    for count in range(1,7):
+        ws.cell(row=3+count,column=max_column+7, value ="Block "+str(count)).fill=PatternFill("solid", fgColor="f7d28a")
     ws.cell(row=15,column=max_column+7, value ="Name").fill=PatternFill("solid", fgColor="c6c0ed")
     ws.cell(row=16,column=max_column+7, value =str(day)+" Night Average").fill=PatternFill("solid", fgColor="c6c0ed")
-    ws.cell(row=17,column=max_column+7, value ="Block 1").fill=PatternFill("solid", fgColor="c6c0ed")
-    ws.cell(row=18,column=max_column+7, value ="Block 2").fill=PatternFill("solid", fgColor="c6c0ed")
-    ws.cell(row=19,column=max_column+7, value ="Block 3").fill=PatternFill("solid", fgColor="c6c0ed")
-    ws.cell(row=20,column=max_column+7, value ="Block 4").fill=PatternFill("solid", fgColor="c6c0ed")
-    ws.cell(row=21,column=max_column+7, value ="Block 5").fill=PatternFill("solid", fgColor="c6c0ed")
-    ws.cell(row=22,column=max_column+7, value ="Block 6").fill=PatternFill("solid", fgColor="c6c0ed")
-
+    for count in range(1,7):
+        ws.cell(row=16+count,column=max_column+7, value ="Block "+str(count)).fill=PatternFill("solid", fgColor="c6c0ed")
     
-
+#Create Daily Tables that shows time stamps
 def block_tables(col,max_column,time_block,tab_block,cell_block,block_count,ws,teacher_name,day):
     col=col-2
-    s_row=(col*8)-7
+    s_row=(col*9)-7
     ws.cell(row=s_row+block_count,column=max_column+2, value =time_block[0]+" - "+time_block[-1])
     
     ws.cell(row=s_row+block_count,column=max_column+3, value =round(np.average(cell_block),2))
@@ -99,6 +104,7 @@ def block_tables(col,max_column,time_block,tab_block,cell_block,block_count,ws,t
             if hr>=8 and hr<12 and m=="PM" or day=="Sat" or day =="Sun":
                 ws.cell(row=s_row+block_count,column=max_column+4).fill=PatternFill("solid", fgColor="c6c0ed")
                 ws.cell(row=s_row+block_count,column=max_column+5).fill=PatternFill("solid", fgColor="c6c0ed")
+                ws.cell(row=s_row+block_count,column=max_column+3).fill=PatternFill("solid", fgColor="c6c0ed")
                 ws.cell(row=s_row+block_count,column=max_column+2).fill=PatternFill("solid", fgColor="c6c0ed")
                 ws.cell(row=block_count+16,column=max_column+7+col,value =round(round(np.average(cell_block),2)/round(np.average(tab_block),2),2))
                 check=True
