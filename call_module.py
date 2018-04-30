@@ -35,7 +35,7 @@ def save_files(wb,Lead_Name):
     create_dir(folder_location)
     lead_book_location=os.path.join(folder_location,"TEAM E-REPORTS")
     create_dir(lead_book_location)
-    final_save_name = os.path.join(lead_book_location,Lead_Name+"_"+date+"-LEADBOOK.xlsx")
+    final_save_name = os.path.join(lead_book_location,Lead_Name+"_"+date+"-TEAMWIDE.xlsx")
     wb.save(final_save_name)
     create_books(max_col,wb,folder_location,date)
     
@@ -48,7 +48,7 @@ def get_date(wb):
     return date
 
 
-Lead_Names=["Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",'']
+Lead_Names=["Jeremy Shock",'']
 #"Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",''
 for x in range(len(Lead_Names)-1):
     print "------------------------------------------------------------"

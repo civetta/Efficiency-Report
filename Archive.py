@@ -11,7 +11,7 @@ def authorize():
     credentials = ServiceAccountCredentials.from_json_keyfile_name('C:\\Users\\kheyden\\Documents\\Program\\archivekey.json', scope)
     gs = gspread.authorize(credentials)
     gsheet = gs.open("Test")
-    wsheet = gsheet.worksheet("tenths2")
+    wsheet = gsheet.worksheet("apr23")
     return wsheet
 
 

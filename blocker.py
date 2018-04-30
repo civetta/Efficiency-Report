@@ -27,7 +27,7 @@ def create_list(ws,col):
 """Finds the numbers of chunks and about where they are, then uses trim, to define them exactly"""
 def find_teacher_chunks(lister):
     o_lister=str(lister)
-    lister=o_lister.replace('0, 0, 0','-')
+    lister=o_lister.replace('0, 0','-')
     list_of_blocks =re.split('-,', lister)
     final_array=[]
     for i in list_of_blocks:
