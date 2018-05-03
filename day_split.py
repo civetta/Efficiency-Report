@@ -2,9 +2,8 @@ import openpyxl
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
-#To Do - Do Not Paste Rows were there are 0,0,0,0,0,0 create start day switch. When turned on, copy everything.
-def find_days(wb):
 
+def split_sheet_by_days(wb):
     search_day=["Mon","Tue","Wed","Thu","Fri","Sat","Sun","None","None2"]
     ws = wb.get_sheet_by_name("Raw Changes")
     max_row=ws.max_row
@@ -44,15 +43,11 @@ def find_days(wb):
                 date_cell=date_cell.strip()
                 make_sheets(wb,ws,max_column,date_cell)
                 rower=1
-
-                
             a=a+1
-    wb.save("progress.xlsx")
     try:
         clean_up(wb)
     except:
         pass
-        
     return wb
 
 

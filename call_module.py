@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 import numpy as np
 import re
 import os
-from day_split import find_days
+from day_split import split_sheet_by_days
 from blocker import define_blocks
 from efficency_calculator import create_block_table
 from break_down import create_summary
@@ -61,7 +61,7 @@ for x in range(len(Lead_Names)-1):
     name_of_gsheet="apr23"
     wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
     wb=make_time_difference_sheet(wb)
-    wb=find_days(wb)
+    wb=split_sheet_by_days(wb)
     wb=define_blocks(wb)
     max_col=create_block_table(wb,start_of_team)
     create_summary(wb,max_col)
