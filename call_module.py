@@ -8,7 +8,7 @@ from blocker import define_blocks
 from efficency_calculator import create_block_table
 from break_down import create_summary
 from weekly_summary import find_row
-from time_difference import make_sheet
+from time_difference import make_time_difference_sheet
 from Archive import archive_to_excel
 from formatter import formatter
 from teacher_books import create_books
@@ -60,7 +60,7 @@ for x in range(len(Lead_Names)-1):
         current_lead="Jill Szafranski"
     name_of_gsheet="apr23"
     wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
-    wb=make_sheet(wb)
+    wb=make_time_difference_sheet(wb)
     wb=find_days(wb)
     wb=define_blocks(wb)
     max_col=create_block_table(wb,start_of_team)
