@@ -1,0 +1,138 @@
+<html>
+    <head></head>
+    <body>
+        <title>Efficiency Report</title>
+        <h1> Efficiency Report Generator</h1>
+        <form>
+           
+            <fieldset>
+                <legend>Select Dates</legend>
+            Start Date:
+            <input id="date" type="date">
+                <br>End Date:
+            <input id="date" type="date"><br>
+            </fieldset>
+        
+        
+        
+            <fieldset>
+            <legend>Select Teams or a Teacher</legend>
+            <div style="float:left;">
+            <input type="checkbox" name="Jill" value="Jill"> Jill<br>
+            <input type="checkbox" name="Caren" value="Caren"> Caren<br>
+            <input type="checkbox" name="Kristin" value="Kristin"> Kristin<br>
+            <input type="checkbox" name="Jairo" value="Jairo"> Jairo<br>
+            <input type="checkbox" name="Jeremy" value="Jeremy"> Jeremy<br>
+            <input type="checkbox" name="Rachel" value="Rachel"> Rachel<br>
+            <input type="checkbox" name="Rachel" value="Rachel"> All Day Time Teachers<br>
+            <input type="checkbox" name="Rachel" value="Rachel"> All Night Time Teachers<br>
+            <input type="checkbox" name="Department" value="Department"> All Teachers
+    </div>
+
+          
+          <div style="float:left; padding-left: 50px;">
+Hold ALT to select Multiple Teachers <br>
+<select name="Teachers" multiple=true size=15>
+    <option value="volvo">Select a Specific Teacher</option> 
+    <option value="volvo">Jeremy Shock</option> 
+    <option value="volvo">Jennifer Gilmore</option> 
+    <option value="volvo">Kay Plinta-Howard</option> 
+    <option value="volvo">Crystal Boris</option> 
+    <option value="volvo">Melissa Mitchell</option> 
+    <option value="volvo">Cassie Ulisse</option> 
+    <option value="volvo">Laura Gardiner</option> 
+    <option value="volvo">Michelle Amigh</option> 
+    <option value="volvo">Kimberly Stanek</option> 
+    <option value="volvo">Rachel Adams</option> 
+    <option value="volvo">Michele Irwin</option> 
+    <option value="volvo">Jamie Weston</option> 
+    <option value="volvo">Heather Chilleo</option> 
+    <option value="volvo">Hester Southerland</option> 
+    <option value="volvo">James Hare</option> 
+    <option value="volvo">Jairo Rios</option> 
+    <option value="volvo">Juventino Mireles</option> 
+    <option value="volvo">Stacy Good</option> 
+    <option value="volvo">Veronica Alvarez</option> 
+    <option value="volvo">Nancy Polhemus</option> 
+    <option value="volvo">John Burket</option> 
+    <option value="volvo">Melissa Cox</option> 
+    <option value="volvo">Kimberly Fedyna</option> 
+    <option value="volvo">Kelly-Anne Heyden</option> 
+    <option value="volvo">Salome Saenz</option> 
+    <option value="volvo">Alisa Lynch</option> 
+    <option value="volvo">Gabriela Torres</option> 
+    <option value="volvo">Wendy Bowser</option> 
+    <option value="volvo">Nicole Marsula</option> 
+    <option value="volvo">Donita Spencer</option> 
+    <option value="volvo">Andrea Burkholder</option> 
+    <option value="volvo">Laura Craig</option> 
+    <option value="volvo">Bill Hubert</option> 
+    <option value="volvo">Erin Hrncir</option> 
+    <option value="volvo">Kristin Donnelly</option> 
+    <option value="volvo">Angel Miller</option> 
+    <option value="volvo">Marcella Parks</option> 
+    <option value="volvo">Sara Watkins</option> 
+    <option value="volvo">Shannon Stout</option> 
+    <option value="volvo">Lisa Duran</option> 
+    <option value="volvo">Erica Basilone</option> 
+    <option value="volvo">Carol Kish</option> 
+    <option value="volvo">Jennifer Talaski</option> 
+    <option value="volvo">Nicole Knisely</option> 
+    <option value="volvo">Caren Glowa</option> 
+    <option value="volvo">Johana Miller</option> 
+    <option value="volvo">Audrey Rogers</option> 
+    <option value="volvo">Cheri Shively</option> 
+    <option value="volvo">Amy Stayduhar</option> 
+    <option value="volvo">Dominique Huffman</option> 
+    <option value="volvo">Meaghan Wright</option> 
+    <option value="volvo">Kathryn Montano</option> 
+    <option value="volvo">Lynae Shepph</option> 
+    </select>
+    </div>
+</fieldset>
+    <br>
+    <br><br><br>
+    <input type="submit" value="Download Excel Sheet">
+        </form>
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <script>
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+        </script>
+    </body>
+</html>
