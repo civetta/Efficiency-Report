@@ -48,7 +48,7 @@ def get_date(wb):
     return date
 
 
-Lead_Names=["Salome Saenz","Kristin Donnelly"]
+Lead_Names=["Jeremy Shock","Rachel Adams"]
 #"Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",''
 for x in range(len(Lead_Names)-1):
     print "------------------------------------------------------------"
