@@ -31,11 +31,11 @@ def clean_up(wb):
 
 def save_files(wb,Lead_Name):
     date=get_date(wb)
-    folder_location = os.path.join('C:\Users\kheyden\OneDrive - Imagine Learning\Reports\Efficiency Reports',"TEST")
+    folder_location = os.path.join('C:\Users\kheyden\OneDrive - Imagine Learning\Reports\Efficiency Reports')
     create_dir(folder_location)
     lead_book_location=os.path.join(folder_location,"TEAM E-REPORTS")
     create_dir(lead_book_location)
-    final_save_name = os.path.join(lead_book_location,Lead_Name+"_"+date+"-LEADBOOK.xlsx")
+    final_save_name = os.path.join(lead_book_location,date+"-TEAMWIDE.xlsx")
     wb.save(final_save_name)
     #create_books(max_col,wb,folder_location,date)
     
@@ -48,7 +48,7 @@ def get_date(wb):
     return date
 
 
-Lead_Names=["Salome Saenz","Kristin Donnelly"]
+Lead_Names=["Jeremy Shock",'']
 #"Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",''
 for x in range(len(Lead_Names)-1):
     print "------------------------------------------------------------"
@@ -58,7 +58,7 @@ for x in range(len(Lead_Names)-1):
     current_lead=Lead_Names[x]
     if current_lead=="Salome Saenz":
         current_lead="Jill Szafranski"
-    name_of_gsheet="apr23"
+    name_of_gsheet="03/26"
     wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
     wb=make_time_difference_sheet(wb)
     wb=split_sheet_by_days(wb)
