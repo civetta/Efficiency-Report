@@ -56,6 +56,7 @@ def chunk_location(lister,o_lister,ws,col):
     indexes=[]
     for sub_list in lister:
         sub_list=integer_list(sub_list)
+        print sub_list
 
         for i in range(len(o_lister)):
             if o_lister[i:i+len(sub_list)] == sub_list and len(sub_list)>2 and sum(sub_list)>2:
@@ -73,6 +74,8 @@ def integer_list(lister):
 """This function goes through and bolds and conditionally formatts each of the blocks. The bolding will be used later to identify a block and for calculating"""    
 def bolder(ws,start_index,end_index,column):
         for r in range(start_index,end_index):
+            print start_index
+            print end_index
             Tabby_Cell= ws.cell(row =r,  column  =2).value
             Tabby_Cell=int(Tabby_Cell)
             current_cell=ws.cell(row =r,  column  =column)
@@ -95,7 +98,9 @@ def bolder(ws,start_index,end_index,column):
 
 
 def define_blocks(wb):
-    week=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+    week=wb.get_sheet_names()
+    week=week[3:]
+    print week
     for day in week:
         try:
             ws = wb.get_sheet_by_name(day)

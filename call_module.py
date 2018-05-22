@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 import numpy as np
 import re
 import os
-from day_split import split_sheet_by_days
+from daysplit2 import split_sheet_by_days
 from blocker import define_blocks
 from efficency_calculator import create_block_table
 from break_down import create_summary
@@ -48,7 +48,7 @@ def get_date(wb):
     return date
 
 
-Lead_Names=["Jeremy Shock",'']
+Lead_Names=["Jeremy Shock","Rachel Adams"]
 #"Jeremy Shock","Rachel Adams","Jairo  Rios","Salome Saenz","Kristin Donnelly","Caren Glowa",''
 for x in range(len(Lead_Names)-1):
     print "------------------------------------------------------------"
@@ -63,11 +63,12 @@ for x in range(len(Lead_Names)-1):
     wb=make_time_difference_sheet(wb)
     wb=split_sheet_by_days(wb)
     wb=define_blocks(wb)
-    max_col=create_block_table(wb,start_of_team)
-    create_summary(wb,max_col)
-    find_row(wb)
-    std=wb.get_sheet_by_name('Sheet')
-    wb.remove_sheet(std)
-    formatter(wb)
-    clean_up(wb)
-    folder_location=save_files(wb,current_lead)
+    print "Test"
+    #max_col=create_block_table(wb,start_of_team)
+    #create_summary(wb,max_col)
+    #find_row(wb)
+    #std=wb.get_sheet_by_name('Sheet')
+    #wb.remove_sheet(std)
+    #formatter(wb)
+    #clean_up(wb)
+    #folder_location=save_files(wb,current_lead)
