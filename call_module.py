@@ -63,7 +63,6 @@ for x in range(len(Lead_Names)-1):
     wb=make_time_difference_sheet(wb)
     wb=split_sheet_by_days(wb)
     wb=define_blocks(wb)
-    print "Test"
     #max_col=create_block_table(wb,start_of_team)
     #create_summary(wb,max_col)
     #find_row(wb)
