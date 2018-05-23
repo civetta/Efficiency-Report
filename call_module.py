@@ -53,6 +53,7 @@ Lead_Names=["Jeremy Shock","Rachel Adams"]
 for x in range(len(Lead_Names)-1):
     print "------------------------------------------------------------"
     print Lead_Names[x]
+    """
     start_of_team=Lead_Names[x]
     end_of_team=Lead_Names[x+1]
     current_lead=Lead_Names[x]
@@ -60,7 +61,8 @@ for x in range(len(Lead_Names)-1):
         current_lead="Jill Szafranski"
     name_of_gsheet="03/26"
     wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
-    wb=make_time_difference_sheet(wb)
+    wb=make_time_difference_sheet(wb)"""
+    wb = load_workbook(filename = 'PartTimeTest.xlsx')
     wb=split_sheet_by_days(wb)
     wb=define_blocks(wb)
     #max_col=create_block_table(wb,start_of_team)

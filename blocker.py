@@ -108,7 +108,7 @@ def define_blocks(wb):
         ws = wb.get_sheet_by_name(day)
         max_col=ws.max_column
         create_summary_tables(ws,max_col)
-        counter = ws.max_column+1
+        counter = max_col
         i=3
         while i <= counter:
             lister=create_list(ws,i)
