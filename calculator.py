@@ -26,28 +26,27 @@ def create_time_range(start,end):
     timeEnd = datetime.strptime(timeEnd, "%I:%M%p")
     timeStart = datetime.strptime(timeStart, "%I:%M%p")
     for item in lister:
-        item=item[item.index(" ")+1:]
-        date=item[:item.index(" ")]
-        item=item[item.index(" ")+1:]
-        string_time=datetime.strptime(item,'%I:%M %p')
-        time_range=time_range+item+" - "
-
+        hour=item[13:]
+        date=item[9:12]
+        string_time=datetime.strptime(hour,'%I:%M %p')
         if date =='Sat' or date=='Sun':
-            time_range=time_range+'*'
-        if timeStart>=string_time or string_time<=timeEnd:
-            time_range=time_range+'*'
+            hour=hour+'*'
+        if timeStart<=string_time or string_time>=timeEnd:
+            hour=hour+'*'
+        time_range=time_range+hour+" - "
         
         
     
-    return time_range[:-3]
+    return time_range[:-1]
 
 """Paste the organized data under the daily summary tables"""        
 def paste_data(ws,paste_list,teacher_name,column,start_col):
     if teacher_name != "":
         table_row=find_table(ws,teacher_name,start_col)
         empty_row=find_empty_row(ws,table_row,start_col)
-        for count in range(len(paste_list)):
-            ws.cell(row = empty_row,column=start_col+count).value=paste_list[count]
+        if empty_row != None:
+            for count in range(len(paste_list)):
+                ws.cell(row = empty_row,column=start_col+count).value=paste_list[count]
 
 """Finds the location of the teacher's summary table in the column"""
 def find_table(ws,teacher_name,start_col):
