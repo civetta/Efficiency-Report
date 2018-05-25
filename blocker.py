@@ -113,6 +113,7 @@ def define_blocks(wb):
         create_team_daily_table(ws,max_col,'Night',10,"c6c0ed")
         counter = max_col
         i=3
+        wb.save('Test2.xlsx')
         while i <= counter:
             lister=create_list(ws,i)
             new_list=find_teacher_chunks(lister)

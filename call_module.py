@@ -53,14 +53,16 @@ Lead_Names=["Caren Glowa",'']
 for x in range(len(Lead_Names)-1):
     print "------------------------------------------------------------"
     print Lead_Names[x]
-    start_of_team=Lead_Names[x]
-    end_of_team=Lead_Names[x+1]
-    current_lead=Lead_Names[x]
-    if current_lead=="Salome Saenz":
-        current_lead="Jill Szafranski"
-    name_of_gsheet="Test3"
-    wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
+    #start_of_team=Lead_Names[x]
+    #end_of_team=Lead_Names[x+1]
+    #current_lead=Lead_Names[x]
+    #if current_lead=="Salome Saenz":
+    #    current_lead="Jill Szafranski"
+    #name_of_gsheet="Test3"
+    #wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
+    wb = load_workbook(filename = 'TestSource.xlsx')
     wb=make_time_difference_sheet(wb)
+    
     wb=split_sheet_by_days(wb)
     wb=define_blocks(wb)
     #max_col=create_block_table(wb,start_of_team)
