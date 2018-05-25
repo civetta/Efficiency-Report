@@ -16,8 +16,13 @@ def organize_data(ws,start,end,column,block,tab_list,max_col):
     start_col=max_col+2
     paste_data(ws,paste_list,teacher_name,column,start_col)
 
-"""Creates a time range from the date cell. So it reads 2PM-4PM instead of Tuesday, May 21, 2PM-Tuesaday May 21, 4PM
-This also puts a * at the end of the time range if it's considered a "night time" teacher. Used for future functions."""
+"""
+Input: Two string of time. Example: 03/21/18 Thu 8:27 AM and 03/21/18 Thu 9:48 AM.
+Output: A string with just the hours (example: 8:27 AM - 9:48 AM").
+Times is marked with an asteriks if one of the times is after 8 AM but before 1AM.
+Or if the day of the week is Saturday or Sunday
+These mark the cells so that they are calculated differently then the "day time" teachers.
+"""
 def create_time_range(start,end):
     lister=[start,end]
     time_range=""
@@ -31,13 +36,10 @@ def create_time_range(start,end):
         string_time=datetime.strptime(hour,'%I:%M %p')
         if date =='Sat' or date=='Sun':
             hour=hour+'*'
-        if timeStart<=string_time or string_time>=timeEnd:
+        if timeStart<=string_time or string_time<=timeEnd:
             hour=hour+'*'
         time_range=time_range+hour+" - "
-        
-        
-    
-    return time_range[:-1]
+    return time_range[:-2]
 
 """Paste the organized data under the daily summary tables"""        
 def paste_data(ws,paste_list,teacher_name,column,start_col):
