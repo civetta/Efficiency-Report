@@ -6,6 +6,7 @@ from openpyxl.styles import Fill
 from openpyxl.styles import PatternFill
 from calculator import organize_data
 from calculator import create_summary_tables
+from calculator import create_team_daily_table
 import numpy as np
 import re
 
@@ -108,6 +109,8 @@ def define_blocks(wb):
         ws = wb.get_sheet_by_name(day)
         max_col=ws.max_column
         create_summary_tables(ws,max_col)
+        create_team_daily_table(ws,max_col,'Day',1,"f7d28a")
+        create_team_daily_table(ws,max_col,'Night',10,"c6c0ed")
         counter = max_col
         i=3
         while i <= counter:

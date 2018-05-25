@@ -1,6 +1,8 @@
 import openpyxl
 import numpy as np
 from datetime import datetime
+from openpyxl.styles import Fill
+from openpyxl.styles import PatternFill
 
 
 """Declares all of the variables needed to create and organize the efficiency table"""
@@ -26,20 +28,16 @@ These mark the cells so that they are calculated differently then the "day time"
 def create_time_range(start,end):
     lister=[start,end]
     time_range=""
-    timeStart = '8:00PM'
-    timeEnd = '1:00AM'
-    timeEnd = datetime.strptime(timeEnd, "%I:%M%p")
-    timeStart = datetime.strptime(timeStart, "%I:%M%p")
+    night_shift_indicator_start = datetime.strptime('8:00PM', "%I:%M%p")
+    night_shift_indicator_end = datetime.strptime('2:00AM', "%I:%M%p")
     for item in lister:
         hour=item[13:]
         date=item[9:12]
         string_time=datetime.strptime(hour,'%I:%M %p')
-        if date =='Sat' or date=='Sun':
-            hour=hour+'*'
-        if timeStart<=string_time or string_time<=timeEnd:
+        if date =='Sat' or date=='Sun' or night_shift_indicator_start <= string_time or string_time<=night_shift_indicator_end:
             hour=hour+'*'
         time_range=time_range+hour+" - "
-    return time_range[:-2]
+    return time_range[:-3]
 
 """Paste the organized data under the daily summary tables"""        
 def paste_data(ws,paste_list,teacher_name,column,start_col):
@@ -50,19 +48,19 @@ def paste_data(ws,paste_list,teacher_name,column,start_col):
             for count in range(len(paste_list)):
                 ws.cell(row = empty_row,column=start_col+count).value=paste_list[count]
 
-"""Finds the location of the teacher's summary table in the column"""
+"""Finds the location of the teacher's daily summary table in the column"""
 def find_table(ws,teacher_name,start_col):
     for col in range(1,start_col):
         if ws.cell(row=1,column=col).value ==teacher_name:
             return col*8-20
         
-"""Finds the first empty row in the teacher's summary table so it can paste the new data in it"""
+"""Finds the first empty row in the teacher's daily summary table so it can paste the new data in it"""
 def find_empty_row(ws,table_row,start_col):
     for row in range(table_row,ws.max_row):
         if ws.cell(row=row,column=start_col).value==None:
             return row
         
-"""Creates Summary Tables for each teacher to the right of the data"""        
+"""Creates Daily Summary Tables for each teacher to the right of the data"""        
 def create_summary_tables(ws,max_col):
     for col in range(3,max_col+1):
         teacher_name=ws.cell(row=1,column=col).value
@@ -72,6 +70,15 @@ def create_summary_tables(ws,max_col):
         ws.cell(row=col*8-20+1,column=max_col+4).value="Average Tabby"
         ws.cell(row=col*8-20+1,column=max_col+5).value="Effciency Score"
     
+"""Creates the Team Wide Summary Table. Is called twice. Once to create a "Day Time" table and another to create the "night time" table"""  
+def create_team_daily_table(ws,max_col,shift,start_row,hex_code):
+    DayName=ws.cell(row=5,column=1).value[9:12]
+    ws.cell(row=1+start_row,column=max_col+8,value=DayName+" "+shift+" Summary").fill=PatternFill("solid", fgColor=hex_code)
+    ws.cell(row=2+start_row,column=max_col+8,value="Teacher Name").fill=PatternFill("solid", fgColor=hex_code)
+    ws.cell(row=3+start_row,column=max_col+8,value=DayName+" Daily Average").fill=PatternFill("solid", fgColor=hex_code)
+    for col in range(3,max_col+1):
+        teacher_name=ws.cell(row=1,column=col).value
+        ws.cell(row=2+start_row,column=max_col+col+6,value=teacher_name).fill=PatternFill("solid", fgColor=hex_code)
     
     
     

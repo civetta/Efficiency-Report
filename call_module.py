@@ -58,7 +58,7 @@ for x in range(len(Lead_Names)-1):
     current_lead=Lead_Names[x]
     if current_lead=="Salome Saenz":
         current_lead="Jill Szafranski"
-    name_of_gsheet="03/26"
+    name_of_gsheet="test"
     wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
     wb=make_time_difference_sheet(wb)
     wb = load_workbook(filename = 'PartTimeTest.xlsx')
