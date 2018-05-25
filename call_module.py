@@ -58,10 +58,9 @@ for x in range(len(Lead_Names)-1):
     current_lead=Lead_Names[x]
     if current_lead=="Salome Saenz":
         current_lead="Jill Szafranski"
-    name_of_gsheet="test"
+    name_of_gsheet="Test3"
     wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
     wb=make_time_difference_sheet(wb)
-    wb = load_workbook(filename = 'PartTimeTest.xlsx')
     wb=split_sheet_by_days(wb)
     wb=define_blocks(wb)
     #max_col=create_block_table(wb,start_of_team)

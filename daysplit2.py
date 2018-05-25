@@ -15,6 +15,10 @@ def split_sheet_by_days(wb):
         if end_of_day_row==None:
             break
         current_day=find_current_day(raw_changes_ws,current_row)
+        print current_day
+        print "Start Row "+str(current_row)
+        print "End Row "+str(end_of_day_row)
+        print "\n"
         make_sheets(wb,current_row,end_of_day_row,raw_changes_ws,max_column,current_day)
     return wb
 
