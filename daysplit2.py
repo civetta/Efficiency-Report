@@ -85,5 +85,4 @@ def make_sheets(wb,current_row,end_of_day_row,raw_changes_ws,max_column,day):
         for row in range(current_row,end_of_day_row):
             current_sheet.cell(row=rower,column=column,value=raw_changes_ws.cell(row=row,column=column).value)
             rower=rower+1
-    wb.save('Test2.xlsx')
     return current_sheet

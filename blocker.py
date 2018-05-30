@@ -113,13 +113,12 @@ def define_blocks(wb):
         create_team_daily_table(ws,max_col,'Night',10,"c6c0ed")
         counter = max_col
         i=3
-        wb.save('Test2.xlsx')
         while i <= counter:
             lister=create_list(ws,i)
             new_list=find_teacher_chunks(lister)
             chunk_location(new_list,lister,ws,i,max_col)
             i=i+1
-    wb.save('Test2.xlsx')
+    
     return wb
 
 
