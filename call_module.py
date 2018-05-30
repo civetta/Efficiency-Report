@@ -1,3 +1,4 @@
+
 import openpyxl
 from openpyxl import load_workbook
 import numpy as np
@@ -61,10 +62,12 @@ for x in range(len(Lead_Names)-1):
     #name_of_gsheet="Test3"
     #wb = archive_to_excel(start_of_team,end_of_team,name_of_gsheet)
     wb = load_workbook(filename = 'TestSource.xlsx')
+    print "Start Time Difference"
     wb=make_time_difference_sheet(wb)
-    
+    print "Difference Done"
     wb=split_sheet_by_days(wb)
-    wb=define_blocks(wb)
+    print "Split Done"
+    #wb=define_blocks(wb)
     #max_col=create_block_table(wb,start_of_team)
     #create_summary(wb,max_col)
     #find_row(wb)
@@ -73,3 +76,9 @@ for x in range(len(Lead_Names)-1):
     #formatter(wb)
     #clean_up(wb)
     #folder_location=save_files(wb,current_lead)
+wb = load_workbook(filename = 'TestSource.xlsx')
+    print "Start Time Difference"
+    wb=make_time_difference_sheet(wb)
+    print "Difference Done"
+    wb=split_sheet_by_days(wb)
+    print "Split Done"
