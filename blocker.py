@@ -1,7 +1,7 @@
-import openpyxl
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
 from calculator import organize_data
+from calculator import daily_average
 from create_tables import create_summary_tables
 from create_tables import create_team_daily_table
 import re
@@ -39,9 +39,9 @@ def find_teacher_chunks(lister):
 
 def trim(lister):
     """Removes trailing and begining zeros from the chunks"""
-    start = re.search('[1-9]',lister).start()
+    start = re.search('[1-9]', lister).start()
     lister = lister[start:]
-    lil_list = re.findall('[1-9]',lister)
+    lil_list = re.findall('[1-9]', lister)
     lister = lister[:lister.rfind(lil_list[-1])+1]
     return lister
 
@@ -95,27 +95,29 @@ def bolder(ws, start_index, end_index, column, block, max_col):
             current_cell.font = Font(bold=True)
         else:
                 continue
-        organize_data(ws,start_index,end_index,column,block,tab_list,max_col)
-
+    organize_data(ws, start_index, end_index, column, block, tab_list, max_col)
 
 
 def define_blocks(wb):
-    week=wb.get_sheet_names()
-    week=week[3:]
+    week = wb.get_sheet_names()
+    week = week[3:]
     for day in week:
         ws = wb.get_sheet_by_name(day)
-        max_row=ws.max_row
-        max_col=ws.max_column
-        create_summary_tables(ws,max_col)
-        create_team_daily_table(ws,max_col,'Day',1,"f7d28a")
-        create_team_daily_table(ws,max_col,'Night',10,"c6c0ed")
+        max_row = ws.max_row
+        max_col = ws.max_column
+        create_summary_tables(ws, max_col)
+        create_team_daily_table(ws, max_col, 'Day', 1, "f7d28a")
+        create_team_daily_table(ws, max_col, 'Night', 10, "c6c0ed")
         counter = max_col
-        i=3
+        i = 3
         while i <= counter:
-            lister=create_list(ws,i,max_row)
-            new_list=find_teacher_chunks(lister)
-            chunk_location(new_list,lister,ws,i,max_col)
-            i=i+1
+            lister = create_list(ws, i, max_row)
+            new_list = find_teacher_chunks(lister)
+            chunk_location(new_list, lister, ws, i,max_col)
+            i = i+1
+        for teacher in range(3,max_col):
+            teacher_name = ws.cell(row=1, column=teacher).value
+            daily_average(teacher_name, max_col, ws)
     return wb
 
 

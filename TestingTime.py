@@ -9,12 +9,13 @@ These mark the cells so that they are calculated differently then the "day time"
 def create_time_range(start,end):
     lister=[start,end]
     time_range=""
-    night_shift_indicator_start = datetime.strptime('8:00PM', "%I:%M%p")
-    night_shift_indicator_end = datetime.strptime('2:00AM', "%I:%M%p")
+    night_shift_indicator_start = datetime.strptime('8:00PM', "%I:%M%p").time()
+    night_shift_indicator_end = datetime.strptime('2:00AM', "%I:%M%p").time()
+    print night_shift_indicator_start
     for item in lister:
         hour=item[13:]
         date=item[9:12]
-        string_time=datetime.strptime(hour,'%I:%M %p')
+        string_time=datetime.strptime(hour,'%I:%M %p').time()
         if date =='Sat' or date=='Sun' or night_shift_indicator_start <= string_time or string_time<=night_shift_indicator_end:
             hour=hour+'*'
         time_range=time_range+hour+" - "
