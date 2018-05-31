@@ -3,9 +3,8 @@ from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
 
-
-def split_sheet_by_days(wb,skip_days):
-    """Find start of day, and end of day, and then copies everything in 
+def split_sheet_by_days(wb, skip_days):
+    """Find start of day, and end of day, and then copies everything in
     between into a new sheet. If end of day returns none, it breaks"""
     raw_changes_ws = wb.get_sheet_by_name("Raw Changes")
     max_row = raw_changes_ws.max_row
@@ -13,19 +12,19 @@ def split_sheet_by_days(wb,skip_days):
     end_of_day_row = 0
     while True:
         current_row = end_of_day_row+1
-        if current_row>max_row:
+        current_time_cell = raw_changes_ws.cell(row=current_row, column=1).value
+        if current_row > max_row:
             break
-        if skip_days in raw_changes_ws.cell(row=current_row,column=1).value:
-            current_row=find_next_day(raw_changes_ws,current_row,max_row)
+        if any(skip in current_time_cell for skip in skip_days):
+            current_row = find_next_day(raw_changes_ws, current_row, max_row)
         current_row = find_start(raw_changes_ws, current_row, max_column, max_row)
         end_of_day_row = find_end(raw_changes_ws, current_row, max_column, max_row)
         if current_row == end_of_day_row:
             pass
-        if end_of_day_row==None:
-            end_of_day_row=max_row
-        print raw_changes_ws.cell(row=end_of_day_row,column=1).value
-        current_day=find_current_day(raw_changes_ws,current_row)
-        make_sheets(wb,current_row,end_of_day_row,raw_changes_ws,max_column,current_day)
+        if end_of_day_row == None:
+            end_of_day_row = max_row
+        current_day = find_current_day(raw_changes_ws, current_row)
+        make_sheets(wb, current_row, end_of_day_row, raw_changes_ws, max_column, current_day)
     return wb
 
 

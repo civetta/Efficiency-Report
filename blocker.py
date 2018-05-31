@@ -1,7 +1,7 @@
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
 from calculator import organize_data
-from calculator import daily_average
+from calculator import daily_array
 from create_tables import create_summary_tables
 from create_tables import create_team_daily_table
 import re
@@ -105,9 +105,6 @@ def define_blocks(wb):
         ws = wb.get_sheet_by_name(day)
         max_row = ws.max_row
         max_col = ws.max_column
-        create_summary_tables(ws, max_col)
-        create_team_daily_table(ws, max_col, 'Day', 1, "f7d28a")
-        create_team_daily_table(ws, max_col, 'Night', 10, "c6c0ed")
         counter = max_col
         i = 3
         while i <= counter:
@@ -115,9 +112,6 @@ def define_blocks(wb):
             new_list = find_teacher_chunks(lister)
             chunk_location(new_list, lister, ws, i,max_col)
             i = i+1
-        for teacher in range(3,max_col):
-            teacher_name = ws.cell(row=1, column=teacher).value
-            daily_average(teacher_name, max_col, ws)
     return wb
 
 

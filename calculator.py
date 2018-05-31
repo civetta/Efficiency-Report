@@ -79,7 +79,8 @@ def find_empty_row(ws, table_row, start_col):
             return row
         
 
-def daily_average(teacher_name, max_col, ws):
+def daily_array(teacher_name, max_col, ws):
+    """Creates an Array of each blocks Efficiency Scores"""
     table_column = max_col+2
     table_row_start = find_table(ws, teacher_name, table_column)
     day_array = []
@@ -91,8 +92,5 @@ def daily_average(teacher_name, max_col, ws):
             night_array.append(float(ws.cell(row=i, column=table_column+3).value))
         else:
             day_array.append(float(ws.cell(row=i, column=table_column+3).value))
-    if len(day_array) > 1:
-        daily_day_average = (sum(day_array)/len(day_array))
-    else:
-        daily_day_average=day
+    
 
