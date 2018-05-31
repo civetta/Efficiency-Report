@@ -10,6 +10,7 @@ def call_create_tables(wb):
         create_summary_tables(ws, max_col)
         create_team_daily_table(ws, max_col, 'Day', 1, "f7d28a")
         create_team_daily_table(ws, max_col, 'Night', 10, "c6c0ed")
+    return max_col
 
 
 def create_summary_tables(ws, max_col):

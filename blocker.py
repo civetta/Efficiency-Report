@@ -97,14 +97,13 @@ def bolder(ws, start_index, end_index, column, block, max_col):
                 continue
     organize_data(ws, start_index, end_index, column, block, tab_list, max_col)
 
-
-def define_blocks(wb):
+def define_blocks(wb,max_col):
+    """Calls the above functions in correct order"""
     week = wb.get_sheet_names()
     week = week[3:]
     for day in week:
         ws = wb.get_sheet_by_name(day)
         max_row = ws.max_row
-        max_col = ws.max_column
         counter = max_col
         i = 3
         while i <= counter:
