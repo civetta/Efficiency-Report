@@ -71,11 +71,11 @@ def find_table(ws, teacher_name, start_col):
             return col*8-20
 
 
-def find_empty_row(ws, table_row, start_col):
+def find_empty_row(ws, starting_row, column):
     """Finds the first empty row in the teacher's daily summary table 
     so it can paste the new data in it"""
-    for row in range(table_row, ws.max_row):
-        if ws.cell(row=row, column=start_col).value is None:
+    for row in range(starting_row, ws.max_row):
+        if ws.cell(row=row, column=column).value is None:
             return row
         
 
@@ -92,5 +92,5 @@ def daily_array(teacher_name, max_col, ws):
             night_array.append(float(ws.cell(row=i, column=table_column+3).value))
         else:
             day_array.append(float(ws.cell(row=i, column=table_column+3).value))
-    
+print 
 

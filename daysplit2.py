@@ -5,6 +5,7 @@ def split_sheet_by_days(wb, skip_days):
     max_row = raw_change_ws.max_row
     max_column = raw_change_ws.max_column
     end_of_day_row = 0
+    day_count=0
     while True:
         current_row = end_of_day_row+1
         current_time_cell = raw_change_ws.cell(row=current_row, column=1).value
@@ -19,7 +20,8 @@ def split_sheet_by_days(wb, skip_days):
         if end_of_day_row is None:
             end_of_day_row = max_row
         current_day = find_current_day(raw_change_ws, current_row)
-        make_sheets(wb, current_row, end_of_day_row, raw_change_ws, max_column, current_day)
+        make_sheets(wb, current_row, end_of_day_row, raw_change_ws, max_column, current_day,day_count)
+        day_count=day_count+1
     return wb
 
 
@@ -34,24 +36,13 @@ def find_next_day(raw_change_ws, current_row, max_row):
 
 
 def find_current_day(raw_change_ws, current_row):
-    """Splices down to day of week"""
+    """Splices down to day of week. Used to name worksheet"""
     current_day_time = raw_change_ws.cell(row=current_row, column=1).value
     current_day_time = current_day_time[current_day_time.index(" ")+1:]
     current_day = current_day_time[:current_day_time.index(" ")]
     return current_day
 
 
-def find_end(raw_change_ws, current_row, max_column, max_row):
-    """Finds next instance of 12:45AM, 
-    used to define the end row, or end of day."""    
-    while current_row < max_row:
-        current_day_time = raw_change_ws.cell(row=current_row, column=1).value
-        if "12:54 AM" in current_day_time:
-            return current_row
-        else:
-            current_row = current_row+1
-
-       
 def find_start(ws, a, max_column, max_row):
     """Find the first row with at least 3 consecutive values above 0"""
     b=a
@@ -70,18 +61,28 @@ def find_start(ws, a, max_column, max_row):
     return a
 
 
-def make_sheets(wb, current_row, end_of_day_row, raw_change_ws, max_column, day):
+def find_end(raw_change_ws, current_row, max_column, max_row):
+    """Finds next instance of 12:45AM, 
+    used to define the end row, or end of day."""    
+    while current_row < max_row:
+        current_day_time = raw_change_ws.cell(row=current_row, column=1).value
+        if "12:54 AM" in current_day_time:
+            return current_row
+        else:
+            current_row = current_row+1
+
+def make_sheets(wb, current_row, end_of_day_row, raw_change_ws, max_column,day, day_count):
     """Creates Worksheet with Day of Week-Day of Month title syntax. Copies and
      Pastes from Raw Changes using Start Row and End Row as ranges."""
     name = raw_change_ws.cell(row=current_row, column=1).value
     name = name.replace("/", "-")
-    current_sheet = wb.create_sheet(day+" "+name[:5])
+    current_sheet = wb.create_sheet(day+" "+name[:5],day_count)
     for column in range(1, max_column):
         name_cell = raw_change_ws.cell(row=1, column=column).value
-        current_sheet.cell(row=1, column=column, value=name_cell)
+        current_sheet.cell(row=1, column=column+5, value=name_cell)
         rower = 2
         for row in range(current_row, end_of_day_row):
             current_cell = raw_change_ws.cell(row=row, column=column).value
-            current_sheet.cell(row=rower, column=column, value=current_cell)
+            current_sheet.cell(row=rower, column=column+5, value=current_cell)
             rower = rower+1
     return current_sheet
