@@ -50,11 +50,11 @@ def bolder(ws, start_index, end_index, column, max_col):
     formatts each of the blocks. The bolding will be used later to identify
     a block and for calculating"""            
     tab_list = []
+    block_list=[]
     for r in range(start_index, end_index):
-        Tabby_Cell = int(ws.cell(row=r,  column=7).value)
-        tab_list.append(Tabby_Cell)
         current_cell = ws.cell(row=r,  column=column)
         current_value = current_cell.value
+        Tabby_Cell = int(ws.cell(row=r,  column=7).value)
         plus_1_check = current_value == Tabby_Cell+1 
         minus_1_check = current_value == Tabby_Cell-1
         current_cell.font = Font(bold=True)
@@ -66,4 +66,6 @@ def bolder(ws, start_index, end_index, column, max_col):
             current_cell.fill = PatternFill("solid", fgColor='c0f7f4')
         else:
                 continue
-    #organize_data(ws, start_index, end_index, column, block, tab_list, max_col)
+        tab_list.append(Tabby_Cell)
+        block_list.append(current_value)
+    #organize_data(ws, column, block_list, tab_list, max_col)
