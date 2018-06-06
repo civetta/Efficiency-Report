@@ -1,5 +1,6 @@
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
+from calculator import organize_data
 
 
 def define_blocks(wb):
@@ -45,13 +46,13 @@ def find_blocks(ws, col, max_row, starting_row, position):
     return max_row
 
 
-def bolder(ws, start_index, end_index, column, max_col):
+def bolder(ws, start, end, column, max_col):
     """This function goes through and bolds and conditionally
     formatts each of the blocks. The bolding will be used later to identify
     a block and for calculating"""            
     tab_list = []
-    block_list=[]
-    for r in range(start_index, end_index):
+    block_list = []
+    for r in range(start, end):
         current_cell = ws.cell(row=r,  column=column)
         current_value = current_cell.value
         Tabby_Cell = int(ws.cell(row=r,  column=7).value)
@@ -68,4 +69,4 @@ def bolder(ws, start_index, end_index, column, max_col):
                 continue
         tab_list.append(Tabby_Cell)
         block_list.append(current_value)
-    #organize_data(ws, column, block_list, tab_list, max_col)
+    organize_data(ws, start, end, column, block_list, tab_list, max_col)

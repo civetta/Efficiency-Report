@@ -1,3 +1,4 @@
+
 from openpyxl.utils import get_column_letter
 """This module takes the YTD numbers from Raw Pulls sheet and finds
  the differences every 6 minutes. It then puts those differences 
