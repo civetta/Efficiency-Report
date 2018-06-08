@@ -1,6 +1,8 @@
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
-from calculator import organize_data
+from Calculate_Block_Escores_5A import organize_data
+from Create_Tables_04A import create_tables
+from Create_Tables_04A import format_sheet
 
 
 def define_blocks(wb):
@@ -11,6 +13,8 @@ def define_blocks(wb):
     week = week[:-3]
     for day in week:
         ws = wb.get_sheet_by_name(day)
+        create_tables(ws)
+        format_sheet(ws)
         max_row, max_col = ws.max_row, ws.max_column
         col = 8
         start_row_to_look = 2

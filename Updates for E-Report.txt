@@ -1,6 +1,3 @@
 Updates for Efficiency Report 
--Switch columns and tables 
--Conditional Format E-Scores in tables
--Drop Team Summary tables and Weekly Breakdown Sheet
 -Use borders to declare a night time teachers
--
+-Pass User Variable Conditions in Create Daily Escores
