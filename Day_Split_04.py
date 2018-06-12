@@ -26,10 +26,6 @@ def split_sheet_by_days(wb, skip_days):
         if start_row >= max_row:
             break
         current_day = find_current_day(raw_change_ws, start_row)
-        print 'Start Row: '+str(start_row)
-        print 'End Row: '+str(end_of_day_row)
-        print 'Day: '+str(current_day)
-        print '\n'
         make_sheets(wb, start_row, end_of_day_row, raw_change_ws, max_column, current_day,day_count)
         day_count = day_count+1
     return wb

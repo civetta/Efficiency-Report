@@ -10,7 +10,7 @@ def define_blocks(wb):
     start and end of each block. It then calls the bolder function
     conditionally format the cells"""
     week = wb.get_sheet_names()
-    week = week[:-3]
+    week = week[:-2]
     for day in week:
         ws = wb.get_sheet_by_name(day)
         create_tables(ws)
@@ -33,20 +33,21 @@ def define_blocks(wb):
 def find_blocks(ws, col, max_row, starting_row, position):
     """Looks for either two 0's in a row for the end of a block,or 
     two sequential non zeros for the start of the block"""
-    for a in range(starting_row, max_row):
-        val1 = ws.cell(row=a, column=col).value
+    
+    for row in range(starting_row, max_row):
+        val1 = ws.cell(row=row, column=col).value
         if position == 'start':  
             if int(val1) > 0:
-                val2 = int(ws.cell(row=a+1, column=col).value)
-                val3 = int(ws.cell(row=a+2, column=col).value)
+                val2 = int(ws.cell(row=row+1, column=col).value)
+                val3 = int(ws.cell(row=row+2, column=col).value)
                 if val2 > 0 or val3 > 0:
-                    return a
+                    return row
         elif position == 'end':
             if int(val1) == 0:
-                val2 = int(ws.cell(row=a+1, column=col).value)
-                val3 = int(ws.cell(row=a+2, column=col).value)
+                val2 = int(ws.cell(row=row+1, column=col).value)
+                val3 = int(ws.cell(row=row+2, column=col).value)
                 if val2 == 0 and val3 == 0:
-                    return a
+                    return row
     return max_row
 
 

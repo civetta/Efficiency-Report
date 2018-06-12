@@ -18,7 +18,7 @@ def format_sheet(ws):
     for i in range(1, ws.max_row):
         current_cell = ws.cell(row=i, column=5)
         current_cell.fill = PatternFill("solid", fgColor='F2F2F2')
-    for col in range(1, ws.max_column):
-        ws.column_dimensions[get_column_letter(col)].width = int(15)
+    for col in range(1, ws.max_column+1):
+        ws.column_dimensions[get_column_letter(col)].width = int(20)
     ws.column_dimensions['A'].width = int(30)
     ws.column_dimensions['F'].width = int(30)

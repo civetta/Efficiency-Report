@@ -39,10 +39,12 @@ def check_which_tables_to_make(wb, data_dict, summary, sheet1, number_of_days):
         day_dict = data_dict[day]
         for teacher in day_dict.keys():
             current_dict = day_dict[teacher]
-            if current_dict['Day Average'] is not None:
+            if current_dict['Day Average'] is not '':
                 day_check = True
-            if current_dict['Night Average'] is not None:
+            if current_dict['Night Average'] is not '':
                 night_check = True
+    print day_check
+    print night_check
     if day_check == True and night_check == True:
         create_table(summary, sheet1, 3, 
             'Day Summary',data_dict, number_of_days, day_color, wb)
@@ -81,8 +83,6 @@ def paste_data_into_cell(cell_in_table, summary, column, row, header_row, data_d
         cell_in_table.value = teacher_data['Day Average']
     else:
         cell_in_table.value = teacher_data['Night Average']
-    
-    
     
 
 def create_titles(summary, header_row, name_of_table, number_of_days, color):
