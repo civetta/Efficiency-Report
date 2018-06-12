@@ -9,12 +9,15 @@ skip_days = ['03/29', '3/27']
 condition_list = {"Good Score": float(.90), "Upper Bound": float(1.25)}
 
 """Calling Functions"""
-wb = load_workbook(filename='TestSource.xlsx')
+wb = load_workbook(filename='data_source2.xlsx')
 make_time_difference_sheet(wb)
 split_sheet_by_days(wb, skip_days)
 define_blocks(wb)
 data_library = find_non_empty_tables(wb)
-blank_sheeet = wb.get_sheet_by_name('Sheet')
-wb.remove_sheet(blank_sheeet)
+for dates in data_library.keys():
+    data_library[dates]
+    print '\n'
+#blank_sheeet = wb.get_sheet_by_name('Sheet')
+#wb.remove_sheet(blank_sheeet)
 create_summary_page(wb, data_library)
-wb.save('Test2.xlsx')
+wb.save('Test3.xlsx')
