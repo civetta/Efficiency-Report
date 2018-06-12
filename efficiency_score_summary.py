@@ -12,9 +12,9 @@ def create_summary_page(wb,data_dict):
     sheet_list = wb.get_sheet_names()[:-2]
     wb.create_sheet('Summary', 0)
     summary = wb.get_sheet_by_name('Summary')
-    sheet1 = wb.get_sheet_by_name('Raw Pulls')
+    rawsheet = wb.get_sheet_by_name('Raw Pulls')
     create_title(summary, sheet_list)
-    check_which_tables_to_make(wb, data_dict, summary, sheet1,len(sheet_list))
+    check_which_tables_to_make(wb, data_dict, summary, rawsheet, len(sheet_list))
 
 
 def create_title(summary, sheet_list):
@@ -24,11 +24,10 @@ def create_title(summary, sheet_list):
     title_of_summary = "Summary Of Days: " + date_range
     summary.cell(row=1, column=1).value = title_of_summary
     summary.cell(row=1, column=1).font = Font(size=20, bold=True)
-    summary.column_dimensions['A'].width = int(40)
     summary.row_dimensions[1].height = int(60)
 
 
-def check_which_tables_to_make(wb, data_dict, summary, sheet1, number_of_days):
+def check_which_tables_to_make(wb, data_dict, summary, rawsheet, number_of_days):
     """Reads through the data dictionary and sees if there are night time and 
     day time shifts. If there are both it creates tables for both."""
     day_check = False
@@ -43,34 +42,43 @@ def check_which_tables_to_make(wb, data_dict, summary, sheet1, number_of_days):
                 day_check = True
             if current_dict['Night Average'] is not '':
                 night_check = True
-    print day_check
-    print night_check
     if day_check == True and night_check == True:
-        create_table(summary, sheet1, 3, 
+        create_table(summary, rawsheet, 3, 
             'Day Summary',data_dict, number_of_days, day_color, wb)
-        create_table(summary, sheet1, 8+number_of_days, 
+        create_table(summary, rawsheet, 8+number_of_days, 
             'Night Summary', data_dict, number_of_days, night_color, wb)
     elif day_check == True and night_check == False:
-        create_table(summary, sheet1, 3, 
+        create_table(summary, rawsheet, 3, 
             'Day Summary',data_dict, number_of_days, day_color, wb)
     else:
-        create_table(summary, sheet1, 3, 
+        create_table(summary, rawsheet, 3, 
             'Night Summary',data_dict, number_of_days, night_color, wb)
 
 
-def create_table(summary, sheet_1, header_row, name_of_table, data_dict, number_of_days, color, wb):
+def create_table(summary, rawsheet, header_row, name_of_table, data_dict, number_of_days, color, wb):
     """Uses the names from the first non summary page and copies and pastes
     them into the summary page, using a bit of formatting"""
     create_titles(summary, header_row, name_of_table, number_of_days, color)
     fill_in_date_column(wb, summary, color, header_row, number_of_days) 
-    for column_in_sheet1 in range(3, sheet_1.max_column):
-        column_in_sum = column_in_sheet1-1
-        create_teacher_name_column_head(column_in_sheet1, sheet_1, summary, header_row, column_in_sum)
+    for column_in_rawsheet in range(3, rawsheet.max_column):
+        column_array = []
+        column_in_sum = column_in_rawsheet-1
+        summary.column_dimensions[get_column_letter(column_in_sum)].width = int(20)
+        create_teacher_name_column_head(column_in_rawsheet, rawsheet, summary, header_row, column_in_sum)
         for index, row in enumerate(range(header_row, header_row+number_of_days+1)):
             cell_in_table = summary.cell(row=row, column=column_in_sum)
             format_cell_in_table(cell_in_table, color)
             if index > 1:
-                paste_data_into_cell(cell_in_table, summary, column_in_sum, row, header_row, data_dict, name_of_table)
+                data = paste_data_into_cell(cell_in_table, summary, column_in_sum, row, header_row, data_dict, name_of_table)
+                if data != '':
+                    column_array.append(data)
+        if len(column_array)>0:
+            average = round(sum(column_array)/len(column_array),2)
+            average_cell_row = header_row+number_of_days+1
+            average_cell = summary.cell(row=average_cell_row, column=column_in_sum)
+            big_font(average_cell, average)
+    summary.column_dimensions['A'].width = int(20)
+
 
 
 def paste_data_into_cell(cell_in_table, summary, column, row, header_row, data_dict, name_of_table):
@@ -80,9 +88,13 @@ def paste_data_into_cell(cell_in_table, summary, column, row, header_row, data_d
     date_dictionary = data_dict[date]
     teacher_data = date_dictionary[teacher_name]
     if "Day" in name_of_table:
-        cell_in_table.value = teacher_data['Day Average']
+        data = teacher_data['Day Average']
+        cell_in_table.value = data
     else:
-        cell_in_table.value = teacher_data['Night Average']
+        data = teacher_data['Night Average']
+        cell_in_table.value = data
+    return data
+    
     
 
 def create_titles(summary, header_row, name_of_table, number_of_days, color):
@@ -90,14 +102,18 @@ def create_titles(summary, header_row, name_of_table, number_of_days, color):
     title_of_table = summary.cell(row=header_row, column=1)
     format_cell_in_table(title_of_table, color)
     total_average_title = summary.cell(row=header_row+number_of_days+1, column=1)
-    format_table_title_text(title_of_table, name_of_table)
-    format_table_title_text(total_average_title, 'Total Average')
+    big_font(title_of_table, name_of_table)
+    big_font(total_average_title, 'Total Average')
+    summary.row_dimensions[header_row].height = int(40)
 
 
-def create_teacher_name_column_head(column_in_sheet1, sheet_1, summary, header_row, column_in_sum):
-    teacher_name_formatted = create_formatted_teacher_name(sheet_1, column_in_sheet1)
+def create_teacher_name_column_head(column_in_rawsheet, rawsheet, summary, header_row, column_in_sum):
+    teacher_name = rawsheet.cell(row=1, column=column_in_rawsheet).value
+    first_name = teacher_name[:teacher_name.index(" ")]
+    last_name = teacher_name[teacher_name.index(" ")+1:]
+    teacher_name_formatted = first_name+'\r\n'+last_name
     current_cell = summary.cell(row=header_row, column=column_in_sum)
-    paste_formated_teacher_name(teacher_name_formatted, column_in_sum, current_cell, summary)
+    big_font(current_cell, teacher_name_formatted)
 
 
 def fill_in_date_column(wb, summary, color, header_row, number_of_days):
@@ -119,22 +135,7 @@ def format_cell_in_table(cell_in_table, color):
     cell_in_table.border = thin_border
 
 
-def create_formatted_teacher_name(sheet_1, column_in_sheet1):
-    teacher_name = sheet_1.cell(row=1, column=column_in_sheet1).value
-    first_name = teacher_name[:teacher_name.index(" ")]
-    last_name = teacher_name[teacher_name.index(" ")+1:]
-    teacher_name_formatted = first_name+'\r\n'+last_name
-    return teacher_name_formatted
-
-
-def paste_formated_teacher_name(teacher_name_formatted, column_in_sum, current_cell, summary):
-    current_cell.value = teacher_name_formatted
-    current_cell.alignment = Alignment(wrapText=True)
-    current_cell.font = Font(size=10, bold=True)
-    summary.column_dimensions[get_column_letter(column_in_sum)].width = int(15)
-
-
-def format_table_title_text(cell, value):
+def big_font(cell, value):
     cell.value = value
     cell.font = Font(size=15, bold=True)
     cell.alignment = Alignment(wrapText=True)
