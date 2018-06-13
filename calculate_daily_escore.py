@@ -7,7 +7,7 @@ def find_non_empty_tables(wb):
      the first empty row in each table"""
     week = wb.get_sheet_names()
     week = week[:-2]   
-    all_data = {} 
+    all_data = {}
     for day in week:
         day_dict = {}
         ws = wb.get_sheet_by_name(day)

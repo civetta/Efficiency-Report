@@ -3,7 +3,7 @@ from openpyxl.styles import PatternFill
 from openpyxl.styles.borders import Border, Side
 condition_list = {"Good Score": float(.90), "Upper Bound": float(1.25)}
 
-def organize_data(ws, start, end, column, block_list, tab_list, max_col):
+def organize_data(ws, start, end, column, block_list, tab_list, max_col, checks):
     """Declares all of the variables needed to create and organize the
     efficiency table"""
     average_student = round(sum(block_list)/float(len(block_list)), 2)
@@ -13,8 +13,13 @@ def organize_data(ws, start, end, column, block_list, tab_list, max_col):
     start_time = str(ws.cell(row=start, column=6).value)
     end_time = str(ws.cell(row=end, column=6).value)
     time_range = create_time_range(start_time, end_time, ws)
+    if '*' in time_range:
+        checks['Night Check'] = True
+    if '*' not in time_range:
+        checks['Day Check'] = True
     paste_list = [time_range, average_student, average_tabby, block_escore]
     paste_data(ws, paste_list, teacher_name, max_col)
+    return checks
 
 
 def create_time_range(start, end, ws):
