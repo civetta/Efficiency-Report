@@ -3,8 +3,6 @@ from openpyxl.styles import Alignment
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import PatternFill
 from openpyxl.styles.borders import Border, Side
-"""The abrivation curr is short for "current". It's used to talk about the 
-current column, cell, or row in the ws page."""
 
 
 def create_summary_page(wb, data_dict, checks):
@@ -19,12 +17,12 @@ def create_summary_page(wb, data_dict, checks):
     ws = wb.get_sheet_by_name('Summary')
     create_title(ws, sheet_list)
     if checks['Day Check'] is True and checks['Night Check'] is True:
-        create_table(ws, 3, 'Day ws', data_dict, num_of_days, day_color, wb)
-        create_table(ws, 8+num_of_days, 'Night ws', data_dict, num_of_days, night_color, wb)
+        create_table(ws, 3, 'Day Summary', data_dict, num_of_days, day_color, wb)
+        create_table(ws, 8+num_of_days, 'Night Summary', data_dict, num_of_days, night_color, wb)
     elif checks['Day Check'] is True and checks['Night Check'] is False:
-        create_table(ws, 3, 'Day ws', data_dict, num_of_days, day_color, wb)
+        create_table(ws, 3, 'Day Summary', data_dict, num_of_days, day_color, wb)
     else:
-        create_table(ws, 3, 'Night ws', data_dict, num_of_days, night_color, wb)
+        create_table(ws, 3, 'Night Summary', data_dict, num_of_days, night_color, wb)
 
 
 def create_title(ws, sheet_list):
@@ -40,14 +38,14 @@ def create_title(ws, sheet_list):
 def create_table(ws, header_row, table_name, data_dict, num_of_days, color, wb):
     """Uses the names from the first non ws page and copies and pastes
     them into the ws page, using a bit of formatting"""
-    create_sub_titles(ws, header_row, table_name, num_of_days, color)
+    create_sub_titles(ws, header_row, table_name, num_of_days)
     create_date_column(wb, ws, color, header_row, num_of_days) 
     create_teacher_header_row(ws, header_row, wb)
-    for col in range(2, ws.max_column):
+    format_table(ws, header_row, color, num_of_days)
+    for col in range(2, ws.max_column+1):
         column_array = []
         for row in range(header_row+1, header_row+num_of_days+1):
             curr_cell = ws.cell(row=row, column=col)
-            format_curr_cell(curr_cell, color)
             data = paste_data(
                 curr_cell, ws, col, row, header_row, data_dict, table_name)
             if data != '':
@@ -56,11 +54,10 @@ def create_table(ws, header_row, table_name, data_dict, num_of_days, color, wb):
     ws.column_dimensions['A'].width = int(20)
 
 
-def create_sub_titles(ws, header_row, table_name, num_of_days, color):
-    """Creates the sub titles, like "Day ws" or "night ws"."""
+def create_sub_titles(ws, header_row, table_name, num_of_days):
+    """Creates the sub titles, like "Day Summary" or "night ws"."""
     ws.row_dimensions[header_row].height = int(30)
     title_of_table = ws.cell(row=header_row, column=1)
-    format_curr_cell(title_of_table, color)
     total_average_title = ws.cell(row=header_row+num_of_days+1, column=1)
     big_font(title_of_table, table_name)
     big_font(total_average_title, 'Total Average')
@@ -92,8 +89,20 @@ def create_date_column(wb, ws, color, header_row, num_of_days):
     for row in range(header_row+1, header_row+num_of_days+1):
         date_cell = ws.cell(row=row, column=1)
         date_cell.value = dates[count]
-        format_curr_cell(date_cell, color)
         count = count+1 
+
+
+def format_table(ws, header_row, color, num_of_days):
+    """Goes through the table and colors it in, with the color"""
+    for col in range(1, ws.max_column+1):
+        for row in range(header_row, header_row+num_of_days+1):
+            curr_cell = ws.cell(row=row, column=col)
+            thin_border = Border(left=Side(border_style='thin', color='E6E6E6'),
+                right=Side(border_style='thin', color='E6E6E6'),
+                top=Side(border_style='thin', color='E6E6E6'),
+                bottom=Side(border_style='thin', color='E6E6E6'))
+            curr_cell.fill = PatternFill("solid", fgColor=color)
+            curr_cell.border = thin_border
 
 
 def paste_data(curr_cell, ws, column, row, header_row, data_dict, table_name):
@@ -114,20 +123,13 @@ def paste_data(curr_cell, ws, column, row, header_row, data_dict, table_name):
     
 
 def paste_average(column_array, header_row, num_of_days, col, ws):
+    """Calculates the average and paste it in the bottom row of the 
+    table"""
     if len(column_array) > 0:
         average = round(sum(column_array)/len(column_array), 2)
         avg_cell_row = header_row+num_of_days+1
         average_cell = ws.cell(row=avg_cell_row, column=col)
         big_font(average_cell, average)
-
-
-def format_curr_cell(curr_cell, color):
-    thin_border = Border(left=Side(border_style='thin', color='E6E6E6'),
-        right=Side(border_style='thin', color='E6E6E6'),
-        top=Side(border_style='thin', color='E6E6E6'),
-        bottom=Side(border_style='thin', color='E6E6E6'))
-    curr_cell.fill = PatternFill("solid", fgColor=color)
-    curr_cell.border = thin_border
 
 
 def big_font(cell, value):

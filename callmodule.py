@@ -10,7 +10,7 @@ skip_days = ['03/29', '3/27']
 condition_list = {"Good Score": float(.90), "Upper Bound": float(1.25)}
 
 """Calling Functions"""
-wb = load_workbook(filename='TestSource.xlsx')
+wb = load_workbook(filename='TestSource2.xlsx')
 blank_sheeet = wb.get_sheet_by_name('Sheet')
 wb.remove_sheet(blank_sheeet)
 make_time_difference_sheet(wb)
