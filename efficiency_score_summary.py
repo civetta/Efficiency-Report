@@ -16,7 +16,8 @@ def create_summary_page(wb, data_dict, checks):
     ws = wb.get_sheet_by_name('Summary')
     create_title(ws, sheet_list)
     if checks['Day Check'] is True and checks['Night Check'] is True:
-        create_table(ws, 3, 'Day Summary', data_dict, num_of_days, day_color, wb)
+        create_table(
+            ws, 3, 'Day Summary', data_dict, num_of_days, day_color, wb)
         create_table(ws, 8+num_of_days, 'Night Summary', data_dict, num_of_days, night_color, wb)
     elif checks['Day Check'] is True and checks['Night Check'] is False:
         create_table(ws, 3, 'Day Summary', data_dict, num_of_days, day_color, wb)
@@ -44,18 +45,17 @@ def create_table(ws, header_row, table_name, data_dict, num_of_days, color, wb):
     for col in range(2, ws.max_column+1):
         column_array = []
         for row in range(header_row+1, header_row+num_of_days+1):
-            curr_cell = ws.cell(row=row, column=col)
-            data = paste_data(
-                curr_cell, ws, col, row, header_row, data_dict, table_name)
+            data = paste_data(ws, col, row, header_row, data_dict, table_name)
             if data != '':
                 column_array.append(data)
         paste_average(column_array, header_row, num_of_days, col, ws)
     ws.column_dimensions['A'].width = int(20)
 
 
-def paste_data(curr_cell, ws, column, row, header_row, data_dict, table_name):
+def paste_data( ws, column, row, header_row, data_dict, table_name):
     """Using the current row for the date, and column to find teacher name
     it looks into the data_dict and matches."""
+    curr_cell = ws.cell(row=row, column=col)
     date = ws.cell(row=row, column=1).value
     teacher_name = ws.cell(row=header_row, column=column).value
     teacher_name = teacher_name.replace('\r\n', ' ')
