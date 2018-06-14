@@ -6,7 +6,9 @@ from calculate_block_escore import organize_data
 def define_blocks(wb, checks, scores):
     """Goes through each ws and then goes through each column looking for the 
     start and end of each block. It then calls the bolder function
-    conditionally format the cells"""
+    conditionally format the cells, and then passes information over to 
+    calculate_block_escore module to do calculations and paste data into 
+    tables"""
     week = wb.get_sheet_names()
     week = week[:-2]
     for day in week:
@@ -29,7 +31,6 @@ def define_blocks(wb, checks, scores):
 def find_blocks(ws, col, max_row, starting_row, position):
     """Looks for either two 0's in a row for the end of a block,or 
     two sequential non zeros for the start of the block"""
-    
     for row in range(starting_row, max_row):
         val1 = ws.cell(row=row, column=col).value
         if position == 'start':  
@@ -49,8 +50,12 @@ def find_blocks(ws, col, max_row, starting_row, position):
 
 def bolder(ws, start, end, column, max_col, checks, scores):
     """This function goes through and bolds and conditionally
-    formatts each of the blocks. The bolding will be used later to identify
-    a block and for calculating"""            
+    formatts each of the blocks. It then creates a list of 
+    all of the information in the blocks. So Tab_list is a 
+    list of all of the tabby's during the block, block_list is a list
+    of all of the students taken during that block, and so on. This
+    information is passed over into the calculate_block_escore module
+    who pastes all of these data into daily teacher summary tables."""            
     tab_list = []
     block_list = []
     for r in range(start, end):

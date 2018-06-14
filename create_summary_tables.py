@@ -25,8 +25,8 @@ def create_sub_titles(ws, header_row, table_name, num_of_days):
 
 def create_teacher_header_row(ws, header_row, wb):
     """Creates the header row for each table. The header row consistants
-    of all teacher names with a new line in between their first and 
-    laste name"""
+    of all teacher names with a new line in between their first and
+    last name"""
     rawsheet = wb.get_sheet_by_name('Raw Pulls')
     for col_in_rawsheet in range(3, rawsheet.max_column+1):
         curr_col = col_in_rawsheet-1

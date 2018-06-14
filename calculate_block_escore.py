@@ -7,7 +7,7 @@ from format_block_escore import coniditional_format_row, night_time_teacher
 def organize_data(
         ws, start, end, column, block_list, tab_list, max_col, checks, scores):
     """Declares all of the variables needed to create and organize the
-    efficiency table"""
+    efficiency table. Then it calls paste_data to paste all of the data we have"""
     average_student = round(sum(block_list)/float(len(block_list)), 2)
     average_tabby = round(sum(tab_list)/float(len(tab_list)), 2)
     block_escore = round(average_student/float(average_tabby), 2)
@@ -52,8 +52,11 @@ def paste_data(ws, paste_list, teacher_name, max_col, scores):
     which indiciates a night or weekend shift."""  
     night_check = False
     if teacher_name is not None:
+        """Finds location of current active teachers, daily summary table"""
         starting_row = find_table(ws, teacher_name, max_col)
         empty_row = find_empty_row(ws, starting_row)
+        """If there is an asteriks in the time_range (paste_list[0]) it is a 
+        night shift and treated differently"""
         if '*' in paste_list[0]:
             night_time_teacher(ws, empty_row)
             night_check = True
@@ -61,6 +64,7 @@ def paste_data(ws, paste_list, teacher_name, max_col, scores):
             color = coniditional_format_row(
                 ws, empty_row, paste_list, scores, night_check)
         for i in range(4):
+            """paste data from paste_list into empty row in daily summary table"""
             current_cell = ws.cell(row=empty_row, column=i+1)
             current_cell.value = paste_list[i]
             current_cell.fill = PatternFill("solid", fgColor=color)
