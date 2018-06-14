@@ -1,7 +1,0 @@
-Updates for Efficiency Report 
--Use borders to declare a night time teachers
--Pass User Variable Conditions in Create Daily Escores
--Write Functions that Make Day Tables and Night Tables and calls it twice
-if there is a night table.
-
---Figure out Why Script Isn't Working with Jairo table
