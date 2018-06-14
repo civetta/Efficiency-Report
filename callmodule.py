@@ -7,18 +7,22 @@ from calculate_daily_escore import find_non_empty_tables
 from efficiency_score_summary import create_summary_page
 """User Input Variables"""
 skip_days = ['03/29', '3/27']
-condition_list = {"Good Score": float(.90), "Upper Bound": float(1.25)}
-output_filename =""
+scores = {"Good Score": float(.90), "Upper Bound": float(1.25)}
+output_filename = "Hey"
+
 
 """Calling Functions"""
-wb = load_workbook(filename='TestSource2.xlsx')
+wb = load_workbook(filename='FullTime_Team_Source.xlsx')
 blank_sheeet = wb.get_sheet_by_name('Sheet')
 wb.remove_sheet(blank_sheeet)
 make_time_difference_sheet(wb)
 split_sheet_by_days(wb, skip_days)
 call_create_tables(wb)
 checks = {'Night Check': False, 'Day Check': False}
-checks = define_blocks(wb, checks)
+checks = define_blocks(wb, checks, scores)
 data_library = find_non_empty_tables(wb)
 create_summary_page(wb, data_library, checks)
-wb.save(output_filname+'.xlsx')
+wb.save(output_filename+'.xlsx')
+
+
+

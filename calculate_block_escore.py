@@ -1,9 +1,9 @@
 from datetime import datetime
 from openpyxl.styles import PatternFill
 from openpyxl.styles.borders import Border, Side
-condition_list = {"Good Score": float(.90), "Upper Bound": float(1.25)}
 
-def organize_data(ws, start, end, column, block_list, tab_list, max_col, checks):
+
+def organize_data(ws, start, end, column, block_list, tab_list, max_col, checks, scores):
     """Declares all of the variables needed to create and organize the
     efficiency table"""
     average_student = round(sum(block_list)/float(len(block_list)), 2)
@@ -18,7 +18,7 @@ def organize_data(ws, start, end, column, block_list, tab_list, max_col, checks)
     if '*' not in time_range:
         checks['Day Check'] = True
     paste_list = [time_range, average_student, average_tabby, block_escore]
-    paste_data(ws, paste_list, teacher_name, max_col)
+    paste_data(ws, paste_list, teacher_name, max_col, scores)
     return checks
 
 
@@ -44,22 +44,23 @@ def create_time_range(start, end, ws):
     return time_range+start.strftime("%I:%M %p")+"-"+end.strftime("%I:%M %p")
 
 
-def paste_data(ws, paste_list, teacher_name, max_col):
+def paste_data(ws, paste_list, teacher_name, max_col, scores):
     """Paste the organized data under the daily summary tables.
     It also outlines the cell if it has an asteriks(*)
     which indiciates a night or weekend shift."""  
-
+    night_check = False
     if teacher_name is not None:
         starting_row = find_table(ws, teacher_name, max_col)
         empty_row = find_empty_row(ws, starting_row)
-        if paste_list[-1] is not None:
-            color_to_fill = coniditional_format_row(ws, empty_row, paste_list)
         if '*' in paste_list[0]:
             night_time_teacher(ws, empty_row)
+            night_check = True
+        if paste_list[-1] is not None:
+            color = coniditional_format_row(ws, empty_row, paste_list, scores, night_check)
         for i in range(4):
             current_cell = ws.cell(row=empty_row, column=i+1)
             current_cell.value = paste_list[i]
-            current_cell.fill = PatternFill("solid", fgColor=color_to_fill)
+            current_cell.fill = PatternFill("solid", fgColor=color)
 
 
 def find_table(ws, teacher_name, max_col):
@@ -77,12 +78,12 @@ def find_empty_row(ws, starting_row):
             return row
 
 
-def coniditional_format_row(ws, empty_row, paste_list):
+def coniditional_format_row(ws, empty_row, paste_list, scores, night_check):
     """Using the condition_list as scores, it conditionally formats
     "good scores' as green, 'bad scores' as red, and too good scores as
     blue"""
-    good_score = condition_list.get("Good Score")
-    upper_bound = condition_list.get("Upper Bound")
+    good_score = scores.get("Good Score")
+    upper_bound = scores.get("Upper Bound")
     e_score = paste_list[-1]
     if e_score < good_score:
         return 'f2b8ea'

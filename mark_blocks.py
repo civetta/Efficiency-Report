@@ -3,7 +3,7 @@ from openpyxl.styles import PatternFill
 from calculate_block_escore import organize_data
 
 
-def define_blocks(wb,checks):
+def define_blocks(wb, checks, scores):
     """Goes through each ws and then goes through each column looking for the 
     start and end of each block. It then calls the bolder function
     conditionally format the cells"""
@@ -19,7 +19,7 @@ def define_blocks(wb,checks):
             if start >= start_row_to_look and start != max_row:
                 end = find_blocks(ws, col, max_row, start, 'end')
                 start_row_to_look = end
-                checks = bolder(ws, start, end, col, max_col, checks)                  
+                checks = bolder(ws, start, end, col, max_col, checks, scores)                  
             else:
                 col = col+1
                 start_row_to_look = 2
@@ -47,7 +47,7 @@ def find_blocks(ws, col, max_row, starting_row, position):
     return max_row
 
 
-def bolder(ws, start, end, column, max_col,checks):
+def bolder(ws, start, end, column, max_col, checks, scores):
     """This function goes through and bolds and conditionally
     formatts each of the blocks. The bolding will be used later to identify
     a block and for calculating"""            
@@ -71,5 +71,5 @@ def bolder(ws, start, end, column, max_col,checks):
         tab_list.append(Tabby_Cell)
         block_list.append(current_value)
     checks = organize_data(
-        ws, start, end, column, block_list, tab_list, max_col, checks)
+        ws, start, end, column, block_list, tab_list, max_col, checks, scores)
     return checks

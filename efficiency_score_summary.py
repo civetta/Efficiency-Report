@@ -55,7 +55,7 @@ def create_table(ws, header_row, table_name, data_dict, num_of_days, color, wb):
 def paste_data( ws, column, row, header_row, data_dict, table_name):
     """Using the current row for the date, and column to find teacher name
     it looks into the data_dict and matches."""
-    curr_cell = ws.cell(row=row, column=col)
+    curr_cell = ws.cell(row=row, column=column)
     date = ws.cell(row=row, column=1).value
     teacher_name = ws.cell(row=header_row, column=column).value
     teacher_name = teacher_name.replace('\r\n', ' ')
