@@ -82,7 +82,10 @@ def coniditional_format_row(ws, empty_row, paste_list, scores, night_check):
     """Using the condition_list as scores, it conditionally formats
     "good scores' as green, 'bad scores' as red, and too good scores as
     blue"""
-    good_score = scores.get("Good Score")
+    if night_check is True:
+        good_score = scores.get("Good Night Score")
+    else:
+        good_score = scores.get("Good Day Score")
     upper_bound = scores.get("Upper Bound")
     e_score = paste_list[-1]
     if e_score < good_score:
