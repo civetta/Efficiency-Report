@@ -5,6 +5,7 @@ from create_tables import call_create_tables
 from mark_blocks import define_blocks
 from calculate_daily_escore import find_non_empty_tables
 from efficiency_score_summary import create_summary_page
+from create_teacher_books import create_books
 """User Input Variables"""
 skip_days = ['03/29', '3/27']
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
@@ -24,6 +25,7 @@ checks = define_blocks(wb, checks, scores)
 data_library = find_non_empty_tables(wb)
 create_summary_page(wb, data_library, checks)
 wb.save(output_filename+'.xlsx')
+create_books(wb)
 
 
 

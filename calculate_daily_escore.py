@@ -12,6 +12,10 @@ def find_non_empty_tables(wb):
         day_dict = {}
         ws = wb.get_sheet_by_name(day)
         for col in range(8, ws.max_column+1):
+            """So we do teacher location column -7, which should give us a 
+            1 count, and then times 8, and then subtract 6.
+             So the first teacher is located at row 2, the second teacher 
+             is located at row 10, and so on"""
             table_row = ((col-7)*8)-6
             teacher = ws.cell(row=1, column=col).value
             empty_row = find_empty_row(ws, table_row)
@@ -22,7 +26,7 @@ def find_non_empty_tables(wb):
 
 
 def create_arrays(ws, table_row, empty_row, teacher, day_dict):
-    """Goes through each tabble and add each block efficiency score to 
+    """Goes through each table and add each block efficiency score to 
     either a day array or a night array, using * as an indicator as a
     night shift. It also removes the *"""
     day_array = []
