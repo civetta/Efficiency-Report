@@ -1,9 +1,8 @@
 from openpyxl.styles import Font
 from openpyxl.styles import Alignment
-from openpyxl.utils import get_column_letter
-from openpyxl.styles import PatternFill
-from openpyxl.styles.borders import Border, Side
-
+from create_summary_tables import create_sub_titles, create_date_column
+from create_summary_tables import create_teacher_header_row, format_table
+from create_summary_tables import big_font
 
 def create_summary_page(wb, data_dict, checks):
     """Create the ws page and locates it at the beginning of the workbook.
@@ -54,57 +53,6 @@ def create_table(ws, header_row, table_name, data_dict, num_of_days, color, wb):
     ws.column_dimensions['A'].width = int(20)
 
 
-def create_sub_titles(ws, header_row, table_name, num_of_days):
-    """Creates the sub titles, like "Day Summary" or "night ws"."""
-    ws.row_dimensions[header_row].height = int(30)
-    title_of_table = ws.cell(row=header_row, column=1)
-    total_average_title = ws.cell(row=header_row+num_of_days+1, column=1)
-    big_font(title_of_table, table_name)
-    big_font(total_average_title, 'Total Average')
-    ws.row_dimensions[header_row].height = int(40)
-
-
-def create_teacher_header_row(ws, header_row, wb):
-    """Creates the header row for each table. The header row consistants
-    of all teacher names with a new line in between their first and 
-    laste name"""
-    rawsheet = wb.get_sheet_by_name('Raw Pulls')
-    for col_in_rawsheet in range(3, rawsheet.max_column):
-        curr_col = col_in_rawsheet-1
-        teacher_name = rawsheet.cell(row=1, column=col_in_rawsheet).value
-        first_name = teacher_name[:teacher_name.index(" ")]
-        last_name = teacher_name[teacher_name.index(" ")+1:]
-        teacher_name_formatted = first_name+'\r\n'+last_name
-        current_cell = ws.cell(row=header_row, column=curr_col)
-        big_font(current_cell, teacher_name_formatted)
-        ws.column_dimensions[get_column_letter(curr_col)].width = int(20)
-
-
-def create_date_column(wb, ws, color, header_row, num_of_days):
-    """Creates the date column, which represents the y axis of the ws
-    table. Each row in the column is a date. It uses the list of sheet 
-    names to create this"""
-    dates = wb.get_sheet_names()[1:-2]
-    count = 0
-    for row in range(header_row+1, header_row+num_of_days+1):
-        date_cell = ws.cell(row=row, column=1)
-        date_cell.value = dates[count]
-        count = count+1 
-
-
-def format_table(ws, header_row, color, num_of_days):
-    """Goes through the table and colors it in, with the color"""
-    for col in range(1, ws.max_column+1):
-        for row in range(header_row, header_row+num_of_days+1):
-            curr_cell = ws.cell(row=row, column=col)
-            thin_border = Border(left=Side(border_style='thin', color='E6E6E6'),
-                right=Side(border_style='thin', color='E6E6E6'),
-                top=Side(border_style='thin', color='E6E6E6'),
-                bottom=Side(border_style='thin', color='E6E6E6'))
-            curr_cell.fill = PatternFill("solid", fgColor=color)
-            curr_cell.border = thin_border
-
-
 def paste_data(curr_cell, ws, column, row, header_row, data_dict, table_name):
     """Using the current row for the date, and column to find teacher name
     it looks into the data_dict and matches."""
@@ -130,9 +78,3 @@ def paste_average(column_array, header_row, num_of_days, col, ws):
         avg_cell_row = header_row+num_of_days+1
         average_cell = ws.cell(row=avg_cell_row, column=col)
         big_font(average_cell, average)
-
-
-def big_font(cell, value):
-    cell.value = value
-    cell.font = Font(size=15, bold=True)
-    cell.alignment = Alignment(wrapText=True)
