@@ -8,6 +8,7 @@ from efficiency_score_summary import create_summary_page
 """User Input Variables"""
 skip_days = ['03/29', '3/27']
 condition_list = {"Good Score": float(.90), "Upper Bound": float(1.25)}
+output_filename =""
 
 """Calling Functions"""
 wb = load_workbook(filename='TestSource2.xlsx')
@@ -20,4 +21,4 @@ checks = {'Night Check': False, 'Day Check': False}
 checks = define_blocks(wb, checks)
 data_library = find_non_empty_tables(wb)
 create_summary_page(wb, data_library, checks)
-wb.save('Test.xlsx')
+wb.save(output_filname+'.xlsx')
