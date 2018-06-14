@@ -4,6 +4,7 @@ from create_summary_tables import create_sub_titles, create_date_column
 from create_summary_tables import create_teacher_header_row, format_table
 from create_summary_tables import big_font
 
+
 def create_summary_page(wb, data_dict, checks):
     """Create the ws page and locates it at the beginning of the workbook.
     Uses the sheet names to make date columns. Then it calls the first sheet
@@ -52,7 +53,7 @@ def create_table(ws, header_row, table_name, data_dict, num_of_days, color, wb):
     ws.column_dimensions['A'].width = int(20)
 
 
-def paste_data( ws, column, row, header_row, data_dict, table_name):
+def paste_data(ws, column, row, header_row, data_dict, table_name):
     """Using the current row for the date, and column to find teacher name
     it looks into the data_dict and matches."""
     curr_cell = ws.cell(row=row, column=column)

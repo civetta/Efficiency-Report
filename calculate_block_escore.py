@@ -7,7 +7,10 @@ from format_block_escore import coniditional_format_row, night_time_teacher
 def organize_data(
         ws, start, end, column, block_list, tab_list, max_col, checks, scores):
     """Declares all of the variables needed to create and organize the
-    efficiency table. Then it calls paste_data to paste all of the data we have"""
+    efficiency table. Then it calls paste_data to paste all of the data we have.
+    This function also figures out if there is ever a night time shift and 
+    return it back up to callmodule. This is used in the last module to know
+    if we should create a day table, a night table, or both."""
     average_student = round(sum(block_list)/float(len(block_list)), 2)
     average_tabby = round(sum(tab_list)/float(len(tab_list)), 2)
     block_escore = round(average_student/float(average_tabby), 2)
