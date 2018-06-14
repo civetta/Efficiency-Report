@@ -9,7 +9,7 @@ from efficiency_score_summary import create_summary_page
 skip_days = ['03/29', '3/27']
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
-output_filename = "Hey"
+output_filename = "Lead_Book"
 
 
 """Calling Functions"""
