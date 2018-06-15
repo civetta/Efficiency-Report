@@ -1,7 +1,7 @@
 from openpyxl.styles import PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
-from copier import copier
+from utility import copier, find_teacher_column
 
 
 def copy_data(teacherbook, wb, teachername):
@@ -12,7 +12,7 @@ def copy_data(teacherbook, wb, teachername):
     days_in_sheet = wb.get_sheet_names()[1:-2]
     for day in days_in_sheet:
         ws = wb.get_sheet_by_name(day)
-        column = find_teacher_column(ws, teachername)
+        column = find_teacher_column(ws, teachername, 1, 8)
         for row in range(1, ws.max_row+1):
             # Copies time column
             old_time = ws.cell(row=row, column=6)
@@ -51,10 +51,3 @@ def format_data_sheet(teacher_data):
         x = x+4
 
 
-def find_teacher_column(ws, teachername):
-    """Finds the column in which the 
-    teacher's data is located in each worksheet"""
-    for column in range(8, ws.max_column+1):
-        cell = ws.cell(row=1, column=column).value
-        if cell == teachername:
-            return column
