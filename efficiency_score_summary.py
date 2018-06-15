@@ -12,18 +12,19 @@ def create_summary_page(wb, data_dict, checks):
     night_color = 'c0b8f2'
     day_color = 'f2c0b8'
     sheet_list = wb.get_sheet_names()[:-2]
-    num_of_days = len(sheet_list)
+    days_num = len(sheet_list)
     wb.create_sheet('Summary', 0)
     ws = wb.get_sheet_by_name('Summary')
     create_title(ws, sheet_list)
     if checks['Day Check'] is True and checks['Night Check'] is True:
+        create_table(ws, 3, 'Day Summary', data_dict, days_num, day_color, wb)
         create_table(
-            ws, 3, 'Day Summary', data_dict, num_of_days, day_color, wb)
-        create_table(ws, 8+num_of_days, 'Night Summary', data_dict, num_of_days, night_color, wb)
+            ws, 8+days_num, 'Night Summary', data_dict, days_num, night_color, wb)
     elif checks['Day Check'] is True and checks['Night Check'] is False:
-        create_table(ws, 3, 'Day Summary', data_dict, num_of_days, day_color, wb)
+        create_table(ws, 3, 'Day Summary', data_dict, days_num, day_color, wb)
     else:
-        create_table(ws, 3, 'Night Summary', data_dict, num_of_days, night_color, wb)
+        create_table(
+            ws, 3, 'Night Summary', data_dict, days_num, night_color, wb)
 
 
 def create_title(ws, sheet_list):
@@ -36,20 +37,20 @@ def create_title(ws, sheet_list):
     ws.row_dimensions[1].height = int(60)
 
 
-def create_table(ws, header_row, table_name, data_dict, num_of_days, color, wb):
+def create_table(ws, header_row, table_name, data_dict, days_num, color, wb):
     """Uses the names from the first non ws page and copies and pastes
     them into the ws page, using a bit of formatting"""
-    create_sub_titles(ws, header_row, table_name, num_of_days)
-    create_date_column(wb, ws, color, header_row, num_of_days) 
+    create_sub_titles(ws, header_row, table_name, days_num)
+    create_date_column(wb, ws, color, header_row, days_num) 
     create_teacher_header_row(ws, header_row, wb)
-    format_table(ws, header_row, color, num_of_days)
+    format_table(ws, header_row, color, days_num)
     for col in range(2, ws.max_column+1):
         column_array = []
-        for row in range(header_row+1, header_row+num_of_days+1):
+        for row in range(header_row+1, header_row+days_num+1):
             data = paste_data(ws, col, row, header_row, data_dict, table_name)
             if data != '':
                 column_array.append(data)
-        paste_average(column_array, header_row, num_of_days, col, ws)
+        paste_average(column_array, header_row, days_num, col, ws)
     ws.column_dimensions['A'].width = int(20)
 
 
@@ -71,11 +72,11 @@ def paste_data(ws, column, row, header_row, data_dict, table_name):
     return data
     
 
-def paste_average(column_array, header_row, num_of_days, col, ws):
+def paste_average(column_array, header_row, days_num, col, ws):
     """Calculates the average and paste it in the bottom row of the 
     table"""
     if len(column_array) > 0:
         average = round(sum(column_array)/len(column_array), 2)
-        avg_cell_row = header_row+num_of_days+1
+        avg_cell_row = header_row+days_num+1
         average_cell = ws.cell(row=avg_cell_row, column=col)
         big_font(average_cell, average)
