@@ -1,7 +1,8 @@
-
 from daily_ws.format_block_escore import find_table, find_empty_row
 from utility import copier, find_teacher_column
 from summary_ws.create_summary_tables import big_font
+from openpyxl.utils import get_column_letter
+
 
 def copy_summary(teacherbook, wb, teachername):
     """Goes through each day of the week worksheet and using the 
@@ -16,6 +17,10 @@ def copy_summary(teacherbook, wb, teachername):
 
 
 def copy_daily_tables(teach_summary, wb, teachername):
+    """Goes through each daily sheet, and copies the teacher summary daily
+    tables. If first finds the table using the function used earlier in 
+    format block escore (find table), then it copies 8 rows since each
+    table is 8 rows tall."""
     days_in_sheet = wb.get_sheet_names()[1:-2]
     teacherbook_row = 5
     for day in days_in_sheet:
@@ -35,39 +40,30 @@ def copy_daily_tables(teach_summary, wb, teachername):
 
 
 def copy_summary_page(teach_summary, wb, teachername):
+    """Copies the teacher column in the Summary ws in Leadbook. It also puts
+    the title that is found in Summary ws and make it the title of this 
+    summary page."""
     old_summary = wb.get_sheet_by_name('Summary')
     teacher_col = find_teacher_column(old_summary, teachername, 3, 1)
     title = old_summary.cell(row=1, column=1)
     new_title = teach_summary.cell(row=1, column=1)
     copier(title, new_title)
-    day_table_end = find_empty_row(old_summary, 3)
-    copy_sum_tables(
-        3, day_table_end, teacher_col, old_summary, teach_summary, 6)
-    if day_table_end < old_summary.max_row:
-        night_table_end = find_empty_row(old_summary, day_table_end+2)
-        copy_sum_tables(
-            day_table_end+2, night_table_end, teacher_col, old_summary, teach_summary, 9)
-
-
-def copy_sum_tables(start,end, teacher_col, old_summary, teach_summary, start_column):
-    for row in range(start, end+1):
+    for row in range(3, old_summary.max_row+1):
         old_date = old_summary.cell(row=row, column=1)
-        new_date = teach_summary.cell(row=row, column=start_column)
+        new_date = teach_summary.cell(row=row, column=7)
         copier(old_date, new_date)
         old_cell = old_summary.cell(row=row, column=teacher_col)
-        new_cell = teach_summary.cell(row=row, column=start_column+1)
+        new_cell = teach_summary.cell(row=row, column=8)
         copier(old_cell, new_cell)
-        
 
 
 def format_summary_page(teach_summary):
+    """Makes all of the columns have a width of 20 and then goes back
+    and make the first column which includes the time ranges, 30 pixels
+    wide"""
+    for a in range(1, teach_summary.max_column+1):
+        teach_summary.column_dimensions[get_column_letter(a)].width = int(20)
     teach_summary.column_dimensions['A'].width = int(30)
-    teach_summary.column_dimensions['B'].width = int(20)
-    teach_summary.column_dimensions['C'].width = int(20)
-    teach_summary.column_dimensions['D'].width = int(20)
-    teach_summary.column_dimensions['F'].width = int(30)
-    teach_summary.column_dimensions['G'].width = int(30)
-    
 
         
 

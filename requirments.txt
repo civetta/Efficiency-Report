@@ -1,0 +1,4 @@
+Efficiency Report
+
+Pillow==4.2.1
+openpyxl==2.4.6
