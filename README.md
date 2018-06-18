@@ -51,5 +51,9 @@ following order. Some of these modules have some formatting modules attached to 
 It creates tables for whatever data is available. So it will only createa day summary table if there are only day shift, or a day and night table if there are both types of shifts. The table has dates as it's y axis and the teacher names as it's x axis. It then uses those axis, to find the relevant information in the dictionary passed over from 
 calculate_daily_escore, and pastes them in.
 
+
 # Known Issues
 The FAQ image for the individual teacher books needs to be updated. It refrences 5 minute intervals instead of 6 minute ones.
+
+# FAQ Page
+![FAQ](https://raw.githubusercontent.com/civetta/Efficiency-Report/master/faq.png?token=AEV7slistXziNgm7lU3kQPBQw_O6Ww22ks5bMOXGwA%3D%3D)
