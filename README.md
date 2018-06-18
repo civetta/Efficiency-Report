@@ -10,7 +10,12 @@ teachers Year to Date (YTD) total sessions taught at that time. The share fairly
 number or Tabby, is the number of sessions a teacher should be teaching at that
 time. I have provided the input files for you. You can use either 
 FullTime_Team_Source.xlsx or PartTime_Team_Source.xlsx. Full time teaching teams do 
-not work night shifts, so it will only return day data. 
+not work night shifts, so it will only return day data. The input files are currently
+created by populating web scraping from an old website, and then pasting data into
+a google spreadsheet. Currently working on creating a more reliable method.
+
+
+I highly recommend you look at the sample outputs. One is a Leadbook and the other is the personal teacherbook. These are what the script should produce.
 
 Something to Note:    
 Students Taught  ÷ Share Fairly Number = Efficiency Score
