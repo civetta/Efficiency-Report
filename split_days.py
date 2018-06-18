@@ -1,4 +1,4 @@
-def split_sheet_by_days(wb, skip_days):
+def split_sheet_by_days(wb, skip_days,end_of_day):
     """Find start of day, and end of day, and then copies everything in
     between into a new sheet. If end of day returns none, it breaks"""
     raw_change_ws = wb.get_sheet_by_name("Raw Changes")
@@ -13,9 +13,9 @@ def split_sheet_by_days(wb, skip_days):
             break
         current_time_cell = raw_change_ws.cell(row=start_row, column=1).value
         if any(skip in current_time_cell for skip in skip_days):
-            start_row = find_next_day(raw_change_ws, start_row, max_row)
+            start_row = find_next_day(raw_change_ws, start_row, max_row, end_of_day)
         start_row = find_start(raw_change_ws, start_row, max_column, max_row)
-        end_of_day_row = find_end(raw_change_ws, start_row, max_column, max_row)
+        end_of_day_row = find_end(raw_change_ws, start_row, max_column, max_row, end_of_day)
         if start_row == end_of_day_row:
             #If current row is the same as end of day row, start the loop over 
             #again, meaning it looks for the following day because the day
@@ -31,12 +31,12 @@ def split_sheet_by_days(wb, skip_days):
     return wb
 
 
-def find_next_day(raw_change_ws, start_row, max_row):
+def find_next_day(raw_change_ws, start_row, max_row, end_of_day):
     """If skip day is used, then this function finds the next day"""
     current_row = start_row
     while current_row < max_row:
         current_day_time = raw_change_ws.cell(row=current_row, column=1).value
-        if "12:54 AM" in current_day_time:
+        if end_of_day in current_day_time:
             return current_row+1
         else:
             current_row = current_row+1
@@ -68,13 +68,13 @@ def find_start(ws, start_row, max_column, max_row):
     return current_row
 
 
-def find_end(raw_change_ws, start_row, max_column, max_row):
-    """Finds next instance of 12:45AM, 
+def find_end(raw_change_ws, start_row, max_column, max_row, end_of_day):
+    """Finds next instance of end of day indicator 
     used to define the end row, or end of day."""    
     current_row = start_row
     while current_row < max_row:
         current_day_time = raw_change_ws.cell(row=current_row, column=1).value
-        if "12:54 AM" in current_day_time:
+        if end_of_day in current_day_time:
             return current_row+1
         else:
             current_row = current_row+1
