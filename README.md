@@ -54,9 +54,15 @@ It creates tables for whatever data is available. So it will only createa day su
 **teacherbooks**: Creates the personal teacher books. It goes through each teacher in the summary page and saves it as teachername. It then uses that teachname and goes through each day of week worksheet and then find their information from each page and copie and pastes it into a newbook, with that teachers name as a title. 
 
 
+
 # Known Issues
 The FAQ image for the individual teacher books needs to be updated. It refrences 5 minute intervals instead of 6 minute ones.
 
+<<<<<<< HEAD
 
 # FAQ Page
 ![FAQ](https://raw.githubusercontent.com/civetta/Efficiency-Report/master/faq.png?token=AEV7slistXziNgm7lU3kQPBQw_O6Ww22ks5bMOXGwA%3D%3D)
+=======
+# FAQ Page
+![FAQ](https://raw.githubusercontent.com/civetta/Efficiency-Report/master/faq.png?token=AEV7slistXziNgm7lU3kQPBQw_O6Ww22ks5bMOXGwA%3D%3D)
+>>>>>>> 1123ca88d24ddfe49d265f74f7690606630f5527
