@@ -19,8 +19,8 @@ end_day_indicator = '12:54 AM'
 
 """Calling Functions"""
 wb = load_workbook(filename='PartTime_Team_Source.xlsx')
-blank_sheeet = wb.get_sheet_by_name('Sheet')
-wb.remove_sheet(blank_sheeet)
+blank_sheet = wb.get_sheet_by_name('Sheet')
+wb.remove_sheet(blank_sheet)
 make_time_difference_sheet(wb)
 split_sheet_by_days(wb, skip_days, end_day_indicator)
 call_create_tables(wb)
