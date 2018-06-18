@@ -39,11 +39,15 @@ following order. Some of these modules have some formatting modules attached to 
 
 **split_days**: Takes all of the data from Raw Changes and split it up into multiple worksheets, each worksheet for a different day. So all of data from 04-02-18, will go under a tab called 04-02 Mon.
 
+**The following Modules Create the Daily Worksheets. So the worksheets for each day of the week. Can be found under daily_ws folder**
+
 **create_tables**: Goes into each invidiual day sheet and creates daily tables. There is a daily table for each teacher for each day.
 
 **mark_blocks**: So a "block" of teaching starts when a teacher has been teaching for at least 12 minutes, and ends when they have stopped teaching for at least 12 minutes. The script goes through and bolds all of the numbers that are in an active block. It then passes that block over to calculate block_escore. Blocks are conditionally formatted for easy reading, but those colors are not actually used in the efficiency score at all.
 
 **calculate_block_escore**: Takes an active block and find the average students taken every 6 minutes during that block, the average tabby every 6 minutes during the block, and divides them to get the block efficiency score. It then pastes that information in the tables created during the create_tables module. Then each block is conditionally formatted in the tables, using the condition list. 
+
+**The following modules create the Summary ws found at the beginning of the workbook. It is a worksheet with a table that shows the daily averages of each day, and then the total average of everything. Can be found under summary_ws folder.**
 
 **calculate_daily_escore**: Goes through the table and averages out the escore for all of the blocks during the day, prodcing a daily escore. Night time shifts (which are any shift that touches 
 8PM) are calculated seperatly because they have a different "good score" (it's harder for them to reach higher numbers since the demand is lower at night). It then saves all of these daily and nightly escores into a dictionary. That final dictionary is passed over to efficiency_score_summary
@@ -51,18 +55,19 @@ following order. Some of these modules have some formatting modules attached to 
 **efficiency_score_summary**: Creates a new tab called "Summary" and is placed as the first worksheet. The Summary tab is suppose to be the summary of all of the data. 
 It creates tables for whatever data is available. So it will only createa day summary table if there are only day shift, or a day and night table if there are both types of shifts. The table has dates as it's y axis and the teacher names as it's x axis. It then uses those axis, to find the relevant information in the dictionary passed over from calculate_daily_escore, and pastes them in.
 
-**teacherbooks**: Creates the personal teacher books. It goes through each teacher in the summary page and saves it as teachername. It then uses that teachname and goes through each day of week worksheet and then find their information from each page and copie and pastes it into a newbook, with that teachers name as a title. 
+**The followering modules create the person teacher books. Each teacher book has 3 pages. An FAQ page, a Data page, and a Summary page. The Summary page contains all of the daily summary tables as well as the teachers column in the original summary worksheet. The data worksheet contains all of their condotionally formatted data found in the daily worksheets. They can be found under teacherbook folder.**
+
+**create_teacher_books**: Creates the book using the teachers name. It creates the FAQ page and pastes the FAQ image into it. Calls Copy Summary and Copy Data.
+
+**copy_summary**: Copies the daily summary tables and then the informatiom about the teacher located under the Summary table.
+
+**copy_data**: Copies the data information, timestamps, and a tabby found under the daily ws.
 
 
 
 # Known Issues
 The FAQ image for the individual teacher books needs to be updated. It refrences 5 minute intervals instead of 6 minute ones.
 
-<<<<<<< HEAD
+# FAQ Page
+![FAQ](https://raw.githubusercontent.com/civetta/Efficiency-Report/master/faq.png?token=AEV7slistXziNgm7lU3kQPBQw_O6Ww22ks5bMOXGwA%3D%3D)
 
-# FAQ Page
-![FAQ](https://raw.githubusercontent.com/civetta/Efficiency-Report/master/faq.png?token=AEV7slistXziNgm7lU3kQPBQw_O6Ww22ks5bMOXGwA%3D%3D)
-=======
-# FAQ Page
-![FAQ](https://raw.githubusercontent.com/civetta/Efficiency-Report/master/faq.png?token=AEV7slistXziNgm7lU3kQPBQw_O6Ww22ks5bMOXGwA%3D%3D)
->>>>>>> 1123ca88d24ddfe49d265f74f7690606630f5527
