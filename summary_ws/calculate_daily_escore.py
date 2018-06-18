@@ -12,6 +12,14 @@ def find_non_empty_tables(wb):
         day_dict = {}
         ws = wb.get_sheet_by_name(day)
         for col in range(8, ws.max_column+1):
+            """So we go through the teachers in the ws, they start 8 columns 
+            in, and use that number to calculate where to put the new table.
+            So we do teacher location column -7, which should give us a
+            1,2,3 count, and then times 8, so each teacher is located 8
+            rows apart. Finally we subtract it by 6, so that the tables start
+            higher up in the worksheet versus at row 8. So the first teacher is
+            located at row 2, the second teacher is located at
+            row 10, and so on"""
             table_row = ((col-7)*8)-6
             teacher = ws.cell(row=1, column=col).value
             empty_row = find_empty_row(ws, table_row)

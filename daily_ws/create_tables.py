@@ -7,6 +7,7 @@ def call_create_tables(wb):
     """Goes through each day of the week worksheet and calls the functions
     below"""
     week = wb.get_sheet_names()
+    #List of all of the worksheet names (which are the days of the week)
     week = week[:-2]
     for day in week:
         ws = wb.get_sheet_by_name(day)
