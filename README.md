@@ -2,7 +2,8 @@
 
 The purpose of this script is to take an excel file with teacher ytd information
 and output another excel sheet that is easy to read and includes an
-efficiency score
+efficiency score. First it makes a LeadBook, which is used by the Lead (a teaching department manager) to read information about all of the teachers on their team.
+Then it creates individual workbooks for each teacher that only contains their personal information. 
 
 The input excel file has a time stamp, share fairly number(Tabby), and each 
 teachers Year to Date (YTD) total sessions taught at that time. The share fairly
@@ -48,8 +49,14 @@ following order. Some of these modules have some formatting modules attached to 
 8PM) are calculated seperatly because they have a different "good score" (it's harder for them to reach higher numbers since the demand is lower at night). It then saves all of these daily and nightly escores into a dictionary. That final dictionary is passed over to efficiency_score_summary
 
 **efficiency_score_summary**: Creates a new tab called "Summary" and is placed as the first worksheet. The Summary tab is suppose to be the summary of all of the data. 
-It creates tables for whatever data is available. So it will only createa day summary table if there are only day shift, or a day and night table if there are both types of shifts. The table has dates as it's y axis and the teacher names as it's x axis. It then uses those axis, to find the relevant information in the dictionary passed over from 
-calculate_daily_escore, and pastes them in.
+It creates tables for whatever data is available. So it will only createa day summary table if there are only day shift, or a day and night table if there are both types of shifts. The table has dates as it's y axis and the teacher names as it's x axis. It then uses those axis, to find the relevant information in the dictionary passed over from calculate_daily_escore, and pastes them in.
+
+**teacherbooks**: Creates the personal teacher books. It goes through each teacher in the summary page and saves it as teachername. It then uses that teachname and goes through each day of week worksheet and then find their information from each page and copie and pastes it into a newbook, with that teachers name as a title. 
+
 
 # Known Issues
 The FAQ image for the individual teacher books needs to be updated. It refrences 5 minute intervals instead of 6 minute ones.
+
+
+# FAQ Page
+![FAQ](https://raw.githubusercontent.com/civetta/Efficiency-Report/master/faq.png?token=AEV7slistXziNgm7lU3kQPBQw_O6Ww22ks5bMOXGwA%3D%3D)

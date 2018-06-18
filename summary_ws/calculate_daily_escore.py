@@ -1,4 +1,4 @@
-from calculate_block_escore import find_empty_row
+from daily_ws.calculate_block_escore import find_empty_row
 from openpyxl.styles import Font
 
 

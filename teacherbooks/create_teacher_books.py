@@ -20,7 +20,7 @@ def create_books(wb):
         create_faq(teacherbook)
         copy_summary(teacherbook, wb, teacher_name)
         copy_data(teacherbook, wb, teacher_name)
-        teacherbook.save(teacher_name+'.xlsx')
+        teacherbook.save('Output/Teacher Books/'+teacher_name+'.xlsx')
 
 
 def create_faq(current_teacher):
