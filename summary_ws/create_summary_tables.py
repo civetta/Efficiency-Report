@@ -27,8 +27,9 @@ def create_teacher_header_row(ws, header_row, wb):
     """Creates the header row for each table. The header row consistants
     of all teacher names with a new line in between their first and
     last name"""
-    rawsheet = wb.get_sheet_by_name('Raw Pulls')
-    for col_in_rawsheet in range(3, rawsheet.max_column+1):
+    rawsheet = wb.get_sheet_by_name('Raw Changes')
+    for col_in_rawsheet in range(3, rawsheet.max_column):
+        print col_in_rawsheet
         curr_col = col_in_rawsheet-1
         teacher_name = rawsheet.cell(row=1, column=col_in_rawsheet).value
         first_name = teacher_name[:teacher_name.index(" ")]

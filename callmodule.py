@@ -17,16 +17,18 @@ output_filename = "Lead_Book"
 end_day_indicator = '12:54 AM'
 
 
-"""Calling Functions"""
-wb = load_workbook(filename='PartTime_Team_Source.xlsx')
-blank_sheet = wb.get_sheet_by_name('Sheet')
-wb.remove_sheet(blank_sheet)
-make_time_difference_sheet(wb)
+"""Calling Functions"""#wb = load_workbook(filename='PartTime_Team_Source.xlsx')
+#blank_sheet = wb.get_sheet_by_name('Sheet')
+#wb.remove_sheet(blank_sheet)
+#make_time_difference_sheet(wb)
+wb = load_workbook(filename='week.xlsx')
 split_sheet_by_days(wb, skip_days, end_day_indicator)
 call_create_tables(wb)
+wb.save('Testing.xlsx')
 checks = {'Night Check': False, 'Day Check': False}
 checks = define_blocks(wb, checks, scores)
 data_library = find_non_empty_tables(wb)
+wb.save('Testing.xlsx')
 create_summary_page(wb, data_library, checks)
 wb.save('Output/'+output_filename+'.xlsx')
 create_books(wb)
