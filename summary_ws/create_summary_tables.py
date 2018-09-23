@@ -44,7 +44,7 @@ def create_date_column(wb, ws, color, header_row, num_of_days):
     """Creates the date column, which represents the y axis of the ws
     table. Each row in the column is a date. It uses the list of sheet 
     names to create this"""
-    dates = wb.get_sheet_names()[1:-2]
+    dates = wb.get_sheet_names()[1:-1]
     count = 0
     for row in range(header_row+1, header_row+num_of_days+1):
         date_cell = ws.cell(row=row, column=1)

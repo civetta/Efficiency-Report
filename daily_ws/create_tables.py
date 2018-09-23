@@ -8,7 +8,7 @@ def call_create_tables(wb):
     below"""
     week = wb.get_sheet_names()
     #List of all of the worksheet names (which are the days of the week)
-    week = week[:-2]
+    week = week[:-1]
     for day in week:
         ws = wb.get_sheet_by_name(day)
         max_col = ws.max_column

@@ -1,4 +1,5 @@
 from openpyxl import load_workbook
+from periscope_source import create_input
 from time_difference import make_time_difference_sheet
 from split_days import split_sheet_by_days
 from daily_ws.create_tables import call_create_tables
@@ -6,7 +7,28 @@ from daily_ws.mark_blocks import define_blocks
 from summary_ws.calculate_daily_escore import find_non_empty_tables
 from summary_ws.efficiency_score_summary import create_summary_page
 from teacherbooks.create_teacher_books import create_books
+from datetime import datetime
+import os
 """User Input Variables"""
+import warnings
+warnings.filterwarnings("ignore")
+
+
+def save_leadbook(wb):
+    mydate = datetime.now()
+    date = mydate.strftime("%m-%d-%y")
+    path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
+    file_name = lead_name+"_"+date+'-LEADBOOK.xlsx'
+    save_location = os.path.join(path,lead_name,'TEAM E-REPORTS')
+    if not os.path.isdir(save_location):
+        os.makedirs (save_location)
+    save_name = save_location+"/"+file_name
+    wb.save(save_name)
+
+lead_name = "Jeremy Shock"
+periscope = '049.csv'
+tabby = 'new_tabby.csv'
+create_input(periscope,tabby)
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
 skip_days = ['03/29', '3/27']
 #Used to Conditionally Format the Daily Summary tables
@@ -17,11 +39,14 @@ output_filename = "Lead_Book"
 end_day_indicator = '12:54 AM'
 
 
+
 """Calling Functions"""#wb = load_workbook(filename='PartTime_Team_Source.xlsx')
 #blank_sheet = wb.get_sheet_by_name('Sheet')
 #wb.remove_sheet(blank_sheet)
 #make_time_difference_sheet(wb)
-wb = load_workbook(filename='week.xlsx')
+wb = load_workbook(filename='Input_EReport.xlsx')
+wb_sheet = wb.get_sheet_by_name('Sheet1')
+wb_sheet.title = 'Raw Changes'
 split_sheet_by_days(wb, skip_days, end_day_indicator)
 call_create_tables(wb)
 wb.save('Testing.xlsx')
@@ -30,8 +55,12 @@ checks = define_blocks(wb, checks, scores)
 data_library = find_non_empty_tables(wb)
 wb.save('Testing.xlsx')
 create_summary_page(wb, data_library, checks)
+
+
 wb.save('Output/'+output_filename+'.xlsx')
-create_books(wb)
+create_books(wb,lead_name)
+save_leadbook(wb)
+
 
 
 

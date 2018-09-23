@@ -11,7 +11,7 @@ def create_summary_page(wb, data_dict, checks):
     and uses that to create the names."""
     night_color = 'c0b8f2'
     day_color = 'f2c0b8'
-    sheet_list = wb.get_sheet_names()[:-2]
+    sheet_list = wb.get_sheet_names()[:-1]
     days_num = len(sheet_list)
     wb.create_sheet('Summary', 0)
     ws = wb.get_sheet_by_name('Summary')
@@ -59,6 +59,8 @@ def paste_data(ws, column, row, header_row, data_dict, table_name):
     it looks into the data_dict and matches."""
     curr_cell = ws.cell(row=row, column=column)
     date = ws.cell(row=row, column=1).value
+    
+    
     teacher_name = ws.cell(row=header_row, column=column).value
     teacher_name = teacher_name.replace('\r\n', ' ')
     date_dictionary = data_dict[date]

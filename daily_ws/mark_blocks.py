@@ -10,7 +10,7 @@ def define_blocks(wb, checks, scores):
     calculate_block_escore module to do calculations and paste data into 
     tables"""
     week = wb.get_sheet_names()
-    week = week[:-2]
+    week = week[:-1]
     for day in week:
         ws = wb.get_sheet_by_name(day)
         max_row, max_col = ws.max_row, ws.max_column

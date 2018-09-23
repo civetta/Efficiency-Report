@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from openpyxl.styles import PatternFill
 from format_block_escore import find_empty_row, find_table
 from format_block_escore import coniditional_format_row, night_time_teacher
@@ -40,7 +40,7 @@ def create_time_range(start, end, ws):
     start = datetime.strptime(start, '%m/%d/%y %a %I:%M %p')
     end = datetime.strptime(end, '%m/%d/%y %a %I:%M %p')
     nightshift_start = start.replace(hour=20, minute=0)
-    nightshift_end = start.replace(day=start.day+1, hour=2, minute=0)     
+    nightshift_end = start + timedelta(days=1)     
     time_range = ""
     if end.weekday() >= 5:
         time_range = '*'

@@ -9,7 +9,7 @@ def copy_data(teacherbook, wb, teachername):
     formatting"""
     teacher_data = teacherbook.create_sheet('Data')
     data_column = 1
-    days_in_sheet = wb.get_sheet_names()[1:-2]
+    days_in_sheet = wb.get_sheet_names()[1:-1]
     for day in days_in_sheet:
         ws = wb.get_sheet_by_name(day)
         column = find_teacher_column(ws, teachername, 1, 8)
@@ -45,6 +45,8 @@ def format_data_sheet(teacher_data):
         teacher_data.column_dimensions[get_column_letter(x+2)].width = int(20)
         teacher_data.column_dimensions[get_column_letter(x+3)].width = int(20)
         date = teacher_data.cell(row=3, column=x).value
+        print 
+        print date
         date = date[:date.index(" ")]
         teacher_data.cell(row=1, column=x).value = date
         teacher_data.cell(row=1, column=x).font = Font(size=30, bold=True)

@@ -3,6 +3,8 @@ from utility import copier, find_teacher_column
 from summary_ws.create_summary_tables import big_font
 from openpyxl.utils import get_column_letter
 
+import warnings
+warnings.filterwarnings("ignore")
 
 def copy_summary(teacherbook, wb, teachername):
     """Goes through each day of the week worksheet and using the 

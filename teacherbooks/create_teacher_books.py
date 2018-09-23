@@ -2,9 +2,11 @@ from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from copy_teacher_data import copy_data
 from copy_teacher_summary import copy_summary
-
-
-def create_books(wb):
+from datetime import datetime, timedelta
+import os 
+import warnings
+warnings.filterwarnings("ignore")
+def create_books(wb,lead_name):
     """Collects all of the worksheet variables that will be used and creates
     a new workbook which is defined as teacherbook. Then it creates
     an FAQ page, a Data page, and a Summary page."""
@@ -21,6 +23,20 @@ def create_books(wb):
         copy_summary(teacherbook, wb, teacher_name)
         copy_data(teacherbook, wb, teacher_name)
         teacherbook.save('Output/Teacher Books/'+teacher_name+'.xlsx')
+        save_teacherbook(teacherbook,teacher_name,lead_name)
+
+def save_teacherbook(wb,teacher_name,lead_name):
+    mydate = datetime.now()
+    mydate = mydate + timedelta(days=1)
+    date = mydate.strftime("%m-%d-%y")
+    print date
+    path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
+    file_name = teacher_name+"_"+date+'-EReport.xlsx'
+    save_location = os.path.join(path,lead_name,teacher_name+" E-Report")
+    if not os.path.isdir(save_location):
+        os.makedirs (save_location)
+    save_name = save_location+"/"+file_name
+    wb.save(save_name)
 
 
 def create_faq(current_teacher):
