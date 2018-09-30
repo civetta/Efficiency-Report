@@ -53,9 +53,7 @@ def paste_score(ws, empty_row, day_array, night_array, teacher, day_dict):
     it calculates the daily avg, pasting it as either a "Day avg" 
     or a "Night avg" or both."""
     bold = Font(bold=True)
-    print day_array
     while 'Efficiency Score' in day_array: day_array.remove('Efficiency Score')  
-    print day_array
     if len(day_array) > 0:
         day_avg = round(sum(day_array)/len(day_array), 2)
         ws.cell(row=empty_row, column=1, value="Day Average").font = bold

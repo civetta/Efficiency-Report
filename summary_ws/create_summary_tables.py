@@ -29,7 +29,7 @@ def create_teacher_header_row(ws, header_row, wb):
     last name"""
     rawsheet = wb.get_sheet_by_name('Raw Changes')
     for col_in_rawsheet in range(3, rawsheet.max_column):
-        print col_in_rawsheet
+        
         curr_col = col_in_rawsheet-1
         teacher_name = rawsheet.cell(row=1, column=col_in_rawsheet).value
         first_name = teacher_name[:teacher_name.index(" ")]

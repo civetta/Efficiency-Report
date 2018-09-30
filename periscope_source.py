@@ -11,6 +11,7 @@ def create_input(periscope,tabby):
     pd.set_option('mode.chained_assignment', None)
     #Input Variables
     df = pd.read_csv(periscope)
+    df = df.dropna()
     Tabby = pd.read_csv(tabby)
     Tabby = Tabby.dropna()
     Tabby = organize_Tabby(Tabby)
@@ -24,7 +25,7 @@ def create_input(periscope,tabby):
     seperate_days(df,Tabby)
 
 def organize_Tabby(Tabby):
-    new_Tabby = Tabby[['Per_minute','SS_Max_Avg']]
+    new_Tabby = Tabby[['Per_minute','SS_Max_5']]
     new_Tabby.columns = ['Stamp','Tabby']
 
     
@@ -60,8 +61,9 @@ def seperate_days(df,Tabby):
         current_day_df = df[(df['end_date']==first_day)]
         start = current_day_df.index.values[0]
         start = pd.Timestamp(start)	        
-        start = start.replace(hour=0, minute=0,second=0)	  
-        end = start.replace(hour=23, minute=54, second=0)
+        start = start.replace(hour=7, minute=30,second=0)
+        end = start + timedelta(days=1)	  
+        end = end.replace(hour=1, minute=00, second=0)
         day_Tabby = Tabby[(Tabby['DateStamp']==first_day)]
         Tabby_col = organize(day_Tabby,start,end,'Tabby')
         
@@ -79,8 +81,6 @@ def seperate_days(df,Tabby):
     week_df.set_index(['Tabby'])
     week_df = week_df.fillna(0)
     week_df.index = week_df.index.map(fix_timestamp)
-    print week_df.index.values[0]
-    print week_df.columns
     
     week_df.to_csv('Week.csv')
     writer = pd.ExcelWriter('Input_EReport.xlsx')

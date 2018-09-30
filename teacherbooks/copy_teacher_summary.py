@@ -23,7 +23,7 @@ def copy_daily_tables(teach_summary, wb, teachername):
     tables. If first finds the table using the function used earlier in 
     format block escore (find table), then it copies 8 rows since each
     table is 8 rows tall."""
-    days_in_sheet = wb.get_sheet_names()[1:-2]
+    days_in_sheet = wb.get_sheet_names()[1:-1]
     teacherbook_row = 5
     for day in days_in_sheet:
         ws = wb.get_sheet_by_name(day)
@@ -32,6 +32,7 @@ def copy_daily_tables(teach_summary, wb, teachername):
         date = ws.cell(row=2, column=6).value
         date = date[:date.index(" ")]
         date_cell = teach_summary.cell(row=teacherbook_row-1, column=1) 
+        teach_summary.row_dimensions[teacherbook_row-1].height= 20
         big_font(date_cell, date)
         for row in range(start_of_table, start_of_table+8):
             for col in range(1, 5):
@@ -66,6 +67,8 @@ def format_summary_page(teach_summary):
     for a in range(1, teach_summary.max_column+1):
         teach_summary.column_dimensions[get_column_letter(a)].width = int(20)
     teach_summary.column_dimensions['A'].width = int(30)
+    teach_summary.row_dimensions[1].height= 48
+
 
         
 

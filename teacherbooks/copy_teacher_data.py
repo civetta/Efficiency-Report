@@ -45,8 +45,6 @@ def format_data_sheet(teacher_data):
         teacher_data.column_dimensions[get_column_letter(x+2)].width = int(20)
         teacher_data.column_dimensions[get_column_letter(x+3)].width = int(20)
         date = teacher_data.cell(row=3, column=x).value
-        print 
-        print date
         date = date[:date.index(" ")]
         teacher_data.cell(row=1, column=x).value = date
         teacher_data.cell(row=1, column=x).font = Font(size=30, bold=True)

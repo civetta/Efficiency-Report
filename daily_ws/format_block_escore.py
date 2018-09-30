@@ -11,7 +11,13 @@ def find_table(ws, teacher_name, max_col):
 def find_empty_row(ws, starting_row):
     """Finds the first empty row in the teacher's daily summary table 
     so it can paste the new data in it"""
-    for row in range(starting_row, ws.max_row):
+    if starting_row == ws.max_row:
+        max_row = ws.max_row+6
+    else:
+        max_row = ws.max_row
+    for row in range(starting_row, max_row):
+        if starting_row==max_row:
+            print "START = MAX"
         if ws.cell(row=row, column=1).value is None:
             return row
 
@@ -41,5 +47,7 @@ def night_time_teacher(ws, empty_row):
                 top=Side(border_style='thick', color='1F49A1'),
                 bottom=Side(border_style='thick', color='1F49A1'))
     for i in range(4):
+        #print i
+        #print empty_row
         current_cell = ws.cell(row=empty_row, column=i+1)
         current_cell.border = thick_border

@@ -5,7 +5,7 @@ from format_block_escore import coniditional_format_row, night_time_teacher
 
 
 def organize_data(
-        ws, start, end, column, block_list, tab_list, max_col, checks, scores):
+        ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb):
     """Declares all of the variables needed to create and organize the
     efficiency table. Then it calls paste_data to paste all of the data we have.
     This function also figures out if there is ever a night time shift and 
@@ -13,6 +13,8 @@ def organize_data(
     if we should create a day table, a night table, or both."""
     average_student = round(sum(block_list)/float(len(block_list)), 2)
     average_tabby = round(sum(tab_list)/float(len(tab_list)), 2)
+    
+
     block_escore = round(average_student/float(average_tabby), 2)
     teacher_name = str(ws.cell(row=1, column=column).value)
     start_time = str(ws.cell(row=start, column=6).value)
@@ -23,7 +25,7 @@ def organize_data(
     if '*' not in time_range:
         checks['Day Check'] = True
     paste_list = [time_range, average_student, average_tabby, block_escore]
-    paste_data(ws, paste_list, teacher_name, max_col, scores)
+    paste_data(ws, paste_list, teacher_name, max_col, scores,wb)
     return checks
 
 
@@ -49,14 +51,18 @@ def create_time_range(start, end, ws):
     return time_range+start.strftime("%I:%M %p")+"-"+end.strftime("%I:%M %p")
 
 
-def paste_data(ws, paste_list, teacher_name, max_col, scores):
+def paste_data(ws, paste_list, teacher_name, max_col, scores,wb):
     """Paste the organized data under the daily summary tables.
     It also outlines the cell if it has an asteriks(*)
     which indiciates a night or weekend shift."""  
     night_check = False
+    
     if teacher_name is not None:
         """Finds location of current active teachers, daily summary table"""
+
         starting_row = find_table(ws, teacher_name, max_col)
+        if starting_row > 400:
+            wb.save('checking.xlsx')
         empty_row = find_empty_row(ws, starting_row)
         """If there is an asteriks in the time_range (paste_list[0]) it is a 
         night shift and treated differently"""

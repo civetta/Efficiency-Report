@@ -16,6 +16,7 @@ def call_create_tables(wb):
         format_sheet(ws)
 
 
+
 def create_daily_tables(ws, max_col):
     """So we go through the teachers in the ws, they start 8 columns in, and
     use that number to calculate where to put the new table. So we do teacher
@@ -33,7 +34,8 @@ def create_daily_tables(ws, max_col):
             current_cell.value = title_list[i]
             current_cell.font = Font(bold=True)
             current_cell.fill = PatternFill("solid", fgColor='F2F2F2')
-            
+    for row in range(table_start_cell,table_start_cell+7):
+        ws.cell(row=row, column=1, value=None)      
 
 def format_sheet(ws):
     """Goes through and grays out the spacer column. Makes the time stamp 
