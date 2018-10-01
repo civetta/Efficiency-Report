@@ -28,7 +28,20 @@ def define_blocks(wb, checks, scores):
             else:
                 col = col+1
                 start_row_to_look = 2
+        #live_metrics_down(ws,col,max_col,max_row)
     return checks
+
+
+def live_metrics_down(ws,col,max_col,max_row):
+    row=2
+    for row in range(2,max_row):
+        tab = ws.cell(row=row,column=7).value
+        if tab == 0:
+            for col in range(8,max_col):
+                val = ws.cell(row=row,column=col).value
+                if val > 0:
+                    ws.cell(row=row,column=7,value="Metrics Down")
+                    break
 
 
 def find_max_row(ws):
@@ -36,6 +49,8 @@ def find_max_row(ws):
         row_value = ws.cell(row=row,column=7).value
         if row_value == None:
             return row
+    return ws.max_row
+
 
             
 def empty_tabby(start,end,ws):

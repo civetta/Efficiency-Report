@@ -25,10 +25,10 @@ def save_leadbook(wb):
     save_name = save_location+"/"+file_name
     wb.save(save_name)
 
-lead_name = "des"
+lead_name = "Jeremy Shock"
 """Jeremy Shock, Rachel Adams,Jill Szafranski,Kristin Donnelly, Melissa Cox"""
-periscope = 'team_test.csv'
-tabby = 'tab_9_28.csv'
+periscope = '9_24_jeremy.csv'
+tabby = 'tabby_924.csv'
 create_input(periscope,tabby)
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
 skip_days = []
