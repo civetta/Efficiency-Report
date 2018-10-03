@@ -5,7 +5,7 @@ import math
 from datetime import timedelta
 from dateutil import tz
 
-def create_input(periscope,tabby):
+def create_input(periscope,tabby,lead_name):
     import warnings
     warnings.filterwarnings("ignore")
     pd.set_option('mode.chained_assignment', None)
@@ -22,7 +22,7 @@ def create_input(periscope,tabby):
     df = df.set_index('end_timestamp')
     df = df.sort_index()
     #Creates an array of dfs, where each df is 1 teacher.
-    seperate_days(df,Tabby)
+    seperate_days(df,Tabby,lead_name)
 
 def organize_Tabby(Tabby):
     new_Tabby = Tabby[['Per_minute','SS_Max_5']]
@@ -47,7 +47,7 @@ def create_timestamp(x):
     x = datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S")
     return x
 
-def seperate_days(df,Tabby):
+def seperate_days(df,Tabby,lead_name):
     #Finds First and Laste day in df, and then iterates through them.
     first_day = df.end_date.values[0]
     last_day = df.end_date.values[-1]
@@ -79,6 +79,7 @@ def seperate_days(df,Tabby):
         week_df = week_df.append(day_df)
         first_day += delta
     week_df.set_index(['Tabby'])
+    week_df = fill_in_missing_teachers(week_df,lead_name)
     week_df = week_df.fillna(0)
     week_df.index = week_df.index.map(fix_timestamp)
     
@@ -92,8 +93,28 @@ def fix_timestamp(x):
     dt_obj = dt_obj.strftime('%m/%d/%y %a %I:%M %p')
     return dt_obj
 
-
-#IS TABBY SHIFTED DOWN 1 CELL!!!???????
+def fill_in_missing_teachers(week_df,lead_name):
+    team_org = {'Jeremy Shock':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek'],
+    'Rachel Adams':['Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele Irwin', 'Juventino Mireles'],
+    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly-Anne Heyden', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Fedyna', 'Stacy Good'],
+    'Jill Szafranski':['Jill Szafranski', 'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Spencer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
+    'Kristin Donnelly':['Kristin Donnelly', 'Angela Miller', 'Marcella Parks', 'Sara Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards'],
+    'Caren Glowa':['Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole'],
+    'All':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek',
+    'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele Irwin', 'Juventino Mireles',
+    'Melissa Cox', 'Clifton Dukes', 'Kelly-Anne Heyden', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Fedyna', 'Stacy Good',
+    'Jill Szafranski', 'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Spencer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
+    'Kristin Donnelly', 'Angela Miller', 'Marcella Parks', 'Sara Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards',
+    'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']}
+    team_df = pd.DataFrame.from_dict(team_org,orient='index')
+    team_df = team_df.T
+    team_col =  team_df[lead_name].dropna()
+    columns= week_df.columns.values
+    team = team_col.values
+    difference = list(set(team) - set(columns))
+    for teacher in difference:
+        week_df[teacher] = 0
+    return week_df
 
 
 def organize (df,start,end,column_name):

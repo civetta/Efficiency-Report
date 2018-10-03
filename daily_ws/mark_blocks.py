@@ -28,7 +28,7 @@ def define_blocks(wb, checks, scores):
             else:
                 col = col+1
                 start_row_to_look = 2
-        #live_metrics_down(ws,col,max_col,max_row)
+        live_metrics_down(ws,col,max_col,max_row)
     return checks
 
 
@@ -117,9 +117,11 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
             current_cell.fill = PatternFill("solid", fgColor='c0f7f4')
         else:
                 continue
-        tab_list.append(Tabby_Cell)
-        block_list.append(current_value)
-    average_tabby = round(sum(tab_list)/float(len(tab_list)), 2)
+        if Tabby_Cell == 0 and current_value > 0:
+            pass     
+        else:
+            tab_list.append(Tabby_Cell)
+            block_list.append(current_value)
     checks = organize_data(
         ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb)
     return checks

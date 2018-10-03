@@ -16,8 +16,6 @@ def create_summary_page(wb, data_dict, checks):
     wb.create_sheet('Summary', 0)
     ws = wb.get_sheet_by_name('Summary')
     create_title(ws, sheet_list)
-    print checks
-    print ""
     if checks['Day Check'] is True and checks['Night Check'] is True:
         create_table(ws, 3, 'Day Summary', data_dict, days_num, day_color, wb)
         create_table(

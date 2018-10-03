@@ -47,7 +47,5 @@ def night_time_teacher(ws, empty_row):
                 top=Side(border_style='thick', color='1F49A1'),
                 bottom=Side(border_style='thick', color='1F49A1'))
     for i in range(4):
-        #print i
-        #print empty_row
         current_cell = ws.cell(row=empty_row, column=i+1)
         current_cell.border = thick_border
