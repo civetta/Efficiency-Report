@@ -25,9 +25,9 @@ def save_leadbook(wb):
     save_name = save_location+"/"+file_name
     wb.save(save_name)
 
-lead_name = "Rachel Adams"
+lead_name = "Caren Glowa"
 """Jeremy Shock, Rachel Adams,Jill Szafranski,Kristin Donnelly, Melissa Cox,Caren Glowa"""
-periscope = '9_24_rachel.csv'
+periscope = '9_24_caren.csv'
 tabby = 'tabby_924.csv'
 create_input(periscope,tabby,lead_name)
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
@@ -35,7 +35,7 @@ skip_days = []
 #Used to Conditionally Format the Daily Summary tables
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
-output_filename = "Rachel_4_24"
+output_filename = "New_caren_4_24"
 #Used to indicate a end of day for split day function.
 end_day_indicator = '12:54 AM'
 
@@ -60,7 +60,7 @@ create_summary_page(wb, data_library, checks)
 
 wb.save('Output/'+output_filename+'.xlsx')
 #create_books(wb,lead_name)
-#save_leadbook(wb)"""
+#save_leadbook(wb)
 
 
 

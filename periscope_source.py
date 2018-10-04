@@ -24,16 +24,16 @@ def create_input(periscope,tabby,lead_name):
     #Creates an array of dfs, where each df is 1 teacher.
     seperate_days(df,Tabby,lead_name)
 
+
 def organize_Tabby(Tabby):
     new_Tabby = Tabby[['Per_minute','SS_Max_5']]
     new_Tabby.columns = ['Stamp','Tabby']
 
-    
-    new_Tabby['timestamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S.%f"))
-    new_Tabby['date'] = new_Tabby['timestamp'].map(lambda x: x.strftime('%Y-%m-%d'))
+    new_Tabby['Stamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S.%f"))
+    new_Tabby['date'] = new_Tabby['Stamp'].map(lambda x: x.strftime('%Y-%m-%d'))
     new_Tabby['DateStamp'] = new_Tabby['date'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"))
-    new_Tabby = new_Tabby[['timestamp','DateStamp','Tabby']]
-    new_Tabby = new_Tabby.set_index('timestamp')
+    new_Tabby = new_Tabby[['Stamp','DateStamp','Tabby']]
+    new_Tabby = new_Tabby.set_index('Stamp')
     new_Tabby = new_Tabby.sort_index()
     return new_Tabby
 
@@ -46,6 +46,25 @@ def create_timestamp(x):
         pass
     x = datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S")
     return x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def seperate_days(df,Tabby,lead_name):
     #Finds First and Laste day in df, and then iterates through them.
@@ -78,7 +97,8 @@ def seperate_days(df,Tabby,lead_name):
             
         week_df = week_df.append(day_df)
         first_day += delta
-    week_df.set_index(['Tabby'])
+    
+    print week_df.index.name
     week_df = fill_in_missing_teachers(week_df,lead_name)
     week_df = week_df.fillna(0)
     week_df.index = week_df.index.map(fix_timestamp)
@@ -96,13 +116,13 @@ def fix_timestamp(x):
 def fill_in_missing_teachers(week_df,lead_name):
     team_org = {'Jeremy Shock':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek'],
     'Rachel Adams':['Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele Irwin', 'Juventino Mireles'],
-    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly-Anne Heyden', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Fedyna', 'Stacy Good'],
+    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Fedyna', 'Stacy Good'],
     'Jill Szafranski':['Jill Szafranski', 'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Spencer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
     'Kristin Donnelly':['Kristin Donnelly', 'Angela Miller', 'Marcella Parks', 'Sara Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards'],
     'Caren Glowa':['Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole'],
     'All':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek',
     'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele Irwin', 'Juventino Mireles',
-    'Melissa Cox', 'Clifton Dukes', 'Kelly-Anne Heyden', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Fedyna', 'Stacy Good',
+    'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Fedyna', 'Stacy Good',
     'Jill Szafranski', 'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Spencer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
     'Kristin Donnelly', 'Angela Miller', 'Marcella Parks', 'Sara Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards',
     'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']}
@@ -114,6 +134,11 @@ def fill_in_missing_teachers(week_df,lead_name):
     difference = list(set(team) - set(columns))
     for teacher in difference:
         week_df[teacher] = 0
+    col_list = list(week_df.columns)   
+    col_list = sorted(col_list)
+    print col_list
+    week_df.columns = week_df[[col_list]]
+    print week_df.columns
     return week_df
 
 
@@ -143,7 +168,6 @@ def organize (df,start,end,column_name):
     sessions_ended = sessions_ended.T
     #Sets to columns to alphabetical teacher_name
     #Sets timestamp as index
-    sessions_ended.index.names = ['Date']
+    sessions_ended.index.names = ['Date','Tabby']
     sessions_ended.columns=[column_name]
     return sessions_ended
-

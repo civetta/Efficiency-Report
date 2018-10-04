@@ -32,6 +32,7 @@ def create_teacher_header_row(ws, header_row, wb):
         
         curr_col = col_in_rawsheet-1
         teacher_name = rawsheet.cell(row=1, column=col_in_rawsheet).value
+        print teacher_name
         first_name = teacher_name[:teacher_name.index(" ")]
         last_name = teacher_name[teacher_name.index(" ")+1:]
         teacher_name_formatted = first_name+'\r\n'+last_name

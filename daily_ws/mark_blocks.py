@@ -18,6 +18,7 @@ def define_blocks(wb, checks, scores):
         col = 8
         start_row_to_look = 2
         while col <= max_col:
+            
             start = find_blocks(ws, col, max_row, start_row_to_look, 'start')
             if start != 'Next_Col' and start >= start_row_to_look and start != max_row :
                 end = find_blocks(ws, col, max_row, start, 'end')
@@ -64,7 +65,7 @@ def empty_tabby(start,end,ws):
     if average_tabby>0:
         return True
     else:
-        print tab_list
+        pass
         return False
 
 def find_blocks(ws, col, max_row, starting_row, position):
@@ -104,7 +105,7 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
     block_list = []
     for r in range(start, end):
         current_cell = ws.cell(row=r,  column=column)
-        current_value = current_cell.value
+        current_value = int(current_cell.value)
         Tabby_Cell = int(ws.cell(row=r,  column=7).value)
         plus_1_check = current_value == Tabby_Cell+1 
         minus_1_check = current_value == Tabby_Cell-1
@@ -116,9 +117,9 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
         elif current_value >= Tabby_Cell+2:
             current_cell.fill = PatternFill("solid", fgColor='c0f7f4')
         else:
-                continue
-        if Tabby_Cell == 0 and current_value > 0:
-            pass     
+                pass
+        if Tabby_Cell == 0:
+            pass 
         else:
             tab_list.append(Tabby_Cell)
             block_list.append(current_value)
