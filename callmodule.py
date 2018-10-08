@@ -50,11 +50,9 @@ wb_sheet = wb.get_sheet_by_name('Sheet1')
 wb_sheet.title = 'Raw Changes'
 split_sheet_by_days(wb, skip_days, end_day_indicator)
 call_create_tables(wb)
-wb.save('Testing.xlsx')
 checks = {'Night Check': False, 'Day Check': False}
 checks = define_blocks(wb, checks, scores)
 data_library = find_non_empty_tables(wb)
-wb.save('Testing.xlsx')
 create_summary_page(wb, data_library, checks)
 
 
