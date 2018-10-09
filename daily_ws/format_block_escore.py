@@ -1,5 +1,5 @@
 from openpyxl.styles.borders import Border, Side
-
+import openpyxl
 
 def find_table(ws, teacher_name, max_col):
     """Finds the location of the teacher's daily summary table in the column"""
@@ -32,12 +32,14 @@ def coniditional_format_row(ws, empty_row, paste_list, scores, night_check):
         good_score = scores.get("Good Day Score")
     upper_bound = scores.get("Upper Bound")
     e_score = paste_list[-1]
-    if e_score < good_score:
-        return 'f2b8ea'
-    elif e_score > upper_bound:
-        return 'c0f7f4'
-    else:
-        return 'dff7c0'
+    no_fill = openpyxl.styles.PatternFill(fill_type=None)
+    return 'ffffff'
+    #if e_score < good_score:
+        #return 'f2b8ea'
+    #elif e_score > upper_bound:
+        #return 'c0f7f4'
+    #else:
+        #return 'dff7c0'
 
 
 def night_time_teacher(ws, empty_row):

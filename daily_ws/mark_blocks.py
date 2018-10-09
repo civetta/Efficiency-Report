@@ -85,10 +85,9 @@ def find_blocks(ws, col, max_row, starting_row, position):
             if int(val1) == 0:
                 try:
                     val2 = int(ws.cell(row=row+1, column=col).value)
-                    val3 = int(ws.cell(row=row+2, column=col).value)
                 except TypeError:
                     break
-                if val2 == 0 and val3 == 0:
+                if val2 == 0:
                     return row
     return max_row
 

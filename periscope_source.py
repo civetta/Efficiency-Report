@@ -29,7 +29,9 @@ def organize_Tabby(Tabby):
     new_Tabby = Tabby[['Per_minute','SS_Max_5']]
     new_Tabby.columns = ['Stamp','Tabby']
 
-    new_Tabby['Stamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S.%f"))
+    new_Tabby['Stamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%m/%d/%Y %I:%M:%S %p"))
+
+    #new_Tabby['Stamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S.%f"))
     new_Tabby['date'] = new_Tabby['Stamp'].map(lambda x: x.strftime('%Y-%m-%d'))
     new_Tabby['DateStamp'] = new_Tabby['date'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"))
     new_Tabby = new_Tabby[['Stamp','DateStamp','Tabby']]
@@ -72,8 +74,9 @@ def seperate_days(df,Tabby,lead_name):
     last_day = df.end_date.values[-1]
     delta = datetime.timedelta(days=1)
     sessions_ended = pd.DataFrame()
-    unique_name = df.teacher_name.unique()
+    unique_name = df.name.unique()
     unique_name.sort()
+    print unique_name
     week_df = pd.DataFrame()
 
     while first_day <= last_day:
@@ -90,7 +93,7 @@ def seperate_days(df,Tabby,lead_name):
         day_df['Tabby'] = Tabby_col['Tabby']
         for teacher_name in unique_name:
             #Creates a df for each teacher on each day
-            teacher_per_day = current_day_df.loc[current_day_df['teacher_name'] == teacher_name]
+            teacher_per_day = current_day_df.loc[current_day_df['name'] == teacher_name]
             #Finds session closed every 6 minutes
             new_column = organize(teacher_per_day,start,end,teacher_name)
             day_df[teacher_name] = new_column[teacher_name]
@@ -116,14 +119,14 @@ def fix_timestamp(x):
 def fill_in_missing_teachers(week_df,lead_name):
     team_org = {'Jeremy Shock':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek'],
     'Rachel Adams':['Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele Irwin', 'Juventino Mireles'],
-    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Fedyna', 'Stacy Good'],
-    'Jill Szafranski':['Jill Szafranski', 'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Spencer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
+    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrhams', 'Stacy Good'],
+    'Jill Szafranski':['Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
     'Kristin Donnelly':['Kristin Donnelly', 'Angela Miller', 'Marcella Parks', 'Sara Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards'],
     'Caren Glowa':['Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole'],
     'All':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek',
     'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele Irwin', 'Juventino Mireles',
-    'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Fedyna', 'Stacy Good',
-    'Jill Szafranski', 'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Spencer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
+    'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Ambrams', 'Stacy Good',
+    'Jill Szafranski', 'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
     'Kristin Donnelly', 'Angela Miller', 'Marcella Parks', 'Sara Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards',
     'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']}
     team_df = pd.DataFrame.from_dict(team_org,orient='index')
