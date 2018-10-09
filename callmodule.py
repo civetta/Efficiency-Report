@@ -57,7 +57,7 @@ checks = define_blocks(wb, checks, scores)
 data_library = find_non_empty_tables(wb)
 create_summary_page(wb, data_library, checks)
 
-
+#This saves it locally in project folder and is used for testing.
 wb.save('Output/'+output_filename+'.xlsx')
 #create_books(wb,lead_name)
 #save_leadbook(wb)
