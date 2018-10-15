@@ -41,7 +41,7 @@ def define_blocks(wb, checks, scores):
                 start_row_to_look = 2
         live_metrics_down(ws,col,max_col,max_row)
     np_df = pd.DataFrame(np_array, columns=['TeacherName','Day','Block','Tab'])
-    print np_df
+    np_df.to_csv('Test.csv')
     return checks
 
 
