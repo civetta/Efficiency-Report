@@ -2,7 +2,7 @@ from daily_ws.calculate_block_escore import find_empty_row
 from openpyxl.styles import Font
 
 
-def find_non_empty_tables(wb):
+def find_non_empty_tables(wb,df):
     """Goes through each worksheet and finds each teacher table and
      the first empty row in each table"""
     week = wb.get_sheet_names()

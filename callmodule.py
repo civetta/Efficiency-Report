@@ -53,7 +53,9 @@ split_sheet_by_days(wb, skip_days, end_day_indicator)
 call_create_tables(wb)
 checks = {'Night Check': False, 'Day Check': False}
 checks = define_blocks(wb, checks, scores)
-data_library = find_non_empty_tables(wb)
+df = checks[-1]
+checks = checks[0]
+data_library = find_non_empty_tables(wb, df)
 create_summary_page(wb, data_library, checks)
 
 #This saves leadbook locally in project folder and is used for testing.
