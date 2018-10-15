@@ -60,8 +60,6 @@ def paste_data(ws, paste_list, teacher_name, max_col, scores,wb):
         """Finds location of current active teachers, daily summary table"""
 
         starting_row = find_table(ws, teacher_name, max_col)
-        if starting_row > 400:
-            wb.save('checking.xlsx')
         empty_row = find_empty_row(ws, starting_row)
         """If there is an asteriks in the time_range (paste_list[0]) it is a 
         night shift and treated differently"""

@@ -1,7 +1,8 @@
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
 from calculate_block_escore import organize_data
-
+import pandas as pd
+import numpy as np
 
 def define_blocks(wb, checks, scores):
     """Goes through each ws and then goes through each column looking for the 
@@ -11,25 +12,36 @@ def define_blocks(wb, checks, scores):
     tables"""
     week = wb.get_sheet_names()
     week = week[:-1]
+    np_array=np.array([['TeacherName','Day','Block','Tab']])
+    new_rows={}
     for day in week:
         ws = wb.get_sheet_by_name(day)
         max_col = ws.max_column
         max_row = find_max_row(ws)
         col = 8
         start_row_to_look = 2
+        #Each column is it's own teacher.
         while col <= max_col:
-            
+            teacher_name = ws.cell(row=1, column=col).value
             start = find_blocks(ws, col, max_row, start_row_to_look, 'start')
             if start != 'Next_Col' and start >= start_row_to_look and start != max_row :
                 end = find_blocks(ws, col, max_row, start, 'end')
                 start_row_to_look = end
                 safe_to_color = empty_tabby(start,end,ws)
                 if safe_to_color is True:
-                    checks = bolder(ws, start, end, col, max_col, checks, scores,wb)                  
+                    checks_and_lists = bolder(ws, start, end, col, max_col, checks, scores,wb)  
+                    checks, tab_list, block_list = checks_and_lists[0], checks_and_lists[1], checks_and_lists[2]
+                    
+                    for i in range(len(tab_list)):
+                        each_block = block_list[i]
+                        each_tab = block_list[i]
+                        np_array = np.append(np_array, np.array([[teacher_name,day,each_block,each_tab]]), axis=0)
             else:
                 col = col+1
                 start_row_to_look = 2
         live_metrics_down(ws,col,max_col,max_row)
+    np_df = pd.DataFrame(np_array, columns=['TeacherName','Day','Block','Tab'])
+    print np_df
     return checks
 
 
@@ -69,7 +81,7 @@ def empty_tabby(start,end,ws):
         return False
 
 def find_blocks(ws, col, max_row, starting_row, position):
-    """Looks for either two 0's in a row for the end of a block,or 
+    """Looks for either three 0's in a row for the end of a block,or 
     two sequential non zeros for the start of the block"""
     for row in range(starting_row, max_row):
         val1 = ws.cell(row=row, column=col).value
@@ -124,4 +136,5 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
             block_list.append(current_value)
     checks = organize_data(
         ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb)
-    return checks
+    
+    return [checks, tab_list, block_list]

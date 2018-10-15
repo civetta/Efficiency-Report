@@ -29,13 +29,12 @@ def organize_Tabby(Tabby):
     new_Tabby = Tabby[['Per_minute','SS_Max_5']]
     new_Tabby.columns = ['Stamp','Tabby']
 
-    new_Tabby['Stamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%m/%d/%Y %I:%M:%S %p"))
-
-    #new_Tabby['Stamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S.%f"))
-    new_Tabby['date'] = new_Tabby['Stamp'].map(lambda x: x.strftime('%Y-%m-%d'))
+    
+    new_Tabby['timestamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S.%f"))
+    new_Tabby['date'] = new_Tabby['timestamp'].map(lambda x: x.strftime('%Y-%m-%d'))
     new_Tabby['DateStamp'] = new_Tabby['date'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"))
-    new_Tabby = new_Tabby[['Stamp','DateStamp','Tabby']]
-    new_Tabby = new_Tabby.set_index('Stamp')
+    new_Tabby = new_Tabby[['timestamp','DateStamp','Tabby']]
+    new_Tabby = new_Tabby.set_index('timestamp')
     new_Tabby = new_Tabby.sort_index()
     return new_Tabby
 
@@ -76,7 +75,6 @@ def seperate_days(df,Tabby,lead_name):
     sessions_ended = pd.DataFrame()
     unique_name = df.name.unique()
     unique_name.sort()
-    print unique_name
     week_df = pd.DataFrame()
 
     while first_day <= last_day:
@@ -91,6 +89,7 @@ def seperate_days(df,Tabby,lead_name):
         
         day_df=pd.DataFrame()
         day_df['Tabby'] = Tabby_col['Tabby']
+        current_day_df.to_csv('testing_Between_time.csv')
         for teacher_name in unique_name:
             #Creates a df for each teacher on each day
             teacher_per_day = current_day_df.loc[current_day_df['name'] == teacher_name]
@@ -118,16 +117,16 @@ def fix_timestamp(x):
 
 def fill_in_missing_teachers(week_df,lead_name):
     team_org = {'Jeremy Shock':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek'],
-    'Rachel Adams':['Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele Irwin', 'Juventino Mireles'],
-    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrhams', 'Stacy Good'],
+    'Rachel Adams':['Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele  Irwin', 'Juventino Mireles'],
+    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrams', 'Stacy Good'],
     'Jill Szafranski':['Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
-    'Kristin Donnelly':['Kristin Donnelly', 'Angela Miller', 'Marcella Parks', 'Sara Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards'],
+    'Kristin Donnelly':['Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards'],
     'Caren Glowa':['Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole'],
     'All':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek',
-    'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele Irwin', 'Juventino Mireles',
-    'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Ambrams', 'Stacy Good',
+    'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele  Irwin', 'Juventino Mireles',
+    'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', "Kimberly Abrams", 'Stacy Good',
     'Jill Szafranski', 'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
-    'Kristin Donnelly', 'Angela Miller', 'Marcella Parks', 'Sara Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards',
+    'Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards',
     'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']}
     team_df = pd.DataFrame.from_dict(team_org,orient='index')
     team_df = team_df.T
@@ -137,7 +136,6 @@ def fill_in_missing_teachers(week_df,lead_name):
     difference = list(set(team) - set(columns))
     for teacher in difference:
         week_df[teacher] = 0
-    print week_df.columns
     return week_df
 
 
