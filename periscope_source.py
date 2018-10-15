@@ -152,7 +152,7 @@ def organize (df,start,end,column_name):
         
         if column_name == 'Tabby':
             tab = df2['Tabby'].mean()
-            tab = math.ceil(tab)
+            #tab = math.ceil(tab)
             if tab > 5:
                 tab = 5
             num.append(tab)
