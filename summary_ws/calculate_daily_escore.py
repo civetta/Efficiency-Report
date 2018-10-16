@@ -26,6 +26,7 @@ def find_non_empty_tables(wb,df):
             if table_row-empty_row != 0:
                 create_arrays(ws, table_row, empty_row, teacher, day_dict)
         all_data.update({day: day_dict})
+        print df 
     return all_data
 
 
