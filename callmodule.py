@@ -29,8 +29,8 @@ def save_leadbook(wb):
 """Jeremy Shock, Rachel Adams,Jill Szafranski,Kristin Donnelly, Melissa Cox,Caren Glowa, All"""
 #Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
 lead_name = "Rachel Adams"
-periscope = 'rachel_108.csv'
-tabby = 'tabby_108.csv'
+periscope = 'e-data_source/rachel_108.csv'
+tabby = "e-data_source/tabby_108.csv"
 create_input(periscope,tabby,lead_name)
 
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
