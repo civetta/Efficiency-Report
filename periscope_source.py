@@ -11,7 +11,7 @@ def create_input(periscope,SSMax,lead_name):
     pd.set_option('mode.chained_assignment', None)
     #Input Variables
     df = pd.read_csv(periscope)
-    df = df.dropna()
+    #df = df.dropna()
     SSMax = pd.read_csv(SSMax)
     SSMax = SSMax.dropna()
     SSMax = organize_SSMax(SSMax)

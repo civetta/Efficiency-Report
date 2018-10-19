@@ -19,7 +19,7 @@ def create_sub_titles(ws, header_row, table_name, num_of_days):
     title_of_table = ws.cell(row=header_row, column=1)
     total_average_title = ws.cell(row=header_row+num_of_days+1, column=1)
     big_font(title_of_table, table_name)
-    big_font(total_average_title, 'Total Average')
+    big_font(total_average_title, 'Week Average')
     ws.row_dimensions[header_row].height = int(40)
 
 

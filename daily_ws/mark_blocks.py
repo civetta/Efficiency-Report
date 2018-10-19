@@ -126,15 +126,13 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
         if current_value == Tabby_Cell:
             current_cell.fill = PatternFill("solid", fgColor='dff7c0')
         #Green
-        elif current_value< plus_1_check and current_value>minus_1_check:
+        elif current_value< plus_1_check and current_value>minus_1_check and current_value != float(0):
             current_cell.fill = PatternFill("solid", fgColor='dff7c0')
         #Pink
         elif current_value < Tabby_Cell and current_value > float(0):
             current_cell.fill = PatternFill("solid", fgColor='f2b8ea')
-            print "COLORED PINK"
         #Blue
         elif current_value >= (Tabby_Cell+1.5):
-            print "COLORED BLUE"
             current_cell.fill = PatternFill("solid", fgColor='c0f7f4')
         else:
                 pass

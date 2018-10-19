@@ -20,7 +20,7 @@ def find_non_empty_tables(wb,df):
             higher up in the worksheet versus at row 8. So the first teacher is
             located at row 2, the second teacher is located at
             row 10, and so on"""
-            table_row = ((col-7)*8)-6
+            table_row = ((col-7)*9)-6
             teacher = ws.cell(row=1, column=col).value
             empty_row = find_empty_row(ws, table_row)
             if table_row-empty_row != 0:

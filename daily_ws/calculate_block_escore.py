@@ -71,8 +71,11 @@ def paste_data(ws, paste_list, teacher_name, max_col, scores,wb):
                 ws, empty_row, paste_list, scores, night_check)
         for i in range(4):
             """paste data from paste_list into empty row in daily summary table"""
+            current_item = paste_list[i]
+            if '*' in str(current_item):
+                current_item = current_item[1:]
             current_cell = ws.cell(row=empty_row, column=i+1)
-            current_cell.value = paste_list[i]
+            current_cell.value = current_item
             current_cell.fill = PatternFill("solid", fgColor=color)
 
 

@@ -26,9 +26,9 @@ def create_daily_tables(ws, max_col):
     So the first teacher is located at row 2, the second teacher is located at
     row 10, and so on"""
     for column in range(8, max_col+1):
-        table_start_cell = ((column-7)*8)-6
+        table_start_cell = ((column-7)*9)-6
         teacher_name = ws.cell(row=1, column=column).value
-        title_list = [teacher_name, "Students", "Tabby", "Efficiency Score"]
+        title_list = [teacher_name, "Sessions", "SSMax", "Efficiency Score"]
         for i in range(4):
             current_cell = ws.cell(row=table_start_cell, column=i+1)
             current_cell.value = title_list[i]
