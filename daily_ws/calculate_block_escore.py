@@ -12,12 +12,12 @@ def organize_data(
     This function also figures out if there is ever a night time shift and 
     return it back up to callmodule. This is used in the last module to know
     if we should create a day table, a night table, or both."""
-    average_student = round(np.mean(block_list),2)
-    average_tabby = round(np.mean(tab_list),2)
+    average_student = round(sum(block_list),2)
+    average_tabby = round(sum(tab_list),2)
     block_escore = round(average_student/float(average_tabby), 2)
     teacher_name = str(ws.cell(row=1, column=column).value)
     start_time = str(ws.cell(row=start, column=6).value)
-    end_time = str(ws.cell(row=end, column=6).value)
+    end_time = str(ws.cell(row=end-1, column=6).value)
     time_range = create_time_range(start_time, end_time, ws)
     if '*' in time_range:
         checks['Night Check'] = True

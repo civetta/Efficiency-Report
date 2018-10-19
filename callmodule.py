@@ -28,8 +28,8 @@ def save_leadbook(wb):
 """INPUTS HERE"""
 """Jeremy Shock, Rachel Adams,Jill Szafranski,Kristin Donnelly, Melissa Cox,Caren Glowa, All"""
 #Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
-lead_name = "Jill Szafranski"
-periscope = 'e-data_source/jill_108.csv'
+lead_name = "All"
+periscope = 'e-data_source/all_108.csv'
 tabby = "e-data_source/tabby_108.csv"
 create_input(periscope,tabby,lead_name)
 

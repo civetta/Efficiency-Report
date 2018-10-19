@@ -24,9 +24,10 @@ def find_non_empty_tables(wb,df):
             teacher = ws.cell(row=1, column=col).value
             empty_row = find_empty_row(ws, table_row)
             if table_row-empty_row != 0:
-                create_arrays(ws, table_row, empty_row, teacher, day_dict)
+                #create_arrays(ws, table_row, empty_row, teacher, day_dict)
+                paste_over(df, ws, empty_row, teacher, day_dict)
         all_data.update({day: day_dict})
-        print df 
+        
     return all_data
 
 
@@ -70,3 +71,49 @@ def paste_score(ws, empty_row, day_array, night_array, teacher, day_dict):
         night_avg = ""
     return day_dict.update(
         {teacher: {'Day Average': day_avg, "Night Average": night_avg}})
+
+
+def paste_over(df, ws, empty_row, teacher,day_dict):
+    """Given the teacher and day it creates a new DF of just that information.
+    Then it creates two sub DFS one where is_night is True and the other when it is 
+    False. Then it calls paste_df_data to actually paste it into the excel file."""
+    day = ws.cell(row=2, column=6).value
+    day = day[:day.index(' ')].strip()
+    df = df[(df.TeacherName == teacher)]
+    df = df[(df.Date == day)]
+    day_df = df[(df.is_night == False)]
+    night_df = df[(df.is_night == True)]
+    bold = Font(bold=True)
+    if not day_df.empty:
+        day_avg = paste_df_data(empty_row,ws,day_df)
+        ws.cell(row=empty_row, column=1, value="Day Total").font = bold
+        ws.cell(row=empty_row, column=4, value=day_avg).font = bold
+        
+        empty_row=empty_row+1
+    else:
+        day_avg = ""
+
+
+    if not night_df.empty:
+        night_avg = paste_df_data(empty_row,ws,night_df)
+        ws.cell(row=empty_row, column=1, value="Night Total").font = bold
+        ws.cell(row=empty_row, column=4, value=night_avg).font = bold
+        
+    else:
+        night_avg = ""
+    
+
+    return day_dict.update(
+        {teacher: {'Day Average': day_avg, "Night Average": night_avg}})
+
+def paste_df_data(empty_row, ws, df):       
+    sum_students = df.Block.sum()
+    sum_tabby = df.Tab.sum()
+    if sum_tabby>0:
+        day_average = round((sum_students/float(sum_tabby)),2)
+        bold = Font(bold=True)
+        ws.cell(row=empty_row, column=2, value = sum_students).font = bold
+        ws.cell(row=empty_row, column=3, value = sum_tabby).font = bold
+        ws.cell(row=empty_row, column=4, value = day_average).font = bold
+        return day_average
+

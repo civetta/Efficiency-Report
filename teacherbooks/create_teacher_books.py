@@ -23,7 +23,7 @@ def create_books(wb,lead_name):
         copy_summary(teacherbook, wb, teacher_name)
         copy_data(teacherbook, wb, teacher_name)
         teacherbook.save('Output/Teacher Books/'+teacher_name+'.xlsx')
-        save_teacherbook(teacherbook,teacher_name,lead_name)
+        #save_teacherbook(teacherbook,teacher_name,lead_name)
 
 def save_teacherbook(wb,teacher_name,lead_name):
     mydate = datetime.now()

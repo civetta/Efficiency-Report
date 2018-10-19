@@ -4,6 +4,7 @@ from calculate_block_escore import organize_data
 from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
+import math
 
 def define_blocks(wb, checks, scores):
     """Goes through each ws and then goes through each column looking for the 
@@ -30,13 +31,15 @@ def define_blocks(wb, checks, scores):
                 start_row_to_look = end
                 safe_to_color = empty_tabby(start,end,ws)
                 if safe_to_color is True:
-                    checks_and_lists = bolder(ws, start, end, col, max_col, checks, scores,wb)  
+                    checks_and_lists = bolder(ws, start, end, col, max_col, checks, scores,wb) 
+
                     checks, block_df = checks_and_lists[0], checks_and_lists[1]
                     all_df = all_df.append(block_df)
             else:
                 col = col+1
                 start_row_to_look = 2
         live_metrics_down(ws,col,max_col,max_row)
+        
     return [checks,all_df]
 
 
@@ -92,9 +95,10 @@ def find_blocks(ws, col, max_row, starting_row, position):
             if int(val1) == 0:
                 try:
                     val2 = int(ws.cell(row=row+1, column=col).value)
+                    val3 = int(ws.cell(row=row+2, column=col).value)
                 except TypeError:
                     break
-                if val2 == 0:
+                if val2 == 0 and val3 == 0:
                     return row
     return max_row
 
@@ -113,22 +117,32 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
     teacher_name = ws.cell(row=1, column=column).value
     for r in range(start, end):
         current_cell = ws.cell(row=r,  column=column)
-        current_value = int(current_cell.value)
-        Tabby_Cell = int(ws.cell(row=r,  column=7).value)
-        plus_1_check = current_value == Tabby_Cell+1 
-        minus_1_check = current_value == Tabby_Cell-1
+        current_value = float(current_cell.value)
+        Tabby_Cell = float(ws.cell(row=r,  column=7).value)
+        plus_1_check =  Tabby_Cell+1.5 
+        minus_1_check = Tabby_Cell-1.5
         current_cell.font = Font(bold=True)
-        if current_value == Tabby_Cell or plus_1_check or minus_1_check:
+        #Green
+        if current_value == Tabby_Cell:
             current_cell.fill = PatternFill("solid", fgColor='dff7c0')
-        elif current_value < Tabby_Cell and current_value > 0:
+        #Green
+        elif current_value< plus_1_check and current_value>minus_1_check:
+            current_cell.fill = PatternFill("solid", fgColor='dff7c0')
+        #Pink
+        elif current_value < Tabby_Cell and current_value > float(0):
             current_cell.fill = PatternFill("solid", fgColor='f2b8ea')
-        elif current_value >= Tabby_Cell+2:
+            print "COLORED PINK"
+        #Blue
+        elif current_value >= (Tabby_Cell+1.5):
+            print "COLORED BLUE"
             current_cell.fill = PatternFill("solid", fgColor='c0f7f4')
         else:
                 pass
-        if Tabby_Cell == 0:
+        if Tabby_Cell == float(0):
             pass 
         else:
+            tab_list.append(Tabby_Cell)
+            block_list.append(current_value)
             time_cell = ws.cell(row=r, column=6).value
             row_in_block_df = pd.DataFrame({'TeacherName':[teacher_name],'Block':[current_value],'Tab':[Tabby_Cell],'TimeStamp': [time_cell]})
             block_df = block_df.append(row_in_block_df)
@@ -154,4 +168,6 @@ def mark_as_night(block_df):
         block_df['is_night']=True
     else:
         block_df['is_night']=False
+
+    block_df[['Block','Tab']] = block_df[['Block','Tab']].astype(float)
     return block_df
