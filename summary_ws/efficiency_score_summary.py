@@ -25,7 +25,6 @@ def create_summary_page(wb, data_dict, checks):
     else:
         create_table(
             ws, 3, 'Night Summary', data_dict, days_num, night_color, wb)
-    print data_dict
 
 
 def create_title(ws, sheet_list):

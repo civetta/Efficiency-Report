@@ -86,7 +86,7 @@ def find_blocks(ws, col, max_row, starting_row, position):
         if val1==None:
             return 'Next_Col'
         if position == 'start':  
-            if int(val1) > 0:
+            if int(val1) > 0 and row+2<max_row:
                 val2 = int(ws.cell(row=row+1, column=col).value)
                 val3 = int(ws.cell(row=row+2, column=col).value)
                 if val2 > 0 or val3 > 0:

@@ -1,7 +1,7 @@
 def split_sheet_by_days(wb, skip_days,end_of_day):
     """Find start of day, and end of day, and then copies everything in
     between into a new sheet. If end of day returns none, it breaks"""
-    raw_change_ws = wb.get_sheet_by_name("Raw Changes")
+    raw_change_ws = wb["Raw Changes"]
     max_row = raw_change_ws.max_row
     max_column = raw_change_ws.max_column+1
     end_of_day_row = 0
