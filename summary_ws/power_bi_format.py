@@ -3,12 +3,15 @@ import datetime
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
     
-def create_dataframe(data_dict, lead_name, wb):
+def create_dataframe(data_dict, wb):
+    #Data_dict is a dictionary of dicrionarys. It's {date:{teacher{night:escore, day:escore}}}
     df = pd.DataFrame({'Teacher':[], 'Team':[], 'Date':[], 'E-Score':[], 'Month_Num':[], 'Weekday':[], 'Weekday_Num':[]})
     for date, value in data_dict.iteritems():
         date_dict = data_dict[date]
         ws = wb[date]
+        #Gets date from Worksheet so it includes the year versus just the ws title which does not.
         full_date = ws.cell(row=2, column=6).value
+        #Creates a datetime object and then paress it a bunch of different ways to get values
         dt_obj = datetime.datetime.strptime(full_date, '%m/%d/%y %a %I:%M %p')
         dater = dt_obj.strftime('%m/%d/%y')
         weekday = dt_obj.strftime('%m/%d/%y %A')
@@ -34,7 +37,7 @@ def create_workbook(df):
         ws.append(r)
     for cell in ws['A'] + ws[1]:
         cell.style = 'Pandas'
-    wb.save('Output/Fall/Management.xlsx')
+    wb.save('Output/Fall/11-5_Management.xlsx')
 
 
 def find_team(teacher):

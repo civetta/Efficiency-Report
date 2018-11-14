@@ -11,10 +11,10 @@ def create_summary_page(wb, data_dict, checks):
     and uses that to create the names."""
     night_color = 'c0b8f2'
     day_color = 'f2c0b8'
-    sheet_list = wb.get_sheet_names()[:-1]
+    sheet_list = wb.sheetnames[:-1]
     days_num = len(sheet_list)
     wb.create_sheet('Summary', 0)
-    ws = wb.get_sheet_by_name('Summary')
+    ws = wb['Summary']
     create_title(ws, sheet_list)
     if checks['Day Check'] is True and checks['Night Check'] is True:
         create_table(ws, 3, 'Day Summary', data_dict, days_num, day_color, wb)

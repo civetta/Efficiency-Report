@@ -27,7 +27,7 @@ def create_teacher_header_row(ws, header_row, wb):
     """Creates the header row for each table. The header row consistants
     of all teacher names with a new line in between their first and
     last name"""
-    rawsheet = wb.get_sheet_by_name('Raw Changes')
+    rawsheet = wb['Raw Changes']
     for col_in_rawsheet in range(3, rawsheet.max_column):
         
         curr_col = col_in_rawsheet-1
@@ -44,7 +44,7 @@ def create_date_column(wb, ws, color, header_row, num_of_days):
     """Creates the date column, which represents the y axis of the ws
     table. Each row in the column is a date. It uses the list of sheet 
     names to create this"""
-    dates = wb.get_sheet_names()[1:-1]
+    dates = wb.sheetnames[1:-1]
     count = 0
     for row in range(header_row+1, header_row+num_of_days+1):
         date_cell = ws.cell(row=row, column=1)

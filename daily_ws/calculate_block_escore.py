@@ -6,7 +6,7 @@ import numpy as np
 
 
 def organize_data(
-        ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb):
+        teacher_name, ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb):
     """Declares all of the variables needed to create and organize the
     efficiency table. Then it calls paste_data to paste all of the data we have.
     This function also figures out if there is ever a night time shift and 

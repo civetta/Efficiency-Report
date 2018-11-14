@@ -12,12 +12,13 @@ def define_blocks(wb, checks, scores):
     conditionally format the cells, and then passes information over to 
     calculate_block_escore module to do calculations and paste data into 
     tables"""
-    week = wb.get_sheet_names()
+    week = wb.sheetnames
     week = week[:-1]
     all_df = pd.DataFrame(columns=['TeacherName','Block','Tab', 'TimeStamp'])
     new_rows={}
     for day in week:
-        ws = wb.get_sheet_by_name(day)
+        
+        ws = wb[day]
         max_col = ws.max_column
         max_row = find_max_row(ws)
         col = 8
@@ -25,6 +26,8 @@ def define_blocks(wb, checks, scores):
         #Each column is it's own teacher.
         while col <= max_col:
             teacher_name = ws.cell(row=1, column=col).value
+
+            
             start = find_blocks(ws, col, max_row, start_row_to_look, 'start')
             if start != 'Next_Col' and start >= start_row_to_look and start != max_row :
                 end = find_blocks(ws, col, max_row, start, 'end')
@@ -139,12 +142,15 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
         if Tabby_Cell == float(0):
             pass 
         else:
+            
             tab_list.append(Tabby_Cell)
             block_list.append(current_value)
             time_cell = ws.cell(row=r, column=6).value
+            
             row_in_block_df = pd.DataFrame({'TeacherName':[teacher_name],'Block':[current_value],'Tab':[Tabby_Cell],'TimeStamp': [time_cell]})
             block_df = block_df.append(row_in_block_df)
-    checks = organize_data(
+
+    checks = organize_data(teacher_name,
         ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb)
     block_df = mark_as_night(block_df)
     return [checks, block_df]

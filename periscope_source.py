@@ -12,6 +12,11 @@ def create_input(periscope,SSMax,lead_name):
     #Input Variables
     df = pd.read_csv(periscope)
     df = df[df.reason != 'Demo']
+    print df.shape[0]
+    #df = df[df['transcript'].isnull()]
+    #print df2
+    #df = df.dropna(subset=['transcript'])
+    print df.shape[0]
     #df = df.dropna()
     SSMax = pd.read_csv(SSMax)
     SSMax = SSMax.dropna()
@@ -74,6 +79,10 @@ def seperate_days(df,SSMax,lead_name):
     last_day = df.end_date.values[-1]
     delta = datetime.timedelta(days=1)
     sessions_ended = pd.DataFrame()
+    try:
+        df.rename(columns={'teacher_name':'name'}, inplace=True)
+    except:
+        print ""
     unique_name = df.name.unique()
     unique_name.sort()
     week_df = pd.DataFrame()
@@ -89,7 +98,7 @@ def seperate_days(df,SSMax,lead_name):
         SSMax_col = organize(day_SSMax,start,end,'SSMax')
         
         day_df=pd.DataFrame()
-        day_df['SSMax'] = SSMax_col['SSMax']
+        day_df['*SSMax'] = SSMax_col['SSMax']
         current_day_df.to_csv('testing_Between_time.csv')
         for teacher_name in unique_name:
             #Creates a df for each teacher on each day
@@ -105,7 +114,9 @@ def seperate_days(df,SSMax,lead_name):
     week_df = fill_in_missing_teachers(week_df,lead_name)
     week_df = week_df.fillna(0)
     week_df.index = week_df.index.map(fix_timestamp)
-    
+    week_df = week_df.sort_index(axis=1)
+    week_df.rename(columns={'*SSMax':'SSMax'}, inplace=True)
+    print week_df
     week_df.to_csv('Week.csv')
     writer = pd.ExcelWriter('Input_EReport.xlsx')
     week_df.to_excel(writer, index = True)

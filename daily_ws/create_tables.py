@@ -6,11 +6,11 @@ from openpyxl.utils import get_column_letter
 def call_create_tables(wb):
     """Goes through each day of the week worksheet and calls the functions
     below"""
-    week = wb.get_sheet_names()
+    week = wb.sheetnames
     #List of all of the worksheet names (which are the days of the week)
     week = week[:-1]
     for day in week:
-        ws = wb.get_sheet_by_name(day)
+        ws = wb[day]
         max_col = ws.max_column
         create_daily_tables(ws, max_col)
         format_sheet(ws)

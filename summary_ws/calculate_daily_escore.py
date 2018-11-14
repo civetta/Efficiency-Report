@@ -5,12 +5,13 @@ from openpyxl.styles import Font
 def find_non_empty_tables(wb,df):
     """Goes through each worksheet and finds each teacher table and
      the first empty row in each table"""
-    week = wb.get_sheet_names()
+    week = wb.sheetnames
     week = week[:-1]   
     all_data = {}
+    
     for day in week:
         day_dict = {}
-        ws = wb.get_sheet_by_name(day)
+        ws = wb[day]
         for col in range(8, ws.max_column+1):
             """So we go through the teachers in the ws, they start 8 columns 
             in, and use that number to calculate where to put the new table.
@@ -81,6 +82,8 @@ def paste_over(df, ws, empty_row, teacher,day_dict):
     day = day[:day.index(' ')].strip()
     df = df[(df.TeacherName == teacher)]
     df = df[(df.Date == day)]
+    print teacher
+    print df
     day_df = df[(df.is_night == False)]
     night_df = df[(df.is_night == True)]
     bold = Font(bold=True)
@@ -88,23 +91,18 @@ def paste_over(df, ws, empty_row, teacher,day_dict):
         day_avg = paste_df_data(empty_row,ws,day_df)
         ws.cell(row=empty_row, column=1, value="Day Total").font = bold
         ws.cell(row=empty_row, column=4, value=day_avg).font = bold
-        
         empty_row=empty_row+1
     else:
         day_avg = ""
-
-
     if not night_df.empty:
         night_avg = paste_df_data(empty_row,ws,night_df)
         ws.cell(row=empty_row, column=1, value="Night Total").font = bold
         ws.cell(row=empty_row, column=4, value=night_avg).font = bold
-        
     else:
         night_avg = ""
-    
-
     return day_dict.update(
         {teacher: {'Day Average': day_avg, "Night Average": night_avg}})
+
 
 def paste_df_data(empty_row, ws, df):       
     sum_students = df.Block.sum()
