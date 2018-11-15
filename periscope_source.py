@@ -12,11 +12,9 @@ def create_input(periscope,SSMax,lead_name):
     #Input Variables
     df = pd.read_csv(periscope)
     df = df[df.reason != 'Demo']
-    print df.shape[0]
     #df = df[df['transcript'].isnull()]
     #print df2
     #df = df.dropna(subset=['transcript'])
-    print df.shape[0]
     #df = df.dropna()
     SSMax = pd.read_csv(SSMax)
     SSMax = SSMax.dropna()
@@ -116,7 +114,6 @@ def seperate_days(df,SSMax,lead_name):
     week_df.index = week_df.index.map(fix_timestamp)
     week_df = week_df.sort_index(axis=1)
     week_df.rename(columns={'*SSMax':'SSMax'}, inplace=True)
-    print week_df
     week_df.to_csv('Week.csv')
     writer = pd.ExcelWriter('Input_EReport.xlsx')
     week_df.to_excel(writer, index = True)

@@ -19,7 +19,11 @@ def create_dataframe(data_dict, wb):
         weekday_num = dt_obj.strftime('%w')
         for teacher, data in date_dict.iteritems():
             team = find_team(teacher)
+
+            
             teacher_dict = date_dict[teacher]
+            if "  " in teacher:
+                teacher = teacher.replace("  "," ")
             df = df.append(({'Teacher':teacher, 'Team':team, 'Date':dater, 
                 'E-Score':(teacher_dict['Night Average']),'Day/Night':'Night', 'Month_Num':month_num, 
                 'Weekday':weekday, 'Weekday_Num':weekday_num}), ignore_index=True)

@@ -32,46 +32,6 @@ def find_non_empty_tables(wb,df):
     return all_data
 
 
-def create_arrays(ws, table_row, empty_row, teacher, day_dict):
-    """Goes through each tabble and add each block efficiency score to 
-    either a day array or a night array, using * as an indicator as a
-    night shift. It also removes the *"""
-    day_array = []
-    night_array = []
-    for row in range(table_row+1, empty_row):
-        block_escore = ws.cell(row=row, column=4).value
-        time_range = ws.cell(row=row, column=1).value
-        if '*' in time_range:
-            night_array.append(block_escore)
-            ws.cell(row=row, column=1).value = time_range[1:]
-        else:
-            day_array.append(block_escore)
-    teacher_score = paste_score(
-        ws, empty_row, day_array, night_array, teacher, day_dict)
-    return teacher_score
-
-
-def paste_score(ws, empty_row, day_array, night_array, teacher, day_dict):
-    """Using the array and the empty row (the first empty row in the table),
-    it calculates the daily avg, pasting it as either a "Day avg" 
-    or a "Night avg" or both."""
-    bold = Font(bold=True)
-    while 'Efficiency Score' in day_array: day_array.remove('Efficiency Score')  
-    if len(day_array) > 0:
-        day_avg = round(sum(day_array)/len(day_array), 2)
-        ws.cell(row=empty_row, column=1, value="Day Average").font = bold
-        ws.cell(row=empty_row, column=4, value=day_avg).font = bold
-        empty_row = empty_row+1
-    else:
-        day_avg = ""
-    if len(night_array) > 0:
-        night_avg = round(sum(night_array)/len(night_array), 2)
-        ws.cell(row=empty_row, column=1, value="Night Average").font = bold
-        ws.cell(row=empty_row, column=4, value=night_avg).font = bold
-    else:
-        night_avg = ""
-    return day_dict.update(
-        {teacher: {'Day Average': day_avg, "Night Average": night_avg}})
 
 
 def paste_over(df, ws, empty_row, teacher,day_dict):
@@ -81,9 +41,7 @@ def paste_over(df, ws, empty_row, teacher,day_dict):
     day = ws.cell(row=2, column=6).value
     day = day[:day.index(' ')].strip()
     df = df[(df.TeacherName == teacher)]
-    df = df[(df.Date == day)]
-    print teacher
-    print df
+    df = df[(df.ws == ws.title)]
     day_df = df[(df.is_night == False)]
     night_df = df[(df.is_night == True)]
     bold = Font(bold=True)

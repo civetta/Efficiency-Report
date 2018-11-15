@@ -28,8 +28,8 @@ def save_leadbook(wb):
 """Jeremy Shock, Rachel Adams,Melissa Cox, Jill Szafranski,Kristin Donnelly,Caren Glowa, All"""
 #Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
 lead_name = "All"
-periscope = 'e-data_source/e-data_Fall/1029_allnofilter.csv'
-tabby = "e-data_source/e-data_Fall/1029_tabby.csv"
+periscope = 'e-data_source/e-data_Fall/924_all.csv'
+tabby = "e-data_source/e-data_Fall/924_tabby.csv"
 create_input(periscope,tabby,lead_name)
 
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
@@ -38,7 +38,7 @@ skip_days = []
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
 #Output Filename that saves file locally. Usually used when testing.
-output_filename = "10_29_nofilter"
+output_filename = "wendybug"
 #Used to indicate a end of day for split day function.
 end_day_indicator = '12:54 AM'
 
@@ -59,7 +59,7 @@ create_summary_page(wb, data_library, checks)
 
 #This saves leadbook locally in project folder and is used for testing.
 wb.save('Output/Fall/'+output_filename+'.xlsx')
-#create_dataframe(data_library,wb)
+create_dataframe(data_library,wb)
 #create_books(wb,lead_name)
 #save_leadbook(wb)
 

@@ -147,7 +147,7 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
             block_list.append(current_value)
             time_cell = ws.cell(row=r, column=6).value
             
-            row_in_block_df = pd.DataFrame({'TeacherName':[teacher_name],'Block':[current_value],'Tab':[Tabby_Cell],'TimeStamp': [time_cell]})
+            row_in_block_df = pd.DataFrame({'TeacherName':[teacher_name],'Block':[current_value],'Tab':[Tabby_Cell],'TimeStamp': [time_cell],'ws':ws.title})
             block_df = block_df.append(row_in_block_df)
 
     checks = organize_data(teacher_name,
