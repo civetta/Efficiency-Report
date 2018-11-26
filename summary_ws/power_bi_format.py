@@ -3,7 +3,7 @@ import datetime
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
     
-def create_dataframe(data_dict, wb):
+def create_dataframe(data_dict, wb,save_date):
     #Data_dict is a dictionary of dicrionarys. It's {date:{teacher{night:escore, day:escore}}}
     df = pd.DataFrame({'Teacher':[], 'Team':[], 'Date':[], 'E-Score':[], 'Month_Num':[], 'Weekday':[], 'Weekday_Num':[]})
     for date, value in data_dict.iteritems():
@@ -32,16 +32,16 @@ def create_dataframe(data_dict, wb):
                 'Weekday':weekday, 'Weekday_Num':weekday_num}), ignore_index=True)
 
     df = df[['Teacher', 'Team', 'Date', 'E-Score', 'Day/Night', 'Month_Num', 'Weekday', 'Weekday_Num']]
-    create_workbook(df)
+    create_workbook(df,save_date)
 
-def create_workbook(df):
+def create_workbook(df,save_date):
     wb = Workbook()
     ws = wb.active
     for r in dataframe_to_rows(df, index=False, header=True):
         ws.append(r)
     for cell in ws['A'] + ws[1]:
         cell.style = 'Pandas'
-    wb.save('Output/Fall/11-5_Management.xlsx')
+    wb.save('Output/Fall/'+save_date+'_Management.xlsx')
 
 
 def find_team(teacher):

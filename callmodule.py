@@ -14,9 +14,9 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-def save_leadbook(wb):
+def save_leadbook(wb,save_date):
     path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
-    file_name = lead_name+"_11-5-18-LEADBOOK.xlsx"
+    file_name = lead_name+"_"+save_date+"-LEADBOOK.xlsx"
     save_location = os.path.join(path,lead_name,'TEAM E-REPORTS')
     if not os.path.isdir(save_location):
         os.makedirs (save_location)
@@ -27,10 +27,11 @@ def save_leadbook(wb):
 """INPUTS HERE"""
 """Jeremy Shock, Rachel Adams,Melissa Cox, Jill Szafranski,Kristin Donnelly,Caren Glowa, All"""
 #Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
-lead_name = "All"
-periscope = 'e-data_source/e-data_Fall/924_all.csv'
-tabby = "e-data_source/e-data_Fall/924_tabby.csv"
+lead_name = "Caren Glowa"
+periscope = 'e-data_source/e-data_Fall/1119_caren.csv'
+tabby = "e-data_source/e-data_Fall/1119_tabby.csv"
 create_input(periscope,tabby,lead_name)
+print "Periscope Data Sorted"
 
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
 skip_days = []
@@ -38,7 +39,7 @@ skip_days = []
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
 #Output Filename that saves file locally. Usually used when testing.
-output_filename = "wendybug"
+save_date = "11-19-18"
 #Used to indicate a end of day for split day function.
 end_day_indicator = '12:54 AM'
 
@@ -49,19 +50,21 @@ wb = load_workbook(filename='Input_EReport.xlsx')
 wb_sheet = wb['Sheet1']
 wb_sheet.title = 'Raw Changes'
 split_sheet_by_days(wb, skip_days, end_day_indicator)
+print "Sheets split by days completed"
 call_create_tables(wb)
 checks = {'Night Check': False, 'Day Check': False}
 checks = define_blocks(wb, checks, scores)
+print "Blocks Found and Daily Tables Created"
 df = checks[-1]
 checks = checks[0]
 data_library = find_non_empty_tables(wb, df)
 create_summary_page(wb, data_library, checks)
 
 #This saves leadbook locally in project folder and is used for testing.
-wb.save('Output/Fall/'+output_filename+'.xlsx')
-create_dataframe(data_library,wb)
-#create_books(wb,lead_name)
-#save_leadbook(wb)
+wb.save('Output/Fall/'+save_date+'.xlsx')
+create_dataframe(data_library,wb, save_date)
+create_books(wb,lead_name, save_date)
+save_leadbook(wb, save_date)
 
 
 

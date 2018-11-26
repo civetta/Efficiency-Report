@@ -9,10 +9,10 @@ def copy_data(teacherbook, wb, teachername):
     formatting"""
     teacher_data = teacherbook.create_sheet('Data')
     data_column = 1
-    days_in_sheet = wb.get_sheet_names()[1:-1]
+    days_in_sheet = wb.sheetnames[1:-1]
     for day in days_in_sheet:
         start_of_teacher_day = False
-        ws = wb.get_sheet_by_name(day)
+        ws = wb[day]
         column = find_teacher_column(ws, teachername, 1, 8)
         teacher_worked = did_work(ws, column)
         if teacher_worked == True:
