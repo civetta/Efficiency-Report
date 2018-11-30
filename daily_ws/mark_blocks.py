@@ -26,7 +26,6 @@ def define_blocks(wb, checks, scores):
         #Each column is it's own teacher.
         while col <= max_col:
             teacher_name = ws.cell(row=1, column=col).value
-
             
             start = find_blocks(ws, col, max_row, start_row_to_look, 'start')
             if start != 'Next_Col' and start >= start_row_to_look and start != max_row :
@@ -72,10 +71,10 @@ def empty_tabby(start,end,ws):
     for r in range(start, end):
         Tabby_Cell = ws.cell(row=r,  column=7).value
         if Tabby_Cell != None:
-            Tabby_Cell = int(Tabby_Cell)
+            Tabby_Cell = float(Tabby_Cell)
         tab_list.append(Tabby_Cell)
     average_tabby = round(sum(tab_list)/float(len(tab_list)), 2)
-    if average_tabby>0:
+    if average_tabby>0.0:
         return True
     else:
         pass
@@ -85,14 +84,20 @@ def find_blocks(ws, col, max_row, starting_row, position):
     """Looks for either three 0's in a row for the end of a block,or 
     two sequential non zeros for the start of the block"""
     for row in range(starting_row, max_row):
+        
         val1 = ws.cell(row=row, column=col).value
+        
         if val1==None:
             return 'Next_Col'
         if position == 'start':  
-            if int(val1) > 0 and row+2<max_row:
+            if int(val1) > 0 and row+3<max_row:
+                
                 val2 = int(ws.cell(row=row+1, column=col).value)
                 val3 = int(ws.cell(row=row+2, column=col).value)
-                if val2 > 0 or val3 > 0:
+                val4 = int(ws.cell(row=row+3, column=col).value)
+                if sum([(int(val1)>0),(val2>0),(val3>0),(val4>0)])>=3:
+                    
+                    #Count non zeros is greater than 3.
                     return row
         elif position == 'end':
             if int(val1) == 0:
@@ -118,6 +123,7 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
     block_list = []
     block_df = pd.DataFrame(columns=['TeacherName','Block','Tab', 'TimeStamp'])
     teacher_name = ws.cell(row=1, column=column).value
+    print teacher_name
     for r in range(start, end):
         current_cell = ws.cell(row=r,  column=column)
         current_value = float(current_cell.value)
@@ -149,7 +155,10 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
             
             row_in_block_df = pd.DataFrame({'TeacherName':[teacher_name],'Block':[current_value],'Tab':[Tabby_Cell],'TimeStamp': [time_cell],'ws':ws.title})
             block_df = block_df.append(row_in_block_df)
-
+    print time_cell
+    print block_list
+    print ""
+    print ""
     checks = organize_data(teacher_name,
         ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb)
     block_df = mark_as_night(block_df)

@@ -14,21 +14,24 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-def save_leadbook(wb,save_date):
-    path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
-    file_name = lead_name+"_"+save_date+"-LEADBOOK.xlsx"
-    save_location = os.path.join(path,lead_name,'TEAM E-REPORTS')
-    if not os.path.isdir(save_location):
-        os.makedirs (save_location)
-    save_name = save_location+"/"+file_name
-    wb.save(save_name)
+def save_leadbook(wb,save_date,debug):
+    if debug is False:
+        path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
+        file_name = lead_name+"_"+save_date+"-LEADBOOK.xlsx"
+        save_location = os.path.join(path,lead_name,'TEAM E-REPORTS')
+        if not os.path.isdir(save_location):
+            os.makedirs (save_location)
+        save_name = save_location+"/"+file_name
+        wb.save(save_name)
+    else:
+        wb.save('Output/Teacher Books/'+lead_name+"_"+save_date+'.xlsx')
 
 
 """INPUTS HERE"""
 """Jeremy Shock, Rachel Adams,Melissa Cox, Jill Szafranski,Kristin Donnelly,Caren Glowa, All"""
 #Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
-lead_name = "Caren Glowa"
-periscope = 'e-data_source/e-data_Fall/1119_caren.csv'
+lead_name = "All"
+periscope = 'e-data_source/e-data_Fall/1119_all.csv'
 tabby = "e-data_source/e-data_Fall/1119_tabby.csv"
 create_input(periscope,tabby,lead_name)
 print "Periscope Data Sorted"
@@ -42,6 +45,7 @@ scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 save_date = "11-19-18"
 #Used to indicate a end of day for split day function.
 end_day_indicator = '12:54 AM'
+debug = True
 
 
 
@@ -62,9 +66,9 @@ create_summary_page(wb, data_library, checks)
 
 #This saves leadbook locally in project folder and is used for testing.
 wb.save('Output/Fall/'+save_date+'.xlsx')
-create_dataframe(data_library,wb, save_date)
-create_books(wb,lead_name, save_date)
-save_leadbook(wb, save_date)
+#create_dataframe(data_library,wb, save_date)
+#create_books(wb,lead_name, save_date,debug)
+#save_leadbook(wb, save_date,debug)
 
 
 
