@@ -123,7 +123,6 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
     block_list = []
     block_df = pd.DataFrame(columns=['TeacherName','Block','Tab', 'TimeStamp'])
     teacher_name = ws.cell(row=1, column=column).value
-    print teacher_name
     for r in range(start, end):
         current_cell = ws.cell(row=r,  column=column)
         current_value = float(current_cell.value)
@@ -155,10 +154,6 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
             
             row_in_block_df = pd.DataFrame({'TeacherName':[teacher_name],'Block':[current_value],'Tab':[Tabby_Cell],'TimeStamp': [time_cell],'ws':ws.title})
             block_df = block_df.append(row_in_block_df)
-    print time_cell
-    print block_list
-    print ""
-    print ""
     checks = organize_data(teacher_name,
         ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb)
     block_df = mark_as_night(block_df)

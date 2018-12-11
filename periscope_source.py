@@ -55,22 +55,6 @@ def create_timestamp(x):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def seperate_days(df,SSMax,lead_name):
     #Finds First and Laste day in df, and then iterates through them.
     first_day = df.end_date.values[0]

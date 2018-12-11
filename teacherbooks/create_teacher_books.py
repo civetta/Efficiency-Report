@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import os 
 import warnings
 warnings.filterwarnings("ignore")
-def create_books(wb,lead_name,save_date):
+def create_books(wb,lead_name,save_date,debug):
     """Collects all of the worksheet variables that will be used and creates
     a new workbook which is defined as teacherbook. Then it creates
     an FAQ page, a Data page, and a Summary page."""
@@ -22,8 +22,11 @@ def create_books(wb,lead_name,save_date):
         create_faq(teacherbook)
         copy_summary(teacherbook, wb, teacher_name)
         copy_data(teacherbook, wb, teacher_name)
-        teacherbook.save('Output/Teacher Books/'+teacher_name+'.xlsx')
-        save_teacherbook(teacherbook,teacher_name,lead_name,save_date)
+        
+        if debug is False:
+                save_teacherbook(teacherbook,teacher_name,lead_name,save_date)
+        else:
+                teacherbook.save('Output/Teacher Books/'+teacher_name+'.xlsx')
 
 def save_teacherbook(wb,teacher_name,lead_name,save_date):
     path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
@@ -32,7 +35,6 @@ def save_teacherbook(wb,teacher_name,lead_name,save_date):
     if not os.path.isdir(save_location):
         os.makedirs (save_location)
     save_name = save_location+"/"+file_name
-    #wb.save(file_name)
     wb.save(save_name)
 
 
