@@ -161,3 +161,4 @@ def organize (df,start,end,column_name):
     sessions_ended.index.names = ['Date']
     sessions_ended.columns=[column_name]
     return sessions_ended
+    

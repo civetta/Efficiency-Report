@@ -34,7 +34,6 @@ def define_blocks(wb, checks, scores):
                 safe_to_color = empty_tabby(start,end,ws)
                 if safe_to_color is True:
                     checks_and_lists = bolder(ws, start, end, col, max_col, checks, scores,wb) 
-
                     checks, block_df = checks_and_lists[0], checks_and_lists[1]
                     all_df = all_df.append(block_df)
             else:
