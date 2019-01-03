@@ -5,16 +5,20 @@ import math
 from datetime import timedelta
 from dateutil import tz
 
-def create_input(periscope,tabby,lead_name):
+def create_input(periscope,SSMax,lead_name):
     import warnings
     warnings.filterwarnings("ignore")
     pd.set_option('mode.chained_assignment', None)
     #Input Variables
     df = pd.read_csv(periscope)
-    df = df.dropna()
-    Tabby = pd.read_csv(tabby)
-    Tabby = Tabby.dropna()
-    Tabby = organize_Tabby(Tabby)
+    df = df[df.reason != 'Demo']
+    #df = df[df['transcript'].isnull()]
+    #print df2
+    #df = df.dropna(subset=['transcript'])
+    #df = df.dropna()
+    SSMax = pd.read_csv(SSMax)
+    SSMax = SSMax.dropna()
+    SSMax = organize_SSMax(SSMax)
     #Creates an "end_timestamp" column, with correct format
     df['end_timestamp'] = df['session_ended'].map(create_timestamp)
     df['end_date'] = df['end_timestamp'].map(lambda x: x.date())
@@ -22,21 +26,21 @@ def create_input(periscope,tabby,lead_name):
     df = df.set_index('end_timestamp')
     df = df.sort_index()
     #Creates an array of dfs, where each df is 1 teacher.
-    seperate_days(df,Tabby,lead_name)
+    seperate_days(df,SSMax,lead_name)
 
 
-def organize_Tabby(Tabby):
-    new_Tabby = Tabby[['Per_minute','SS_Max_5']]
-    new_Tabby.columns = ['Stamp','Tabby']
+def organize_SSMax(SSMax):
+    new_SSMax = SSMax[['Per_minute','SS_Max_5']]
+    new_SSMax.columns = ['Stamp','SSMax']
 
     
-    new_Tabby['timestamp']=new_Tabby['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S.%f"))
-    new_Tabby['date'] = new_Tabby['timestamp'].map(lambda x: x.strftime('%Y-%m-%d'))
-    new_Tabby['DateStamp'] = new_Tabby['date'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"))
-    new_Tabby = new_Tabby[['timestamp','DateStamp','Tabby']]
-    new_Tabby = new_Tabby.set_index('timestamp')
-    new_Tabby = new_Tabby.sort_index()
-    return new_Tabby
+    new_SSMax['timestamp']=new_SSMax['Stamp'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S.%f"))
+    new_SSMax['date'] = new_SSMax['timestamp'].map(lambda x: x.strftime('%Y-%m-%d'))
+    new_SSMax['DateStamp'] = new_SSMax['date'].map(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"))
+    new_SSMax = new_SSMax[['timestamp','DateStamp','SSMax']]
+    new_SSMax = new_SSMax.set_index('timestamp')
+    new_SSMax = new_SSMax.sort_index()
+    return new_SSMax
 
 
 def create_timestamp(x):
@@ -51,28 +55,16 @@ def create_timestamp(x):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def seperate_days(df,Tabby,lead_name):
+def seperate_days(df,SSMax,lead_name):
     #Finds First and Laste day in df, and then iterates through them.
     first_day = df.end_date.values[0]
     last_day = df.end_date.values[-1]
     delta = datetime.timedelta(days=1)
     sessions_ended = pd.DataFrame()
+    try:
+        df.rename(columns={'teacher_name':'name'}, inplace=True)
+    except:
+        print ""
     unique_name = df.name.unique()
     unique_name.sort()
     week_df = pd.DataFrame()
@@ -84,11 +76,11 @@ def seperate_days(df,Tabby,lead_name):
         start = start.replace(hour=7, minute=30,second=0)
         end = start + timedelta(days=1)	  
         end = end.replace(hour=1, minute=00, second=0)
-        day_Tabby = Tabby[(Tabby['DateStamp']==first_day)]
-        Tabby_col = organize(day_Tabby,start,end,'Tabby')
+        day_SSMax = SSMax[(SSMax['DateStamp']==first_day)]
+        SSMax_col = organize(day_SSMax,start,end,'SSMax')
         
         day_df=pd.DataFrame()
-        day_df['Tabby'] = Tabby_col['Tabby']
+        day_df['*SSMax'] = SSMax_col['SSMax']
         current_day_df.to_csv('testing_Between_time.csv')
         for teacher_name in unique_name:
             #Creates a df for each teacher on each day
@@ -100,11 +92,12 @@ def seperate_days(df,Tabby,lead_name):
         week_df = week_df.append(day_df)
         first_day += delta
     
-    print week_df.index.name
+    
     week_df = fill_in_missing_teachers(week_df,lead_name)
     week_df = week_df.fillna(0)
     week_df.index = week_df.index.map(fix_timestamp)
-    
+    week_df = week_df.sort_index(axis=1)
+    week_df.rename(columns={'*SSMax':'SSMax'}, inplace=True)
     week_df.to_csv('Week.csv')
     writer = pd.ExcelWriter('Input_EReport.xlsx')
     week_df.to_excel(writer, index = True)
@@ -120,13 +113,13 @@ def fill_in_missing_teachers(week_df,lead_name):
     'Rachel Adams':['Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele  Irwin', 'Juventino Mireles'],
     'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrams', 'Stacy Good'],
     'Jill Szafranski':['Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
-    'Kristin Donnelly':['Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards'],
+    'Kristin Donnelly':['Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely'],
     'Caren Glowa':['Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole'],
     'All':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek',
     'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele  Irwin', 'Juventino Mireles',
     'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', "Kimberly Abrams", 'Stacy Good',
      'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
-    'Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Desiree Sowards',
+    'Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely',
     'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']}
     team_df = pd.DataFrame.from_dict(team_org,orient='index')
     team_df = team_df.T
@@ -150,9 +143,9 @@ def organize (df,start,end,column_name):
         num = []
         df2 = df.between_time(range1, range2,include_start=False, include_end=True)
         
-        if column_name == 'Tabby':
-            tab = df2['Tabby'].mean()
-            tab = math.ceil(tab)
+        if column_name == 'SSMax':
+            tab = df2['SSMax'].mean()
+            tab = round(float(tab),2)
             if tab > 5:
                 tab = 5
             num.append(tab)
@@ -168,3 +161,4 @@ def organize (df,start,end,column_name):
     sessions_ended.index.names = ['Date']
     sessions_ended.columns=[column_name]
     return sessions_ended
+    

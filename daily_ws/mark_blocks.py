@@ -1,8 +1,10 @@
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
 from calculate_block_escore import organize_data
+from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
+import math
 
 def define_blocks(wb, checks, scores):
     """Goes through each ws and then goes through each column looking for the 
@@ -10,12 +12,13 @@ def define_blocks(wb, checks, scores):
     conditionally format the cells, and then passes information over to 
     calculate_block_escore module to do calculations and paste data into 
     tables"""
-    week = wb.get_sheet_names()
+    week = wb.sheetnames
     week = week[:-1]
-    np_array=np.array([['TeacherName','Day','Block','Tab']])
+    all_df = pd.DataFrame(columns=['TeacherName','Block','Tab', 'TimeStamp'])
     new_rows={}
     for day in week:
-        ws = wb.get_sheet_by_name(day)
+        
+        ws = wb[day]
         max_col = ws.max_column
         max_row = find_max_row(ws)
         col = 8
@@ -23,26 +26,22 @@ def define_blocks(wb, checks, scores):
         #Each column is it's own teacher.
         while col <= max_col:
             teacher_name = ws.cell(row=1, column=col).value
+            
             start = find_blocks(ws, col, max_row, start_row_to_look, 'start')
             if start != 'Next_Col' and start >= start_row_to_look and start != max_row :
                 end = find_blocks(ws, col, max_row, start, 'end')
                 start_row_to_look = end
                 safe_to_color = empty_tabby(start,end,ws)
                 if safe_to_color is True:
-                    checks_and_lists = bolder(ws, start, end, col, max_col, checks, scores,wb)  
-                    checks, tab_list, block_list = checks_and_lists[0], checks_and_lists[1], checks_and_lists[2]
-                    
-                    for i in range(len(tab_list)):
-                        each_block = block_list[i]
-                        each_tab = block_list[i]
-                        np_array = np.append(np_array, np.array([[teacher_name,day,each_block,each_tab]]), axis=0)
+                    checks_and_lists = bolder(ws, start, end, col, max_col, checks, scores,wb) 
+                    checks, block_df = checks_and_lists[0], checks_and_lists[1]
+                    all_df = all_df.append(block_df)
             else:
                 col = col+1
                 start_row_to_look = 2
         live_metrics_down(ws,col,max_col,max_row)
-    np_df = pd.DataFrame(np_array, columns=['TeacherName','Day','Block','Tab'])
-    print np_df
-    return checks
+        
+    return [checks,all_df]
 
 
 def live_metrics_down(ws,col,max_col,max_row):
@@ -71,10 +70,10 @@ def empty_tabby(start,end,ws):
     for r in range(start, end):
         Tabby_Cell = ws.cell(row=r,  column=7).value
         if Tabby_Cell != None:
-            Tabby_Cell = int(Tabby_Cell)
+            Tabby_Cell = float(Tabby_Cell)
         tab_list.append(Tabby_Cell)
     average_tabby = round(sum(tab_list)/float(len(tab_list)), 2)
-    if average_tabby>0:
+    if average_tabby>0.0:
         return True
     else:
         pass
@@ -84,22 +83,29 @@ def find_blocks(ws, col, max_row, starting_row, position):
     """Looks for either three 0's in a row for the end of a block,or 
     two sequential non zeros for the start of the block"""
     for row in range(starting_row, max_row):
+        
         val1 = ws.cell(row=row, column=col).value
+        
         if val1==None:
             return 'Next_Col'
         if position == 'start':  
-            if int(val1) > 0:
+            if int(val1) > 0 and row+3<max_row:
+                
                 val2 = int(ws.cell(row=row+1, column=col).value)
                 val3 = int(ws.cell(row=row+2, column=col).value)
-                if val2 > 0 or val3 > 0:
+                val4 = int(ws.cell(row=row+3, column=col).value)
+                if sum([(int(val1)>0),(val2>0),(val3>0),(val4>0)])>=3:
+                    
+                    #Count non zeros is greater than 3.
                     return row
         elif position == 'end':
             if int(val1) == 0:
                 try:
                     val2 = int(ws.cell(row=row+1, column=col).value)
+                    val3 = int(ws.cell(row=row+2, column=col).value)
                 except TypeError:
                     break
-                if val2 == 0:
+                if val2 == 0 and val3 == 0:
                     return row
     return max_row
 
@@ -114,27 +120,61 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
     who pastes all of these data into daily teacher summary tables."""            
     tab_list = []
     block_list = []
+    block_df = pd.DataFrame(columns=['TeacherName','Block','Tab', 'TimeStamp'])
+    teacher_name = ws.cell(row=1, column=column).value
     for r in range(start, end):
         current_cell = ws.cell(row=r,  column=column)
-        current_value = int(current_cell.value)
-        Tabby_Cell = int(ws.cell(row=r,  column=7).value)
-        plus_1_check = current_value == Tabby_Cell+1 
-        minus_1_check = current_value == Tabby_Cell-1
+        current_value = float(current_cell.value)
+        Tabby_Cell = float(ws.cell(row=r,  column=7).value)
+        plus_1_check =  Tabby_Cell+1.5 
+        minus_1_check = Tabby_Cell-1.5
         current_cell.font = Font(bold=True)
-        if current_value == Tabby_Cell or plus_1_check or minus_1_check:
+        #Green
+        if current_value == Tabby_Cell:
             current_cell.fill = PatternFill("solid", fgColor='dff7c0')
-        elif current_value < Tabby_Cell and current_value > 0:
+        #Green
+        elif current_value< plus_1_check and current_value>minus_1_check and current_value != float(0):
+            current_cell.fill = PatternFill("solid", fgColor='dff7c0')
+        #Pink
+        elif current_value < Tabby_Cell and current_value > float(0):
             current_cell.fill = PatternFill("solid", fgColor='f2b8ea')
-        elif current_value >= Tabby_Cell+2:
+        #Blue
+        elif current_value >= (Tabby_Cell+1.5):
             current_cell.fill = PatternFill("solid", fgColor='c0f7f4')
         else:
                 pass
-        if Tabby_Cell == 0:
+        if Tabby_Cell == float(0):
             pass 
         else:
+            
             tab_list.append(Tabby_Cell)
             block_list.append(current_value)
-    checks = organize_data(
+            time_cell = ws.cell(row=r, column=6).value
+            
+            row_in_block_df = pd.DataFrame({'TeacherName':[teacher_name],'Block':[current_value],'Tab':[Tabby_Cell],'TimeStamp': [time_cell],'ws':ws.title})
+            block_df = block_df.append(row_in_block_df)
+    checks = organize_data(teacher_name,
         ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb)
-    
-    return [checks, tab_list, block_list]
+    block_df = mark_as_night(block_df)
+    return [checks, block_df]
+
+
+def mark_as_night(block_df):
+    """Formats block_df and checks to see if it's a night shift or not. This was added on 10/16/18, as a request 
+    from management to use sum of all blocks/sum of all ss_max to calculate Efficiency Report. Instead of re-writing
+    entire module I kept the old efficiency report and added in the df aspect in to work along side it"""
+    block_df['TimeStamp'] = block_df['TimeStamp'].map(lambda x: datetime.strptime(x, "%m/%d/%y %a %I:%M %p"))
+    block_df['Time'] = block_df['TimeStamp'].map(lambda x: x.strftime('%I:%M %p'))
+    block_df['Date'] = block_df['TimeStamp'].map(lambda x: x.strftime('%m/%d/%y'))
+
+
+    nightshift_start = block_df['TimeStamp'].iloc[0].replace(hour=20, minute=0)
+    nightshift_end = block_df['TimeStamp'].iloc[0] + timedelta(days=1)
+    end = block_df['TimeStamp'].iloc[-1]
+    if end > nightshift_start and end < nightshift_end:
+        block_df['is_night']=True
+    else:
+        block_df['is_night']=False
+
+    block_df[['Block','Tab']] = block_df[['Block','Tab']].astype(float)
+    return block_df

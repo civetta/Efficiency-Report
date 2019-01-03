@@ -10,10 +10,11 @@ def copier(old_cell, new_cell):
     '''Copies both the value, font style, and fill from old cell
     into the new cell'''
     new_cell.value = old_cell.value
-    new_cell.font = copy(old_cell.font)
-    new_cell.fill = copy(old_cell.fill)
-    new_cell.alignment = copy(old_cell.alignment)
-    new_cell.border = copy(old_cell.border)
+    if old_cell.has_style:
+        new_cell.font = copy(old_cell.font)
+        new_cell.fill = copy(old_cell.fill)
+        new_cell.alignment = copy(old_cell.alignment)
+        new_cell.border = copy(old_cell.border)
 
 
 def find_teacher_column(ws, teachername, row_to_look, start_column):

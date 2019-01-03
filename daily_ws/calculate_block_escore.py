@@ -6,18 +6,18 @@ import numpy as np
 
 
 def organize_data(
-        ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb):
+        teacher_name, ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb):
     """Declares all of the variables needed to create and organize the
     efficiency table. Then it calls paste_data to paste all of the data we have.
     This function also figures out if there is ever a night time shift and 
     return it back up to callmodule. This is used in the last module to know
     if we should create a day table, a night table, or both."""
-    average_student = round(np.mean(block_list),2)
-    average_tabby = round(np.mean(tab_list),2)
+    average_student = round(sum(block_list),2)
+    average_tabby = round(sum(tab_list),2)
     block_escore = round(average_student/float(average_tabby), 2)
     teacher_name = str(ws.cell(row=1, column=column).value)
     start_time = str(ws.cell(row=start, column=6).value)
-    end_time = str(ws.cell(row=end, column=6).value)
+    end_time = str(ws.cell(row=end-1, column=6).value)
     time_range = create_time_range(start_time, end_time, ws)
     if '*' in time_range:
         checks['Night Check'] = True
@@ -71,8 +71,11 @@ def paste_data(ws, paste_list, teacher_name, max_col, scores,wb):
                 ws, empty_row, paste_list, scores, night_check)
         for i in range(4):
             """paste data from paste_list into empty row in daily summary table"""
+            current_item = paste_list[i]
+            if '*' in str(current_item):
+                current_item = current_item[1:]
             current_cell = ws.cell(row=empty_row, column=i+1)
-            current_cell.value = paste_list[i]
+            current_cell.value = current_item
             current_cell.fill = PatternFill("solid", fgColor=color)
 
 

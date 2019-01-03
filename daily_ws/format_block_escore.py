@@ -5,7 +5,7 @@ def find_table(ws, teacher_name, max_col):
     """Finds the location of the teacher's daily summary table in the column"""
     for col in range(7, max_col+1):
         if ws.cell(row=1, column=col).value == teacher_name:
-            return ((col-7)*8)-6
+            return ((col-7)*9)-6
 
 
 def find_empty_row(ws, starting_row):
@@ -44,10 +44,17 @@ def coniditional_format_row(ws, empty_row, paste_list, scores, night_check):
 
 def night_time_teacher(ws, empty_row):
     """Creates thick borders around night time teacher cells"""
-    thick_border = Border(left=Side(border_style='thick', color='1F49A1'),
+    thick_border =Border(top=Side(border_style='thick', color='1F49A1'))
+    
+    """Border(left=Side(border_style='thick', color='1F49A1'),
                 right=Side(border_style='thick', color='1F49A1'),
                 top=Side(border_style='thick', color='1F49A1'),
-                bottom=Side(border_style='thick', color='1F49A1'))
-    for i in range(4):
-        current_cell = ws.cell(row=empty_row, column=i+1)
-        current_cell.border = thick_border
+                bottom=Side(border_style='thick', color='1F49A1'))"""
+    val = ws.cell(row=empty_row, column=1).value
+    row_above = ws.cell(row=empty_row-1, column=1).border
+    first_night = row_above.top.color
+    #ws.cell(row=empty_row, column=1, value=val[1:])
+    if first_night == None:
+        for i in range(4):
+            current_cell = ws.cell(row=empty_row, column=i+1)
+            current_cell.border = thick_border

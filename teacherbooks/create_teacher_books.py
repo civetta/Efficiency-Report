@@ -6,12 +6,12 @@ from datetime import datetime, timedelta
 import os 
 import warnings
 warnings.filterwarnings("ignore")
-def create_books(wb,lead_name):
+def create_books(wb,lead_name,save_date,debug):
     """Collects all of the worksheet variables that will be used and creates
     a new workbook which is defined as teacherbook. Then it creates
     an FAQ page, a Data page, and a Summary page."""
-    sheet_list = wb.get_sheet_names()
-    summaryws = wb.get_sheet_by_name(sheet_list[0])
+    sheet_list = wb.sheetnames
+    summaryws = wb[sheet_list[0]]
     """Goes through all of the teacher names listed in summary worksheet, with
     the understanding the first table will always have it's teacher header
     row at row 3."""
@@ -22,14 +22,15 @@ def create_books(wb,lead_name):
         create_faq(teacherbook)
         copy_summary(teacherbook, wb, teacher_name)
         copy_data(teacherbook, wb, teacher_name)
-        teacherbook.save('Output/Teacher Books/'+teacher_name+'.xlsx')
-        save_teacherbook(teacherbook,teacher_name,lead_name)
+        
+        if debug is False:
+                save_teacherbook(teacherbook,teacher_name,lead_name,save_date)
+        else:
+                teacherbook.save('Output/Teacher Books/'+teacher_name+'.xlsx')
 
-def save_teacherbook(wb,teacher_name,lead_name):
-    mydate = datetime.now()
-    date = mydate.strftime("%m-%d-%y")
+def save_teacherbook(wb,teacher_name,lead_name,save_date):
     path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
-    file_name = teacher_name+"_10-8-18-EReport.xlsx"
+    file_name = teacher_name+"_"+save_date+"-EReport.xlsx"
     save_location = os.path.join(path,lead_name,teacher_name+" E-Report")
     if not os.path.isdir(save_location):
         os.makedirs (save_location)
@@ -43,7 +44,7 @@ def create_faq(current_teacher):
     info = current_teacher.create_sheet('FAQ')
     img = Image('faq.png')
     info.add_image(img, 'A1')
-    std = current_teacher.get_sheet_by_name('Sheet')
-    current_teacher.remove_sheet(std)  
+    del current_teacher['Sheet']
+    
 
 
