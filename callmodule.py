@@ -16,6 +16,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
+
 def save_leadbook(wb,save_date,debug, lead_name):
     if debug is False:
         path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
@@ -27,6 +28,16 @@ def save_leadbook(wb,save_date,debug, lead_name):
         wb.save(save_name)
     else:
         wb.save('Output/Teacher Books/LEADBOOK_'+lead_name+"_"+save_date+'.xlsx')
+        
+        
+"""INPUTS HERE"""
+"""Jeremy Shock, Rachel Adams,Jill Szafranski,Kristin Donnelly, Melissa Cox,Caren Glowa, All"""
+#Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
+lead_name = "All"
+periscope = 'all_108.csv'
+tabby = 'tabby_108.csv'
+create_input(periscope,tabby,lead_name)
+
 
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
 skip_days = []
@@ -34,6 +45,7 @@ skip_days = []
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
 #Output Filename that saves file locally. Usually used when testing.
+
 save_date = "12-17-18"
 #Used to indicate a end of day for split day function.
 end_day_indicator = '12:54 AM'
