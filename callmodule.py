@@ -1,6 +1,5 @@
 from openpyxl import load_workbook
 from periscope_source import create_input
-from time_difference import make_time_difference_sheet
 from split_days import split_sheet_by_days
 from daily_ws.create_tables import call_create_tables
 from daily_ws.mark_blocks import define_blocks
@@ -29,15 +28,6 @@ def save_leadbook(wb,save_date,debug, lead_name):
     else:
         wb.save('Output/Teacher Books/LEADBOOK_'+lead_name+"_"+save_date+'.xlsx')
         
-        
-"""INPUTS HERE"""
-"""Jeremy Shock, Rachel Adams,Jill Szafranski,Kristin Donnelly, Melissa Cox,Caren Glowa, All"""
-#Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
-lead_name = "All"
-periscope = 'all_108.csv'
-tabby = 'tabby_108.csv'
-create_input(periscope,tabby,lead_name)
-
 
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
 skip_days = []
@@ -70,16 +60,16 @@ team_org = [['Jeremy Shock','*SSMax','Jeremy Shock', 'Jennifer Gilmore', 'Kay Pl
 
 
 
-lead_name = "Jeremy Shock"
-"""start_date ='2018-12-17'
+lead_name = "All"
+start_date ='2018-12-17'
 end_date = '2018-12-21'
 week_df = get_inputs(start_date, end_date)
 week_df = week_df.sort_index(axis=1)
 writer = pd.ExcelWriter(start_date+'_input.xlsx')
 week_df.to_excel(writer, index = True)
-writer.save()"""
+writer.save()
 
-"""for team in team_org:
+for team in team_org:
     lead_name = team[0]
     print lead_name
     
@@ -112,43 +102,11 @@ writer.save()"""
         save_leadbook(wb, save_date,debug, lead_name)
     else:
         create_books(wb,lead_name, save_date,debug)
-        save_leadbook(wb, save_date,debug, lead_name)"""
+        save_leadbook(wb, save_date,debug, lead_name)
 
 
 
 
-
-"""Calling Functions"""
-
-"""INPUTS HERE"""
-"""Jeremy Shock, Rachel Adams,Melissa Cox, Jill Szafranski,Kristin Donnelly,Caren Glowa, All"""
-#Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
-lead_name = "All"
-periscope = 'e-data_source/e-data_Fall/1217_all.csv'
-tabby = "e-data_source/e-data_Fall/1217_tabby.csv"
-week_df = create_input(periscope,tabby,lead_name)
-
-wb = load_workbook(filename='Input_EReport.xlsx')
-wb_sheet = wb['Sheet1']
-wb_sheet.title = 'Raw Changes'
-split_sheet_by_days(wb, skip_days, end_day_indicator)
-print ("Sheets split by days completed")
-call_create_tables(wb)
-checks = {'Night Check': False, 'Day Check': False}
-checks = define_blocks(wb, checks, scores)
-print ("Blocks Found and Daily Tables Created")
-df = checks[-1]
-checks = checks[0]
-data_library = find_non_empty_tables(wb, df)
-print ("Creating summary page")
-create_summary_page(wb, data_library, checks)
-
-#This saves leadbook locally in project folder and is used for testing.
-wb.save('Output/Fall/'+save_date+'.xlsx')
-create_dataframe(data_library,wb, save_date)
-print ("Creating Teacherbooks")
-#create_books(wb,lead_name, save_date,debug)
-#save_leadbook(wb, save_date,debug, lead_name)
 
 
 
