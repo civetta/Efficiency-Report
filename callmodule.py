@@ -56,16 +56,13 @@ team_org = [['Jeremy Shock','*SSMax','Jeremy Shock', 'Jennifer Gilmore', 'Kay Pl
     'Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely',
     'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']]
 
-
-
-
-
 lead_name = "All"
-start_date ='2018-12-17'
-end_date = '2018-12-21'
+start_date ='2018-12-03'
+end_date = '2018-12-08'
 week_df = get_inputs(start_date, end_date)
 week_df = week_df.sort_index(axis=1)
 writer = pd.ExcelWriter(start_date+'_input.xlsx')
+week_df.to_csv('new_input_123.csv')
 week_df.to_excel(writer, index = True)
 writer.save()
 
@@ -80,7 +77,7 @@ for team in team_org:
     team_df.rename(columns={'*SSMax':'SSMax'}, inplace=True)
     writer = pd.ExcelWriter(lead_name+'_input.xlsx')
     team_df.to_excel(writer, index = True)
-    writer.save()
+    #writer.save()
 
     #Organize Excel File
     wb = load_workbook(filename=lead_name+'_input.xlsx')
@@ -92,7 +89,7 @@ for team in team_org:
     call_create_tables(wb)
     checks = {'Night Check': False, 'Day Check': False}
     checks = define_blocks(wb, checks, scores)
-    df = checks[-1]
+    """df = checks[-1]
     checks = checks[0]
     data_library = find_non_empty_tables(wb, df)
     create_summary_page(wb, data_library, checks)
@@ -102,7 +99,7 @@ for team in team_org:
         save_leadbook(wb, save_date,debug, lead_name)
     else:
         create_books(wb,lead_name, save_date,debug)
-        save_leadbook(wb, save_date,debug, lead_name)
+        save_leadbook(wb, save_date,debug, lead_name)"""
 
 
 
