@@ -17,7 +17,6 @@ def define_blocks(wb, checks, scores):
     all_df = pd.DataFrame(columns=['TeacherName','Block','Tab', 'TimeStamp'])
     new_rows={}
     for day in week:
-        
         ws = wb[day]
         max_col = ws.max_column
         max_row = find_max_row(ws)
@@ -26,10 +25,15 @@ def define_blocks(wb, checks, scores):
         #Each column is it's own teacher.
         while col <= max_col:
             teacher_name = ws.cell(row=1, column=col).value
-            
-            start = find_blocks(ws, col, max_row, start_row_to_look, 'start')
+            full_time = ['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek', 'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'Michele  Irwin', 'Juventino Mireles','Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrams', 'Stacy Good', 'Caren Glowa', 'Kristin Donnelly']
+            part_time = ['Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']         
+            if teacher_name in full_time:
+                status = 'full_time'
+            else:
+                status = 'part_time'
+            start = find_blocks(ws, col, max_row, start_row_to_look, 'start',status)
             if start != 'Next_Col' and start >= start_row_to_look and start != max_row :
-                end = find_blocks(ws, col, max_row, start, 'end')
+                end = find_blocks(ws, col, max_row, start, 'end', status)
                 start_row_to_look = end
                 safe_to_color = empty_tabby(start,end,ws)
                 if safe_to_color is True:
@@ -79,18 +83,15 @@ def empty_tabby(start,end,ws):
         pass
         return False
 
-def find_blocks(ws, col, max_row, starting_row, position):
+def find_blocks(ws, col, max_row, starting_row, position,status):
     """Looks for either three 0's in a row for the end of a block,or 
     two sequential non zeros for the start of the block"""
     for row in range(starting_row, max_row):
-        
         val1 = ws.cell(row=row, column=col).value
-        
         if val1==None:
             return 'Next_Col'
         if position == 'start':  
             if int(val1) > 0 and row+3<max_row:
-                
                 val2 = int(ws.cell(row=row+1, column=col).value)
                 val3 = int(ws.cell(row=row+2, column=col).value)
                 val4 = int(ws.cell(row=row+3, column=col).value)
@@ -105,8 +106,12 @@ def find_blocks(ws, col, max_row, starting_row, position):
                     val3 = int(ws.cell(row=row+2, column=col).value)
                 except TypeError:
                     break
-                if val2 == 0 and val3 == 0:
-                    return row
+                if status == "full_time":
+                    if val2 == 0 and val3 == 0:
+                        return row
+                else:
+                    if val2 == 0:
+                        return row
     return max_row
 
 

@@ -5,8 +5,9 @@ from datetime import timedelta
 import pyodbc
 
 
-##REMOVE DATES THAT ARE NOT RELEVANT SO THAT THINGS MATCH
-
+#TEST AFTER PRODUCTS NOT THE BEFORE
+#SSMAX IS CALCULATED SLIGHTLY DIFFERENT FIGURE OUT WHY
+#NUMBERS ARE SLIGHTLY DIFFERENT, BUT THEY FOLLOW JAIROS CHART TO THE T SO THEY ARE MORE ACCURATE? 
 def open_session_closed_data():
     #Connects to Periscope to retreieve table
     url = "https://app.periscopedata.com/api/think-through-learning/chart/csv/88a7a9a3-169d-833b-ce6c-05de1102841e/487533"
@@ -24,6 +25,8 @@ def pivot_df(df):
     df = df.pivot(index='date', columns='teacher_name', values = 'completed_sessions')
     df = df.fillna(0)
     df = df.reset_index(drop=False)
+    #IDEA: Find first day, then just replace datetime with 7:00AM and fill in columns with 0. Then asfeq will deal with rest.
+    #Notes: date = datetime.strptime('26 Sep 2012', '%d %b %Y').replace(hour=7)
     df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, '%m/%d/%y %I:%M %p'))
     df = df.set_index('date', drop=True)
     df = df.sort_index()

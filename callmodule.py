@@ -35,11 +35,10 @@ skip_days = []
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
 #Output Filename that saves file locally. Usually used when testing.
-
-save_date = "12-17-18"
+save_date = "12-10-18"
 #Used to indicate a end of day for split day function.
 end_day_indicator = '12:54 AM'
-debug = False
+debug = True
 
 ##Do df[[teachername1,teachername2,teachername3]]
 ##Then set teachername1 as leadname
@@ -57,11 +56,11 @@ team_org = [['Jeremy Shock','*SSMax','Jeremy Shock', 'Jennifer Gilmore', 'Kay Pl
     'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']]
 
 lead_name = "All"
-start_date ='2018-12-03'
-end_date = '2018-12-08'
+start_date ='2018-12-10'
+end_date = '2018-12-15'
 week_df = get_inputs(start_date, end_date)
 week_df = week_df.sort_index(axis=1)
-writer = pd.ExcelWriter(start_date+'_input.xlsx')
+writer = pd.ExcelWriter(save_date+'_input.xlsx')
 week_df.to_csv('new_input_123.csv')
 week_df.to_excel(writer, index = True)
 writer.save()
@@ -77,7 +76,7 @@ for team in team_org:
     team_df.rename(columns={'*SSMax':'SSMax'}, inplace=True)
     writer = pd.ExcelWriter(lead_name+'_input.xlsx')
     team_df.to_excel(writer, index = True)
-    #writer.save()
+    writer.save()
 
     #Organize Excel File
     wb = load_workbook(filename=lead_name+'_input.xlsx')
@@ -89,7 +88,7 @@ for team in team_org:
     call_create_tables(wb)
     checks = {'Night Check': False, 'Day Check': False}
     checks = define_blocks(wb, checks, scores)
-    """df = checks[-1]
+    df = checks[-1]
     checks = checks[0]
     data_library = find_non_empty_tables(wb, df)
     create_summary_page(wb, data_library, checks)
@@ -99,7 +98,7 @@ for team in team_org:
         save_leadbook(wb, save_date,debug, lead_name)
     else:
         create_books(wb,lead_name, save_date,debug)
-        save_leadbook(wb, save_date,debug, lead_name)"""
+        save_leadbook(wb, save_date,debug, lead_name)
 
 
 
