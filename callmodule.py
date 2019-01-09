@@ -34,8 +34,8 @@ def save_leadbook(wb,save_date,debug, lead_name):
 """Jeremy Shock, Rachel Adams,Melissa Cox, Jill Szafranski,Kristin Donnelly,Caren Glowa, All"""
 #Uses Periscope Source and Tabby source to format and make the raw changes sheet in lead book.
 lead_name = "All"
-periscope = 'e-data_source/e-data_Fall/123_all.csv'
-tabby = "e-data_source/e-data_Fall/123_tabby.csv"
+periscope = 'e-data_source/e-data_Fall/012_all.csv'
+tabby = "e-data_source/e-data_Fall/012_tabby.csv"
 #Skip days are used to skip days with bad data, or to only return certain days from a dataset.
 skip_days = []
 #Used to Conditionally Format the Daily Summary tables
@@ -43,12 +43,14 @@ scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
 #Output Filename that saves file locally. Usually used when testing.
 
-save_date = "12-17-18"
+save_date = "1-2-19"
 #Used to indicate a end of day for split day function.
 end_day_indicator = '12:54 AM'
 debug = True
 
 """Calling Functions"""
+create_input(periscope,tabby,lead_name)
+print "Periscope Data Sorted"
 wb = load_workbook(filename='Input_EReport.xlsx')
 wb_sheet = wb['Sheet1']
 wb_sheet.title = 'Raw Changes'
