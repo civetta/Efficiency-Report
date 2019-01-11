@@ -30,6 +30,13 @@ def pivot_df(df):
     df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, '%m/%d/%y %I:%M %p'))
     df = df.set_index('date', drop=True)
     df = df.sort_index()
+    first_date =  df.first_valid_index().replace(hour=7, minute=0)
+    new_row = pd.Series([0,0])
+    new_row.name = first_date
+    df = df.append(new_row)
+    df = df.fillna(0)
+    print df
+    df = df.sort_index()
     df = df.asfreq(freq='360S', fill_value=0)
     return df
 
