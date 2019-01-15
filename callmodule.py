@@ -35,10 +35,10 @@ skip_days = []
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
 #Output Filename that saves file locally. Usually used when testing.
-save_date = "12-10-18"
+save_date = "01-07-19"
 #Used to indicate a end of day for split day function.
 end_day_indicator = '12:54 AM'
-debug = True
+debug = False
 
 ##Do df[[teachername1,teachername2,teachername3]]
 ##Then set teachername1 as leadname
@@ -56,8 +56,8 @@ team_org = [['Jeremy Shock','*SSMax','Jeremy Shock', 'Jennifer Gilmore', 'Kay Pl
     'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']]
 
 lead_name = "All"
-start_date ='2018-12-10'
-end_date = '2018-12-15'
+start_date ='2019-01-07'
+end_date = '2019-01-12'
 week_df = get_inputs(start_date, end_date)
 week_df = week_df.sort_index(axis=1)
 writer = pd.ExcelWriter(save_date+'_input.xlsx')

@@ -35,9 +35,9 @@ def pivot_df(df):
     new_row.name = first_date
     df = df.append(new_row)
     df = df.fillna(0)
-    print df
     df = df.sort_index()
     df = df.asfreq(freq='360S', fill_value=0)
+    df = df.apply(pd.to_numeric, errors='ignore')
     return df
 
 def find_6min_intervals(df, ssmax):
@@ -116,12 +116,4 @@ def get_inputs(start_date, end_date):
     'Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely',
     'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']
     result = result.reindex(columns=all_columns, fill_value=0)
-
-    #Remove all rows that happen between 1AM-7:30AM as live teaching is closed then.
-    #result['time'] = result.index.map(lambda x: x[x[:x.rfind(" ")].rfind(" "):])
-    
-    print result
-    
-
-
     return result
