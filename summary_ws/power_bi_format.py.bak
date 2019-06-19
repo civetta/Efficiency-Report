@@ -7,7 +7,7 @@ import os
 def create_dataframe(data_dict, wb,save_date,debug):
     #Data_dict is a dictionary of dicrionarys. It's {date:{teacher{night:escore, day:escore}}}
     df = pd.DataFrame({'Teacher':[], 'Team':[], 'Date':[], 'E-Score':[], 'Month_Num':[], 'Weekday':[], 'Weekday_Num':[]})
-    for date, value in data_dict.items():
+    for date, value in data_dict.iteritems():
         date_dict = data_dict[date]
         ws = wb[date]
         #Gets date from Worksheet so it includes the year versus just the ws title which does not.
@@ -18,7 +18,7 @@ def create_dataframe(data_dict, wb,save_date,debug):
         weekday = dt_obj.strftime('%m/%d/%y %A')
         month_num = dt_obj.strftime('%m')
         weekday_num = dt_obj.strftime('%w')
-        for teacher, data in date_dict.items():
+        for teacher, data in date_dict.iteritems():
             team = find_team(teacher)
 
             
@@ -45,7 +45,7 @@ def create_workbook(df,save_date,debug):
     if debug is True:
         wb.save('Output/Fall/'+save_date+'_Management.xlsx')
     else:
-        path = "C:\\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports\Teaching Department"
+        path = "C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports\Teaching Department"
         file_name = save_date+'_Management.xlsx'
         save_name = os.path.join(path,file_name)
         wb.save(save_name)
@@ -58,7 +58,7 @@ def find_team(teacher):
     'Sara  Watkins':[ 'Sara  Watkins','Alisa Lynch', 'Andrea Burkholder', 'Bill Hubert', 'Donita Farmer', 'Laura Craig', 'Nicole Marsula', 'Salome Saenz', 'Wendy Bowser'],
     'Kristin Donnelly':['Kristin Donnelly', 'Angel Miller', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Gabriela Torres', 'Jenni Alexander', 'Nicole Knisely', 'Shannon Stout'],
     'Caren Glowa':['Caren Glowa','Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Jessica Connole', 'Johana Miller', 'Kathryn Montano', 'Lynae Shepp', 'Meaghan Wright','Veraunica Wyatt']}
-    for team_lead, teams in team_org.items():
+    for team_lead, teams in team_org.iteritems():
         if teacher in teams:
             names = team_lead.split(" ")
             return names[0]

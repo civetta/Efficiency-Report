@@ -8,4 +8,4 @@ username = 'IMAGINELEARNING\kelly.richardson'
 password = 'grace7772' 
 cnxn = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
 cursor = cnxn.cursor()
-print(cursor)
+print cursor

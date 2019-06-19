@@ -1,4 +1,4 @@
-import urllib.request, urllib.error, urllib.parse
+import urllib2
 import pandas as pd
 import datetime
 from datetime import timedelta
@@ -11,7 +11,7 @@ import pyodbc
 def open_session_closed_data():
     #Connects to Periscope to retreieve table
     url = "https://app.periscopedata.com/api/think-through-learning/chart/csv/88a7a9a3-169d-833b-ce6c-05de1102841e/487533"
-    response = urllib.request.urlopen(url)
+    response = urllib2.urlopen(url)
     df = pd.read_csv(response)
     #Cleaning up Data from Periscope
     df = df.applymap(str)

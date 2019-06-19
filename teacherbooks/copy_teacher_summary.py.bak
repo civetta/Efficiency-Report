@@ -1,5 +1,5 @@
 from daily_ws.format_block_escore import find_table, find_empty_row
-from .utility import copier, find_teacher_column
+from utility import copier, find_teacher_column
 from summary_ws.create_summary_tables import big_font
 from openpyxl.utils import get_column_letter
 

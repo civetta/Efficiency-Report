@@ -61,7 +61,7 @@ def seperate_days(df,SSMax,lead_name):
     try:
         df.rename(columns={'teacher_name':'name'}, inplace=True)
     except:
-        print("")
+        print ""
     unique_name = df.name.unique()
     unique_name.sort()
     print (unique_name)

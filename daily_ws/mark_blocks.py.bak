@@ -1,6 +1,6 @@
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
-from .calculate_block_escore import organize_data
+from calculate_block_escore import organize_data
 from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np

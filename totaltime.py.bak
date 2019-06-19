@@ -34,7 +34,7 @@ for item in list_of_times:
        sum_diff = sum_diff + end-start
     except:
         sum_diff = end - start
-    print(sum_diff)
+    print sum_diff
 secs = sum_diff.total_seconds()
-print(sum_diff)
-print(secs/60)
+print sum_diff
+print secs/60

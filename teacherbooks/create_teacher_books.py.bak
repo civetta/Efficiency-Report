@@ -1,7 +1,7 @@
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
-from .copy_teacher_data import copy_data
-from .copy_teacher_summary import copy_summary
+from copy_teacher_data import copy_data
+from copy_teacher_summary import copy_summary
 from datetime import datetime, timedelta
 import os 
 import warnings
@@ -29,7 +29,7 @@ def create_books(wb,lead_name,save_date,debug):
                 teacherbook.save('Output/Teacher Books/'+teacher_name+'.xlsx')
 
 def save_teacherbook(wb,teacher_name,lead_name,save_date):
-    path = 'C:\\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
+    path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
     file_name = teacher_name+"_"+save_date+"-EReport.xlsx"
     save_location = os.path.join(path,lead_name,teacher_name+" E-Report")
     if not os.path.isdir(save_location):

@@ -17,7 +17,7 @@ def find_empty_row(ws, starting_row):
         max_row = ws.max_row
     for row in range(starting_row, max_row):
         if starting_row==max_row:
-            print("START = MAX")
+            print "START = MAX"
         if ws.cell(row=row, column=1).value is None:
             return row
 

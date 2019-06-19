@@ -1,13 +1,13 @@
 from openpyxl import load_workbook
-from .periscope_source import create_input
-from .split_days import split_sheet_by_days
-from .daily_ws.create_tables import call_create_tables
-from .daily_ws.mark_blocks import define_blocks
-from .summary_ws.calculate_daily_escore import find_non_empty_tables
-from .summary_ws.efficiency_score_summary import create_summary_page
-from .teacherbooks.create_teacher_books import create_books
-from .summary_ws.power_bi_format import create_dataframe
-from .connect_to_per import get_inputs
+from periscope_source import create_input
+from split_days import split_sheet_by_days
+from daily_ws.create_tables import call_create_tables
+from daily_ws.mark_blocks import define_blocks
+from summary_ws.calculate_daily_escore import find_non_empty_tables
+from summary_ws.efficiency_score_summary import create_summary_page
+from teacherbooks.create_teacher_books import create_books
+from summary_ws.power_bi_format import create_dataframe
+from connect_to_per import get_inputs
 from datetime import datetime
 import os
 import pandas as pd
@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore")
 
 def save_leadbook(wb,save_date,debug, lead_name):
     if debug is False:
-        path = "C:\\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports"
+        path = "C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports"
         if lead_name == "All":
             file_name = save_date+'.xlsx'
             save_location = os.path.join(path,'Teaching Department')

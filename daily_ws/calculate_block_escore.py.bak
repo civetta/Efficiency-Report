@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from openpyxl.styles import PatternFill
-from .format_block_escore import find_empty_row, find_table
-from .format_block_escore import coniditional_format_row, night_time_teacher
+from format_block_escore import find_empty_row, find_table
+from format_block_escore import coniditional_format_row, night_time_teacher
 import numpy as np
 
 
