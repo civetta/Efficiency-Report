@@ -6,16 +6,13 @@ from datetime import timedelta
 from dateutil import tz
 
 def create_input(periscope,SSMax,lead_name):
+    print ("CHECK0.1")
     import warnings
     warnings.filterwarnings("ignore")
     pd.set_option('mode.chained_assignment', None)
     #Input Variables
     df = pd.read_csv(periscope)
     df = df[df.reason != 'Demo']
-    #df = df[df['transcript'].isnull()]
-    #print df2
-    #df = df.dropna(subset=['transcript'])
-    #df = df.dropna()
     SSMax = pd.read_csv(SSMax)
     SSMax = SSMax.dropna()
     SSMax = organize_SSMax(SSMax)
@@ -67,6 +64,7 @@ def seperate_days(df,SSMax,lead_name):
         print ""
     unique_name = df.name.unique()
     unique_name.sort()
+    print (unique_name)
     week_df = pd.DataFrame()
 
     while first_day <= last_day:
@@ -109,18 +107,18 @@ def fix_timestamp(x):
     return dt_obj
 
 def fill_in_missing_teachers(week_df,lead_name):
-    team_org = {'Jeremy Shock':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek'],
-    'Rachel Adams':['Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele  Irwin', 'Juventino Mireles'],
-    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrams', 'Stacy Good'],
-    'Jill Szafranski':['Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
-    'Kristin Donnelly':['Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely'],
-    'Caren Glowa':['Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole'],
-    'All':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek',
-    'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele  Irwin', 'Juventino Mireles',
-    'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', "Kimberly Abrams", 'Stacy Good',
-     'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
-    'Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely',
-    'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']}
+    team_org = {'Jeremy Shock':['Jeremy Shock','Crystal Boris', 'Jamie Weston', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Laura Gardiner', 'Melissa Mitchell', 'Stacy Good', 'Veronica Alvarez'],
+    'Rachel Adams':['Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Juventino Mireles', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Michelle Amigh', 'Nancy Polhemus'],
+    'Melissa Cox':['Melissa Cox','Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Jennifer Talaski', 'Lisa Duran', 'Marcella Parks'],
+    'Sara  Watkins':[ 'Sara  Watkins','Alisa Lynch', 'Andrea Burkholder', 'Bill Hubert', 'Donita Farmer', 'Laura Craig', 'Nicole Marsula', 'Salome Saenz', 'Wendy Bowser'],
+    'Kristin Donnelly':['Kristin Donnelly', 'Angel Miller', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Gabriela Torres', 'Jenni Alexander', 'Nicole Knisely', 'Shannon Stout'],
+    'Caren Glowa':['Caren Glowa','Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Jessica Connole', 'Johana Miller', 'Kathryn Montano', 'Lynae Shepp', 'Meaghan Wright'],
+    'All':[ 'Jeremy Shock','Crystal Boris', 'Jamie Weston', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Laura Gardiner', 'Melissa Mitchell', 'Stacy Good', 'Veronica Alvarez',
+'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Juventino Mireles', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Michelle Amigh', 'Nancy Polhemus',
+'Melissa Cox','Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Jennifer Talaski', 'Lisa Duran', 'Marcella Parks',
+'Sara  Watkins','Alisa Lynch', 'Andrea Burkholder', 'Bill Hubert', 'Donita Farmer', 'Laura Craig', 'Nicole Marsula', 'Salome Saenz', 'Wendy Bowser',
+'Kristin Donnelly', 'Angel Miller', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Gabriela Torres', 'Jenni Alexander', 'Nicole Knisely', 'Shannon Stout',
+'Caren Glowa','Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Jessica Connole', 'Johana Miller', 'Kathryn Montano', 'Lynae Shepp', 'Meaghan Wright']}
     team_df = pd.DataFrame.from_dict(team_org,orient='index')
     team_df = team_df.T
     team_col =  team_df[lead_name].dropna()
@@ -160,5 +158,6 @@ def organize (df,start,end,column_name):
     #Sets timestamp as index
     sessions_ended.index.names = ['Date']
     sessions_ended.columns=[column_name]
+    print ("CHECK0.5")
     return sessions_ended
     

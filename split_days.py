@@ -36,7 +36,7 @@ def find_next_day(raw_change_ws, start_row, max_row, end_of_day):
     current_row = start_row
     while current_row < max_row:
         current_day_time = raw_change_ws.cell(row=current_row, column=1).value
-        if end_of_day in current_day_time:
+        if "01:" in current_day_time and "AM" in current_day_time:
             return current_row+1
         else:
             current_row = current_row+1
@@ -74,7 +74,7 @@ def find_end(raw_change_ws, start_row, max_column, max_row, end_of_day):
     current_row = start_row
     while current_row < max_row:
         current_day_time = raw_change_ws.cell(row=current_row, column=1).value
-        if end_of_day in current_day_time:
+        if "01:" in current_day_time and "AM" in current_day_time:
             return current_row+1
         else:
             current_row = current_row+1

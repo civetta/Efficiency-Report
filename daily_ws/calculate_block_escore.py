@@ -58,7 +58,6 @@ def paste_data(ws, paste_list, teacher_name, max_col, scores,wb):
     
     if teacher_name is not None:
         """Finds location of current active teachers, daily summary table"""
-
         starting_row = find_table(ws, teacher_name, max_col)
         empty_row = find_empty_row(ws, starting_row)
         """If there is an asteriks in the time_range (paste_list[0]) it is a 

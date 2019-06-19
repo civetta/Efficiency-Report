@@ -18,6 +18,7 @@ def open_session_closed_data():
     df = df.apply(lambda x: x.str.strip())
     df['date'] = df.full_day + " " + df.end_time
     df =  df[['teacher_name','date','completed_sessions']]
+
     return df
 
 def pivot_df(df):
@@ -30,18 +31,17 @@ def pivot_df(df):
     df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, '%m/%d/%y %I:%M %p'))
     df = df.set_index('date', drop=True)
     df = df.sort_index()
-    first_date =  df.first_valid_index().replace(hour=7, minute=0)
-    new_row = pd.Series([0,0])
-    new_row.name = first_date
-    df = df.append(new_row)
-    df = df.fillna(0)
-    df = df.sort_index()
-    df = df.asfreq(freq='360S', fill_value=0)
+    cut_date =  df.first_valid_index().replace(hour=7, minute=0)
+    mask = (df.index > cut_date)
+    df = df.loc[mask]
+    first_date = df.first_valid_index()
+    df = df.asfreq(freq='420S', fill_value=0)
     df = df.apply(pd.to_numeric, errors='ignore')
     return df
 
 def find_6min_intervals(df, ssmax):
     #Finding average SSMAX for every 6 minute time period, using the date columns as ranges.
+
     list_of_times =  df.index.values
     ssmax_cols = pd.DataFrame({'date': [list_of_times[0]],'*SSMax': [0]})
     timestamp_loc = 0
@@ -107,13 +107,15 @@ def get_inputs(start_date, end_date):
     df = open_session_closed_data()
     df = pivot_df(df)
     ssmax_cols = find_6min_intervals(df, ssmax)
+    print (ssmax_cols)
     result = pd.concat([df, ssmax_cols], axis=1, sort=False)
+    print (result)
     result.index = result.index.map(lambda x: x.strftime('%m/%d/%y %a %I:%M %p'))
-    all_columns = ['*SSMax','Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek',
-    'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'Michele  Irwin', 'Juventino Mireles',
-    'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', "Kimberly Abrams", 'Stacy Good',
-    'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
-    'Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely',
-    'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']
+    all_columns = ['*SSMax', 'Jeremy Shock','Crystal Boris', 'Jamie Weston', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Laura Gardiner', 'Melissa Mitchell', 'Stacy Good', 'Veronica Alvarez',
+'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Juventino Mireles', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Michelle Amigh', 'Nancy Polhemus',
+'Melissa Cox','Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Jennifer Talaski', 'Lisa Duran', 'Marcella Parks','Preston Tirey','Erin Spilker',
+'Sara  Watkins','Alisa Lynch', 'Andrea Burkholder', 'Bill Hubert', 'Donita Farmer', 'Laura Craig', 'Nicole Marsula', 'Salome Saenz', 'Wendy Bowser',
+'Kristin Donnelly', 'Angel Miller', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Gabriela Torres', 'Jenni Alexander', 'Nicole Knisely', 'Shannon Stout',
+'Caren Glowa','Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Jessica Connole', 'Johana Miller', 'Kathryn Montano', 'Lynae Shepp', 'Meaghan Wright','Veraunica Wyatt']
     result = result.reindex(columns=all_columns, fill_value=0)
     return result

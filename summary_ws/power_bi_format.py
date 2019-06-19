@@ -2,8 +2,9 @@ import pandas as pd
 import datetime
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+import os
     
-def create_dataframe(data_dict, wb,save_date):
+def create_dataframe(data_dict, wb,save_date,debug):
     #Data_dict is a dictionary of dicrionarys. It's {date:{teacher{night:escore, day:escore}}}
     df = pd.DataFrame({'Teacher':[], 'Team':[], 'Date':[], 'E-Score':[], 'Month_Num':[], 'Weekday':[], 'Weekday_Num':[]})
     for date, value in data_dict.iteritems():
@@ -32,25 +33,31 @@ def create_dataframe(data_dict, wb,save_date):
                 'Weekday':weekday, 'Weekday_Num':weekday_num}), ignore_index=True)
 
     df = df[['Teacher', 'Team', 'Date', 'E-Score', 'Day/Night', 'Month_Num', 'Weekday', 'Weekday_Num']]
-    create_workbook(df,save_date)
+    create_workbook(df,save_date,debug)
 
-def create_workbook(df,save_date):
+def create_workbook(df,save_date,debug):
     wb = Workbook()
     ws = wb.active
     for r in dataframe_to_rows(df, index=False, header=True):
         ws.append(r)
     for cell in ws['A'] + ws[1]:
         cell.style = 'Pandas'
-    wb.save('Output/Fall/'+save_date+'_Management.xlsx')
+    if debug is True:
+        wb.save('Output/Fall/'+save_date+'_Management.xlsx')
+    else:
+        path = "C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports\Teaching Department"
+        file_name = save_date+'_Management.xlsx'
+        save_name = os.path.join(path,file_name)
+        wb.save(save_name)
 
 
 def find_team(teacher):
-    team_org = {'Jeremy Shock':['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek'],
-    'Rachel Adams':['Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'James Hare', 'Michele  Irwin', 'Juventino Mireles'],
-    'Melissa Cox':['Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrams', 'Stacy Good'],
-    'Jill Szafranski':['Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
-    'Kristin Donnelly':['Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely'],
-    'Caren Glowa':['Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']}
+    team_org ={'Jeremy Shock':['Jeremy Shock','Crystal Boris', 'Jamie Weston', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Laura Gardiner', 'Melissa Mitchell', 'Stacy Good', 'Veronica Alvarez'],
+    'Rachel Adams':['Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Juventino Mireles', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Michelle Amigh', 'Nancy Polhemus'],
+    'Melissa Cox':['Melissa Cox','Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Jennifer Talaski', 'Lisa Duran', 'Marcella Parks','Preston Tirey','Erin Spilker'],
+    'Sara  Watkins':[ 'Sara  Watkins','Alisa Lynch', 'Andrea Burkholder', 'Bill Hubert', 'Donita Farmer', 'Laura Craig', 'Nicole Marsula', 'Salome Saenz', 'Wendy Bowser'],
+    'Kristin Donnelly':['Kristin Donnelly', 'Angel Miller', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Gabriela Torres', 'Jenni Alexander', 'Nicole Knisely', 'Shannon Stout'],
+    'Caren Glowa':['Caren Glowa','Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Jessica Connole', 'Johana Miller', 'Kathryn Montano', 'Lynae Shepp', 'Meaghan Wright','Veraunica Wyatt']}
     for team_lead, teams in team_org.iteritems():
         if teacher in teams:
             names = team_lead.split(" ")

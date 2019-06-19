@@ -18,9 +18,13 @@ warnings.filterwarnings("ignore")
 
 def save_leadbook(wb,save_date,debug, lead_name):
     if debug is False:
-        path = 'C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports'
-        file_name = lead_name+"_"+save_date+"-LEADBOOK.xlsx"
-        save_location = os.path.join(path,lead_name,'TEAM E-REPORTS')
+        path = "C:\Users\kelly.richardson\OneDrive - Imagine Learning Inc\Reports\Efficiency Reports"
+        if lead_name == "All":
+            file_name = save_date+'.xlsx'
+            save_location = os.path.join(path,'Teaching Department')
+        else:
+            file_name = lead_name+"_"+save_date+"-LEADBOOK.xlsx"
+            save_location = os.path.join(path,lead_name,'TEAM E-REPORTS')
         if not os.path.isdir(save_location):
             os.makedirs (save_location)
         save_name = save_location+"/"+file_name
@@ -35,29 +39,30 @@ skip_days = []
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
 #Output Filename that saves file locally. Usually used when testing.
-save_date = "01-07-19"
+save_date = "05-28-19"
 #Used to indicate a end of day for split day function.
+#You will have to write a script to figure out END OF DAY
 end_day_indicator = '12:54 AM'
 debug = False
 
 ##Do df[[teachername1,teachername2,teachername3]]
 ##Then set teachername1 as leadname
-team_org = [['Jeremy Shock','*SSMax','Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek'],
-    ['Rachel Adams','*SSMax','Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'Michele  Irwin', 'Juventino Mireles'],
-    ['Melissa Cox','*SSMax','Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrams', 'Stacy Good'],
-    ['Jill Szafranski','*SSMax','Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir'],
-    ['Kristin Donnelly','*SSMax','Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely'],
-    ['Caren Glowa','*SSMax','Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole'],
-    ['All','*SSMax','Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek',
-    'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'Michele  Irwin', 'Juventino Mireles',
-    'Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', "Kimberly Abrams", 'Stacy Good',
-     'Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir',
-    'Kristin Donnelly', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely',
-    'Caren Glowa', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']]
+team_org = [['Jeremy Shock','*SSMax','Jeremy Shock','Crystal Boris', 'Jamie Weston', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Laura Gardiner', 'Melissa Mitchell', 'Stacy Good', 'Veronica Alvarez'],
+    ['Rachel Adams','*SSMax','Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Juventino Mireles', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Michelle Amigh', 'Nancy Polhemus'],
+    ['Melissa Cox','*SSMax','Melissa Cox','Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Jennifer Talaski', 'Lisa Duran', 'Marcella Parks','Preston Tirey','Erin Spilker'],
+    ['Sara  Watkins','*SSMax', 'Sara  Watkins','Alisa Lynch', 'Andrea Burkholder', 'Bill Hubert', 'Donita Farmer', 'Laura Craig', 'Nicole Marsula', 'Salome Saenz', 'Wendy Bowser'],
+    ['Kristin Donnelly','*SSMax','Kristin Donnelly', 'Angel Miller', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Gabriela Torres', 'Jenni Alexander', 'Nicole Knisely', 'Shannon Stout'],
+    ['Caren Glowa','*SSMax','Caren Glowa','Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Jessica Connole', 'Johana Miller', 'Kathryn Montano', 'Lynae Shepp', 'Meaghan Wright','Veraunica Wyatt'],
+    ['All','*SSMax', 'Jeremy Shock','Crystal Boris', 'Jamie Weston', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Laura Gardiner', 'Melissa Mitchell', 'Stacy Good', 'Veronica Alvarez',
+'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Juventino Mireles', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Michelle Amigh', 'Nancy Polhemus',
+'Melissa Cox','Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Jennifer Talaski', 'Lisa Duran', 'Marcella Parks','Preston Tirey','Erin Spilker',
+'Sara  Watkins','Alisa Lynch', 'Andrea Burkholder', 'Bill Hubert', 'Donita Farmer', 'Laura Craig', 'Nicole Marsula', 'Salome Saenz', 'Wendy Bowser',
+'Kristin Donnelly', 'Angel Miller', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Gabriela Torres', 'Jenni Alexander', 'Nicole Knisely', 'Shannon Stout',
+'Caren Glowa','Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Jessica Connole', 'Johana Miller', 'Kathryn Montano', 'Lynae Shepp', 'Meaghan Wright','Veraunica Wyatt']]
 
 lead_name = "All"
-start_date ='2019-01-07'
-end_date = '2019-01-12'
+start_date ='2019-05-20'
+end_date = '2019-05-25'
 week_df = get_inputs(start_date, end_date)
 week_df = week_df.sort_index(axis=1)
 writer = pd.ExcelWriter(save_date+'_input.xlsx')
@@ -67,8 +72,7 @@ writer.save()
 
 for team in team_org:
     lead_name = team[0]
-    print lead_name
-    
+    print (lead_name)
     #Get team_df subset, clean it up, and save it as an excel file.
     team_sliced = team[1:]
     team_df = week_df[team_sliced]
@@ -94,7 +98,7 @@ for team in team_org:
     create_summary_page(wb, data_library, checks)
     wb.save(lead_name+'_leadbook.xlsx')
     if lead_name =='All':
-        create_dataframe(data_library,wb, save_date)
+        create_dataframe(data_library,wb, save_date,debug)
         save_leadbook(wb, save_date,debug, lead_name)
     else:
         create_books(wb,lead_name, save_date,debug)
