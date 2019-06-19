@@ -1,13 +1,13 @@
 from openpyxl import load_workbook
-from .periscope_source import create_input
-from .split_days import split_sheet_by_days
-from .daily_ws.create_tables import call_create_tables
-from .daily_ws.mark_blocks import define_blocks
-from .summary_ws.calculate_daily_escore import find_non_empty_tables
-from .summary_ws.efficiency_score_summary import create_summary_page
-from .teacherbooks.create_teacher_books import create_books
-from .summary_ws.power_bi_format import create_dataframe
-from .connect_to_per import get_inputs
+from periscope_source import create_input
+from split_days import split_sheet_by_days
+from daily_ws.create_tables import call_create_tables
+from daily_ws.mark_blocks import define_blocks
+from summary_ws.calculate_daily_escore import find_non_empty_tables
+from summary_ws.efficiency_score_summary import create_summary_page
+from teacherbooks.create_teacher_books import create_books
+from summary_ws.power_bi_format import create_dataframe
+from connect_to_per import get_inputs
 from datetime import datetime
 import os
 import pandas as pd
@@ -43,7 +43,7 @@ save_date = "05-28-19"
 #Used to indicate a end of day for split day function.
 #You will have to write a script to figure out END OF DAY
 end_day_indicator = '12:54 AM'
-debug = False
+debug = True
 
 ##Do df[[teachername1,teachername2,teachername3]]
 ##Then set teachername1 as leadname

@@ -1,8 +1,8 @@
 from openpyxl.styles import Font
 from openpyxl.styles import Alignment
-from create_summary_tables import create_sub_titles, create_date_column
-from create_summary_tables import create_teacher_header_row, format_table
-from create_summary_tables import big_font
+from .create_summary_tables import create_sub_titles, create_date_column
+from .create_summary_tables import create_teacher_header_row, format_table
+from .create_summary_tables import big_font
 
 
 def create_summary_page(wb, data_dict, checks):
