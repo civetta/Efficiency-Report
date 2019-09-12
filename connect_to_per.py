@@ -116,7 +116,7 @@ def get_inputs(start_date, end_date):
     ssmax_cols = find_6min_intervals(df, ssmax)
     result = pd.concat([df, ssmax_cols], axis=1, sort=False)
     result.index = result.index.map(lambda x: x.strftime('%m/%d/%y %a %I:%M %p'))
-    all_columns = ['*SSMax', 'Laura Gardiner',  'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good',  
+     all_columns = ['*SSMax', 'Laura Gardiner',  'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good',  
 'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly-Anne Heyden', 'Kimberly Stanek', 'Michele Irwin', 'Nancy Polhemus', 'Juventino Mireles',  
 'Melissa Cox', 'Andrew Lowe', 'Emily McKibben', 'Erica DeCosta', 'Erin Hrncir', 'Erin Spiker', 'Jennifer Talaski', 'Julie Horne', 'Lisa Duran', 'Preston Tirey',   
 'Sara Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angela Miller', 'Bill Hubert', 'Donita Spencer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romana', 'Veronica Alvarez', 'Wendy Bowser', 
