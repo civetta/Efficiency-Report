@@ -2,33 +2,40 @@ import urllib2
 import pandas as pd
 import datetime
 from datetime import timedelta
+from connect_to_warehouse import make_connection
 import pyodbc
 
 
 #TEST AFTER PRODUCTS NOT THE BEFORE
 #SSMAX IS CALCULATED SLIGHTLY DIFFERENT FIGURE OUT WHY
 #NUMBERS ARE SLIGHTLY DIFFERENT, BUT THEY FOLLOW JAIROS CHART TO THE T SO THEY ARE MORE ACCURATE? 
-def open_session_closed_data():
+def open_session_closed_data(start_date,end_date):
     #Connects to Periscope to retreieve table
+<<<<<<< Updated upstream
     url = "https://app.periscopedata.com/api/think-through-learning/chart/csv/88a7a9a3-169d-833b-ce6c-05de1102841e/487533"
     response = urllib2.urlopen(url)
     df = pd.read_csv(response)
+=======
+    df = make_connection(start_date,end_date)
+>>>>>>> Stashed changes
     #Cleaning up Data from Periscope
     df = df.applymap(str)
     df = df.apply(lambda x: x.str.strip())
-    df['date'] = df.full_day + " " + df.end_time
-    df =  df[['teacher_name','date','completed_sessions']]
+    df['date'] = df.stamp + " " + df.end_time
+    df =  df[['name','date','completed_sessions']]
 
     return df
 
 def pivot_df(df):
     #Pivoting and filling na
-    df = df.pivot(index='date', columns='teacher_name', values = 'completed_sessions')
+    df = df.pivot(index='date', columns='name', values = 'completed_sessions')
     df = df.fillna(0)
     df = df.reset_index(drop=False)
     #IDEA: Find first day, then just replace datetime with 7:00AM and fill in columns with 0. Then asfeq will deal with rest.
     #Notes: date = datetime.strptime('26 Sep 2012', '%d %b %Y').replace(hour=7)
-    df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, '%m/%d/%y %I:%M %p'))
+    df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, '%m-%d-%Y %I:%M %p'))
+    print (df['date'])
+    df['date'] = df.date.apply(lambda x: x - timedelta(hours=5))
     df = df.set_index('date', drop=True)
     df = df.sort_index()
     cut_date =  df.first_valid_index().replace(hour=7, minute=0)
@@ -104,18 +111,16 @@ def get_ssmax(start_date, end_date):
 
 def get_inputs(start_date, end_date):
     ssmax = get_ssmax(start_date, end_date)
-    df = open_session_closed_data()
+    df = open_session_closed_data(start_date, end_date)
     df = pivot_df(df)
     ssmax_cols = find_6min_intervals(df, ssmax)
-    print (ssmax_cols)
     result = pd.concat([df, ssmax_cols], axis=1, sort=False)
-    print (result)
     result.index = result.index.map(lambda x: x.strftime('%m/%d/%y %a %I:%M %p'))
-    all_columns = ['*SSMax', 'Jeremy Shock','Crystal Boris', 'Jamie Weston', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Laura Gardiner', 'Melissa Mitchell', 'Stacy Good', 'Veronica Alvarez',
-'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Juventino Mireles', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Michelle Amigh', 'Nancy Polhemus',
-'Melissa Cox','Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Jennifer Talaski', 'Lisa Duran', 'Marcella Parks','Preston Tirey','Erin Spilker',
-'Sara  Watkins','Alisa Lynch', 'Andrea Burkholder', 'Bill Hubert', 'Donita Farmer', 'Laura Craig', 'Nicole Marsula', 'Salome Saenz', 'Wendy Bowser',
-'Kristin Donnelly', 'Angel Miller', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Gabriela Torres', 'Jenni Alexander', 'Nicole Knisely', 'Shannon Stout',
-'Caren Glowa','Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Jessica Connole', 'Johana Miller', 'Kathryn Montano', 'Lynae Shepp', 'Meaghan Wright','Veraunica Wyatt']
+    all_columns = ['*SSMax', 'Laura Gardiner',  'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good',  
+'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly-Anne Heyden', 'Kimberly Stanek', 'Michele Irwin', 'Nancy Polhemus', 'Juventino Mireles',  
+'Melissa Cox', 'Andrew Lowe', 'Emily McKibben', 'Erica DeCosta', 'Erin Hrncir', 'Erin Spiker', 'Jennifer Talaski', 'Julie Horne', 'Lisa Duran', 'Preston Tirey',   
+'Sara Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angela Miller', 'Bill Hubert', 'Donita Spencer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romana', 'Veronica Alvarez', 'Wendy Bowser', 
+'Kristin Donnelly', 'Carol Kish', 'Erica Basilone', 'Euna Pin', 'Hannah Beus', 'Jenni Alexander', 'Jessica Throolin', 'Natasha Andorful', 'Nicole Knisely', 'Shannon Stout', 
+'Gabriela Torres', 'Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Kathryn Montano', 'Karen Henderson', 'Lynae Shepp', 'Johana Miller', 'Meaghan Wright', 'Veronica Wyatt']
     result = result.reindex(columns=all_columns, fill_value=0)
     return result
