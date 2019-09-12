@@ -61,8 +61,8 @@ team_org = [[ 'Laura Gardiner', '*SSMax', 'Laura Gardiner', 'Caren Glowa', 'Crys
 'Gabriela Torres', 'Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Kathryn Montano', 'Karen Henderson', 'Lynae Shepp', 'Johana Miller', 'Meaghan Wright', 'Veronica Wyatt']]
 
 lead_name = "All"
-start_date ='2019-05-20'
-end_date = '2019-05-25'
+start_date ='2019-09-09'
+end_date = '2019-09-11'
 week_df = get_inputs(start_date, end_date)
 week_df = week_df.sort_index(axis=1)
 writer = pd.ExcelWriter(save_date+'_input.xlsx')

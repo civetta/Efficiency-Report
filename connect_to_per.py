@@ -18,6 +18,7 @@ def open_session_closed_data():
     df = df.apply(lambda x: x.str.strip())
     df['date'] = df.full_day + " " + df.end_time
     df =  df[['teacher_name','date','completed_sessions']]
+    print (df)
 
     return df
 
