@@ -89,12 +89,15 @@ for team in team_org:
 
 
     split_sheet_by_days(wb, skip_days, end_day_indicator)
+    wb.save('testing.xlsx')
     call_create_tables(wb)
     checks = {'Night Check': False, 'Day Check': False}
     checks = define_blocks(wb, checks, scores)
+    wb.save('testing2.xlsx')
     df = checks[-1]
     checks = checks[0]
     data_library = find_non_empty_tables(wb, df)
+    wb.save('testing3.xlsx')
     create_summary_page(wb, data_library, checks)
     wb.save(lead_name+'_leadbook.xlsx')
     if lead_name =='All':

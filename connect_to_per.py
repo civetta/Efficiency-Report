@@ -1,6 +1,7 @@
 import urllib.request, urllib.error, urllib.parse
 import pandas as pd
 import datetime
+from datetime import datetime
 from datetime import timedelta
 import pyodbc
 
@@ -18,7 +19,7 @@ def open_session_closed_data():
     df = df.apply(lambda x: x.str.strip())
     df['date'] = df.full_day + " " + df.end_time
     df =  df[['teacher_name','date','completed_sessions']]
-    print (df)
+
 
     return df
 
@@ -42,9 +43,10 @@ def pivot_df(df):
 
 def find_6min_intervals(df, ssmax):
     #Finding average SSMAX for every 6 minute time period, using the date columns as ranges.
-
+    print (ssmax.dtypes)
     list_of_times =  df.index.values
     ssmax_cols = pd.DataFrame({'date': [list_of_times[0]],'*SSMax': [0]})
+
     timestamp_loc = 0
     while timestamp_loc < len(list_of_times)-1:
         mask = (ssmax['Per_minute'] > list_of_times[timestamp_loc]) & (ssmax['Per_minute'] <= list_of_times[timestamp_loc+1])
@@ -59,7 +61,7 @@ def calculate_mean_ssmax(df3, range1):
     if len(df3.index) != 0:
         if df3.index.values[0] == range1:
             df3 = df3.iloc[1:]
-        tab = df3['SS_Max_5'].mean()
+        tab = df3['ssmax'].mean()
         tab = round(float(tab),2)
     else:
         tab = 0
@@ -100,17 +102,22 @@ def get_ssmax(start_date, end_date):
     WHERE Per_Minute between '"""+start_date+"' and '"+end_date+"""' order by Per_Minute desc;"""
     df = pd.read_sql_query(sql, conn)
     df = df[['SS_Max_5','Per_minute']]
+    print (df)
     return df
 
 
 def get_inputs(start_date, end_date):
-    ssmax = get_ssmax(start_date, end_date)
+    #ssmax = get_ssmax(start_date, end_date)
+    ssmax = pd.read_csv('fallsource.csv')
+    ssmax = ssmax[['ssmax','Per_minute']]
+    
+    ssmax['Per_minute'] = ssmax.Per_minute.apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+    ssmax['Per_minute'] = ssmax.Per_minute.apply(lambda x: datetime.strftime(x, '%Y-%m-%d %H:%M:%S'))
+    print (ssmax)
     df = open_session_closed_data()
     df = pivot_df(df)
     ssmax_cols = find_6min_intervals(df, ssmax)
-    print (ssmax_cols)
     result = pd.concat([df, ssmax_cols], axis=1, sort=False)
-    print (result)
     result.index = result.index.map(lambda x: x.strftime('%m/%d/%y %a %I:%M %p'))
     all_columns = ['*SSMax', 'Laura Gardiner',  'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good',  
 'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly-Anne Heyden', 'Kimberly Stanek', 'Michele Irwin', 'Nancy Polhemus', 'Juventino Mireles',  
