@@ -33,4 +33,4 @@ FROM complete
 WHERE Per_Minute between """+start_date+ " and "+end_date+"""
  order by Per_Minute desc;"""
 df = pd.read_sql_query(sql, conn)
-print df
+return df
