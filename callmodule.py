@@ -47,18 +47,18 @@ debug = True
 
 ##Do df[[teachername1,teachername2,teachername3]]
 ##Then set teachername1 as leadname
-team_org = [[ 'Laura Gardiner', '*SSMax', 'Laura Gardiner', 'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good'],
-    ['Rachel Adams','*SSMax','Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly-Anne Heyden', 'Kimberly Stanek', 'Michele Irwin', 'Nancy Polhemus', 'Juventino Mireles'],
-    ['Melissa Cox','*SSMax', 'Melissa Cox','Andrew Lowe', 'Emily McKibben', 'Erica DeCosta', 'Erin Hrncir', 'Erin Spiker', 'Jennifer Talaski', 'Julie Horne', 'Lisa Duran', 'Preston Tirey'],
-    ['Sara Watkins','*SSMax','Sara Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angela Miller', 'Bill Hubert', 'Donita Spencer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romana', 'Veronica Alvarez', 'Wendy Bowser'],
-    ['Kristin Donnelly','*SSMax','Kristin Donnelly', 'Carol Kish', 'Erica Basilone', 'Euna Pin', 'Hannah Beus', 'Jenni Alexander', 'Jessica Throolin', 'Natasha Andorful', 'Nicole Knisely', 'Shannon Stout'],
-    ['Gabriela Torres','*SSMax','Gabriela Torres', 'Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Kathryn Montano', 'Karen Henderson', 'Lynae Shepp', 'Johana Miller', 'Meaghan Wright', 'Veronica Wyatt'],
+team_org =  [[ 'Laura Gardiner', '*SSMax', 'Laura Gardiner', 'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good'],
+    ['Rachel Adams','*SSMax','Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Nancy Polhemus', 'Juventino Mireles'],
+    ['Melissa Cox','*SSMax', 'Melissa Cox','Andre Lawe', 'Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Erin Spilker', 'Jennifer Talaski', 'Julie Horner', 'Lisa Duran', 'Preston Tirey'],
+    ['Sara  Watkins','*SSMax','Sara  Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angel Miller', 'Bill Hubert', 'Donita Farmer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romano', 'Veronica Alvarez', 'Wendy Bowser'],
+    ['Kristin Donnelly','*SSMax','Kristin Donnelly', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Hannah Beus', 'Jenni Alexander', 'Jessica Throolin', 'Natasha Andorful', 'Nicole Knisely', 'Shannon Stout'],
+    ['Gabriela Torres','*SSMax','Gabriela Torres', 'Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Kathryn Montano', 'Karen Henderson', 'Lynae Shepp', 'Meaghan Wright', 'Veraunica Wyatt'],
    ['All','*SSMax', 'Laura Gardiner',  'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good',  
-'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly-Anne Heyden', 'Kimberly Stanek', 'Michele Irwin', 'Nancy Polhemus', 'Juventino Mireles',  
-'Melissa Cox', 'Andrew Lowe', 'Emily McKibben', 'Erica DeCosta', 'Erin Hrncir', 'Erin Spiker', 'Jennifer Talaski', 'Julie Horne', 'Lisa Duran', 'Preston Tirey',   
-'Sara Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angela Miller', 'Bill Hubert', 'Donita Spencer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romana', 'Veronica Alvarez', 'Wendy Bowser', 
-'Kristin Donnelly', 'Carol Kish', 'Erica Basilone', 'Euna Pin', 'Hannah Beus', 'Jenni Alexander', 'Jessica Throolin', 'Natasha Andorful', 'Nicole Knisely', 'Shannon Stout', 
-'Gabriela Torres', 'Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Kathryn Montano', 'Karen Henderson', 'Lynae Shepp', 'Johana Miller', 'Meaghan Wright', 'Veronica Wyatt']]
+'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Nancy Polhemus', 'Juventino Mireles',  
+'Melissa Cox', 'Andre Lawe', 'Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Erin Spilker', 'Jennifer Talaski', 'Julie Horner', 'Lisa Duran', 'Preston Tirey',   
+'Sara  Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angel Miller', 'Bill Hubert', 'Donita Farmer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romano', 'Veronica Alvarez', 'Wendy Bowser', 
+'Kristin Donnelly', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Hannah Beus', 'Jenni Alexander', 'Jessica Throolin', 'Natasha Andorful', 'Nicole Knisely', 'Shannon Stout', 
+'Gabriela Torres', 'Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Kathryn Montano', 'Karen Henderson', 'Lynae Shepp', 'Meaghan Wright', 'Veraunica Wyatt']]
 
 lead_name = "All"
 start_date ='2019-09-09'

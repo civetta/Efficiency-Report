@@ -52,12 +52,12 @@ def create_workbook(df,save_date,debug):
 
 
 def find_team(teacher):
-    team_org ={'Laura Gardiner':[ 'Laura Gardiner', 'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good'],
-    'Rachel Adams':['Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly-Anne Heyden', 'Kimberly Stanek', 'Michele Irwin', 'Nancy Polhemus', 'Juventino Mireles'],
-    'Melissa Cox':[ 'Melissa Cox','Andrew Lowe', 'Emily McKibben', 'Erica DeCosta', 'Erin Hrncir', 'Erin Spiker', 'Jennifer Talaski', 'Julie Horne', 'Lisa Duran', 'Preston Tirey'],
-    'Sara Watkins':['Sara Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angela Miller', 'Bill Hubert', 'Donita Spencer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romana', 'Veronica Alvarez', 'Wendy Bowser'],
-    'Kristin Donnelly':['Kristin Donnelly', 'Carol Kish', 'Erica Basilone', 'Euna Pin', 'Hannah Beus', 'Jenni Alexander', 'Jessica Throolin', 'Natasha Andorful', 'Nicole Knisely', 'Shannon Stout'],
-    'Gabriela Torres':['Gabriela Torres', 'Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Kathryn Montano', 'Karen Henderson', 'Lynae Shepp', 'Johana Miller', 'Meaghan Wright', 'Veronica Wyatt']}
+team_org = { 'Laura Gardiner':[ 'Laura Gardiner', 'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good'],
+    'Rachel Adams':['Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Nancy Polhemus', 'Juventino Mireles'],
+    'Melissa Cox':[ 'Melissa Cox','Andre Lawe', 'Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Erin Spilker', 'Jennifer Talaski', 'Julie Horner', 'Lisa Duran', 'Preston Tirey'],
+    'Sara  Watkins':['Sara  Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angel Miller', 'Bill Hubert', 'Donita Farmer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romano', 'Veronica Alvarez', 'Wendy Bowser'],
+    'Kristin Donnelly':['Kristin Donnelly', 'Carol Kish', 'Erica Basilone', 'Euna Pineda', 'Hannah Beus', 'Jenni Alexander', 'Jessica Throolin', 'Natasha Andorful', 'Nicole Knisely', 'Shannon Stout'],
+    'Gabriela Torres':['Gabriela Torres', 'Amy Stayduhar', 'Audrey Rogers', 'Cheri Shively', 'Kathryn Montano', 'Karen Henderson', 'Lynae Shepp', 'Meaghan Wright', 'Veraunica Wyatt']}
     for team_lead, teams in team_org.items():
         if teacher in teams:
             names = team_lead.split(" ")
