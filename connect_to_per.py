@@ -30,7 +30,7 @@ def pivot_df(df):
     df = df.reset_index(drop=False)
     #IDEA: Find first day, then just replace datetime with 7:00AM and fill in columns with 0. Then asfeq will deal with rest.
     #Notes: date = datetime.strptime('26 Sep 2012', '%d %b %Y').replace(hour=7)
-    df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, '%m/%d/%y %I:%M %p'))
+    df['date'] = df.date.apply(lambda x: datetime.strptime(x, '%m/%d/%y %I:%M %p'))
     df = df.set_index('date', drop=True)
     df = df.sort_index()
     cut_date =  df.first_valid_index().replace(hour=7, minute=0)
@@ -102,24 +102,22 @@ def get_ssmax(start_date, end_date):
     WHERE Per_Minute between '"""+start_date+"' and '"+end_date+"""' order by Per_Minute desc;"""
     df = pd.read_sql_query(sql, conn)
     df = df[['SS_Max_5','Per_minute']]
-    print (df)
     return df
 
 
 def get_inputs(start_date, end_date):
-    #ssmax = get_ssmax(start_date, end_date)
-    ssmax = pd.read_csv('fallsource.csv')
-    ssmax = ssmax[['ssmax','Per_minute']]
-    
-    ssmax['Per_minute'] = ssmax.Per_minute.apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+    ssmax = get_ssmax(start_date, end_date)
     ssmax['Per_minute'] = ssmax.Per_minute.apply(lambda x: datetime.strftime(x, '%Y-%m-%d %H:%M:%S'))
+    ssmax['Per_minute'] = ssmax.Per_minute.apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
     print (ssmax)
     df = open_session_closed_data()
     df = pivot_df(df)
     ssmax_cols = find_6min_intervals(df, ssmax)
+    ssmax_cols.to_csv('ss.csv')
+    df.to_csv('sdata.csv')
     result = pd.concat([df, ssmax_cols], axis=1, sort=False)
     result.index = result.index.map(lambda x: x.strftime('%m/%d/%y %a %I:%M %p'))
-   all_columns = ['*SSMax', 'Laura Gardiner',  'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good',  
+    all_columns = ['*SSMax', 'Laura Gardiner',  'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good',  
 'Rachel Adams', 'Clifton Dukes', 'Heather Chilleo', 'Hester Southerland', 'Kelly Richardson', 'Kimberly Stanek', 'Michele  Irwin', 'Nancy Polhemus', 'Juventino Mireles',  
 'Melissa Cox', 'Andre Lawe', 'Emily McKibben', 'Erica De Coste', 'Erin Hrncir', 'Erin Spilker', 'Jennifer Talaski', 'Julie Horner', 'Lisa Duran', 'Preston Tirey',   
 'Sara  Watkins', 'Alisa Lynch', 'Andrea Burkholder', 'Angel Miller', 'Bill Hubert', 'Donita Farmer', 'Jessica Connole', 'Laura Craig', 'Nicole Marsula', 'Rachel Romano', 'Veronica Alvarez', 'Wendy Bowser', 
