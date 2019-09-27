@@ -107,9 +107,6 @@ def get_ssmax(start_date, end_date):
 
 def get_inputs(start_date, end_date):
     ssmax = get_ssmax(start_date, end_date)
-    ssmax['Per_minute'] = ssmax.Per_minute.apply(lambda x: datetime.strftime(x, '%Y-%m-%d %H:%M:%S'))
-    ssmax['Per_minute'] = ssmax.Per_minute.apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
-    print (ssmax)
     df = open_session_closed_data()
     df = pivot_df(df)
     ssmax_cols = find_6min_intervals(df, ssmax)
