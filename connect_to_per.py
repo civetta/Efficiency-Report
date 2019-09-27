@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 from datetime import datetime
 from datetime import timedelta
+from connect_to_warehouse import make_connection
 import pyodbc
 
 
@@ -18,14 +19,15 @@ def open_session_closed_data():
     df = df.applymap(str)
     df = df.apply(lambda x: x.str.strip())
     df['date'] = df.full_day + " " + df.end_time
-    df =  df[['teacher_name','date','completed_sessions']]
+    df =  df[['name','date','completed_sessions']]
 
 
     return df
 
 def pivot_df(df):
     #Pivoting and filling na
-    df = df.pivot(index='date', columns='teacher_name', values = 'completed_sessions')
+    print (df)
+    df = df.pivot(index='date', columns='name', values = 'completed_sessions')
     df = df.fillna(0)
     df = df.reset_index(drop=False)
     #IDEA: Find first day, then just replace datetime with 7:00AM and fill in columns with 0. Then asfeq will deal with rest.
@@ -96,18 +98,19 @@ def get_ssmax(start_date, end_date):
     )
 
     SELECT Per_minute, Active_Teachers_Avg
-    , CASE WHEN SS_Max_Avg < 5 then SS_Max_Avg else 5 end as SS_Max_5
+    , CASE WHEN SS_Max_Avg < 5 then SS_Max_Avg else 5 end as ssmax
     , SS_Avg
     FROM complete
     WHERE Per_Minute between '"""+start_date+"' and '"+end_date+"""' order by Per_Minute desc;"""
     df = pd.read_sql_query(sql, conn)
-    df = df[['SS_Max_5','Per_minute']]
+    df = df[['ssmax','Per_minute']]
     return df
 
 
 def get_inputs(start_date, end_date):
     ssmax = get_ssmax(start_date, end_date)
-    df = open_session_closed_data()
+    df = make_connection(start_date, end_date)
+    df.to_csv('df.csv')
     df = pivot_df(df)
     ssmax_cols = find_6min_intervals(df, ssmax)
     ssmax_cols.to_csv('ss.csv')
