@@ -35,12 +35,30 @@ def pivot_df(df):
     df['date'] = df.date.apply(lambda x: datetime.strptime(x, '%m/%d/%y %I:%M %p'))
     df = df.set_index('date', drop=True)
     df = df.sort_index()
-    cut_date =  df.first_valid_index().replace(hour=7, minute=0)
-    mask = (df.index > cut_date)
-    df = df.loc[mask]
-    first_date = df.first_valid_index()
-    df = df.asfreq(freq='420S', fill_value=0)
+    print (df)
+    #Make copy of DF, make everything 0,
+    #then get first row, set time to 7:00 AM, take that first row and append it back to the original DF
+    #Then set new df to df[new_date:end], so get rid of any weird midnight numbers before 7AM
+    df2 = df
+    df2 = df2.iloc[0:4]
+    df2  = df2.replace(df2, 0)
+    cut_date =  df2.first_valid_index().replace(hour=7, minute=0)
+    as_list = df2.index.tolist()
+    as_list[0] = cut_date
+    df2.index = as_list
+    top_row  =df2.iloc[0]
+    df = df.append(top_row)
+    df = df.sort_index()
+    df = df.loc[cut_date:]
+    df.to_csv('after_new_head.csv')
+    #mask = (df.index > cut_date)
+    #df = df.loc[mask]
+    #first_date = df.first_valid_index()
+    df.to_csv('0_before_warehouse.csv')
+    df = df.resample('7T').sum()
+    df = df.fillna(0)
     df = df.apply(pd.to_numeric, errors='ignore')
+    df.to_csv('after_resample.csv')
     return df
 
 def find_6min_intervals(df, ssmax):

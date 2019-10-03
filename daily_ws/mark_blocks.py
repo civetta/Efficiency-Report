@@ -25,6 +25,7 @@ def define_blocks(wb, checks, scores):
         #Each column is it's own teacher.
         while col <= max_col:
             teacher_name = ws.cell(row=1, column=col).value
+
             full_time = ['Jeremy Shock', 'Jennifer Gilmore', 'Kay Plinta-Howard', 'Crystal Boris', 'Melissa Mitchell', 'Cassie Ulisse', 'Laura Gardiner', 'Michelle Amigh', 'Kimberly Stanek', 'Rachel Adams', 'Cristen Phillipsen', 'Heather Chilleo', 'Hester Southerland', 'Jamie Weston', 'Michele  Irwin', 'Juventino Mireles','Melissa Cox', 'Clifton Dukes', 'Kelly Richardson', 'Veronica Alvarez', 'Nancy Polhemus', 'Kimberly Abrams', 'Stacy Good', 'Caren Glowa', 'Kristin Donnelly']
             part_time = ['Salome Saenz', 'Alisa Lynch', 'Gabriela Torres', 'Wendy Bowser', 'Nicole Marsula', 'Donita Farmer', 'Andrea Burkholder', 'Laura Craig', 'Bill Hubert', 'Erin Hrncir', 'Angel Miller', 'Marcella Parks', 'Sara  Watkins', 'Shannon Stout', 'Lisa Duran', 'Erica Basilone', 'Carol Kish', 'Jennifer Talaski', 'Nicole Knisely', 'Johana Miller', 'Audrey Rogers', 'Cheri Shively', 'Amy Stayduhar', 'Dominique Huffman', 'Meaghan Wright', 'Kathryn Montano', 'Lynae Shepp', 'Anna Bell', 'Jessica Connole']         
             if teacher_name in full_time:
@@ -127,6 +128,7 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
     block_list = []
     block_df = pd.DataFrame(columns=['TeacherName','Block','Tab', 'TimeStamp'])
     teacher_name = ws.cell(row=1, column=column).value
+    
     for r in range(start, end):
         current_cell = ws.cell(row=r,  column=column)
         current_value = float(current_cell.value)
@@ -158,6 +160,10 @@ def bolder(ws, start, end, column, max_col, checks, scores,wb):
             
             row_in_block_df = pd.DataFrame({'TeacherName':[teacher_name],'Block':[current_value],'Tab':[Tabby_Cell],'TimeStamp': [time_cell],'ws':ws.title})
             block_df = block_df.append(row_in_block_df)
+    #if teacher_name =='Juventino Mireles':
+        #print ("TINO STARTS HERE")
+        #print (block_df)
+        #print ("")
     checks = organize_data(teacher_name,
         ws, start, end, column, block_list, tab_list, max_col, checks, scores,wb)
     block_df = mark_as_night(block_df)

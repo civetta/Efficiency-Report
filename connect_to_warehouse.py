@@ -11,8 +11,8 @@ def make_connection(start_date,end_date):
       month_name,
       stamp,
       Day_of_Week,
-        to_char(Datetime,'HH:MI AM') ||' - '|| to_char(Datetime+INTERVAL'7              minute','HH:MI AM')  as time_of_the_day,
-        to_char(Datetime+INTERVAL'7           minute','HH:MI AM')  as end_time,
+        to_char(Datetime,'HH:MI AM') ||' - '|| to_char(Datetime+INTERVAL'1              minute','HH:MI AM')  as time_of_the_day,
+        to_char(Datetime+INTERVAL'1           minute','HH:MI AM')  as end_time,
         Count(*) as Completed_Sessions,
         Team
     From
@@ -24,7 +24,7 @@ def make_connection(start_date,end_date):
     dates.date as stamp,      
     dates.day_of_week,
     times.hour,
-    TIMESTAMP 'epoch' + 7*60*floor(date_part('epoch', CAST(dates.date as date) + CAST(times.time as time))/(7*60))        *INTERVAL '1 second' as Datetime
+    TIMESTAMP 'epoch' + 60*floor(date_part('epoch', CAST(dates.date as date) + CAST(times.time as time))/(60))        *INTERVAL '1 second' as Datetime
     --Lauras's Team
     ,CASE WHEN teachers.id IN (
         152964	--Caren Glowa
@@ -138,7 +138,7 @@ def make_connection(start_date,end_date):
 
     select Name,Team, stamp, end_time, Completed_Sessions from Sub_Table"""
     df = pd.read_sql_query(sql,conn)
-    
+    df = daylights(df)
     df['date'] = df['stamp'] + " " + df['end_time']
     df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, "%m-%d-%Y %I:%M %p").strftime('%m/%d/%y %I:%M %p'))
     df =  df[['name','date','completed_sessions']]
@@ -146,3 +146,8 @@ def make_connection(start_date,end_date):
     return df
 
 
+def daylights(df):
+    df['end_time'] = df.end_time.apply(lambda x: datetime.datetime.strptime(x, "%I:%M %p"))
+    df['end_time'] = df['end_time'] - pd.Timedelta(hours=4)
+    df['end_time'] = df.end_time.apply(lambda x: x.strftime("%I:%M %p"))
+    return df
