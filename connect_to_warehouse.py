@@ -11,7 +11,7 @@ def make_connection(start_date,end_date):
       month_name,
       stamp,
       Day_of_Week,
-        to_char(Datetime,'HH:MI AM') ||' - '|| to_char(Datetime+INTERVAL'1              minute','HH:MI AM')  as time_of_the_day,
+        to_char(Datetime,'HH:MI AM') ||' - '|| to_char(Datetime,'HH:MI AM')  as time_of_the_day,
         to_char(Datetime+INTERVAL'1           minute','HH:MI AM')  as end_time,
         Count(*) as Completed_Sessions,
         Team
@@ -138,16 +138,27 @@ def make_connection(start_date,end_date):
 
     select Name,Team, stamp, end_time, Completed_Sessions from Sub_Table"""
     df = pd.read_sql_query(sql,conn)
-    df = daylights(df)
+    
     df['date'] = df['stamp'] + " " + df['end_time']
-    df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, "%m-%d-%Y %I:%M %p").strftime('%m/%d/%y %I:%M %p'))
+    
+    df['date'] = df.date.apply(lambda x: datetime.datetime.strptime(x, "%m-%d-%Y %I:%M %p"))
+    df = daylights(df)
+    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+    df = df[(df['date'] > start_date)]
+    df['date'] = df.date.apply(lambda x: x.strftime('%m/%d/%y %I:%M %p'))
     df =  df[['name','date','completed_sessions']]
     
     return df
 
 
-def daylights(df):
-    df['end_time'] = df.end_time.apply(lambda x: datetime.datetime.strptime(x, "%I:%M %p"))
-    df['end_time'] = df['end_time'] - pd.Timedelta(hours=4)
-    df['end_time'] = df.end_time.apply(lambda x: x.strftime("%I:%M %p"))
+def daylights(df):        
+    #df['date'] = df.end_time.apply(lambda x: datetime.datetime.strptime(x, "%I:%M %p"))
+    clifton_subset = df.name == 'Clifton Dukes'
+    clifton = df[clifton_subset]
+    df.to_csv('0.csv')
+    df['date'] = df['date'] - pd.Timedelta(hours=4)
+    clifton_subset = df.name == 'Clifton Dukes'
+    clifton = df[clifton_subset]
+    df.to_csv('1.csv')
+    #df['date'] = df.end_time.apply(lambda x: x.strftime("%I:%M %p"))
     return df

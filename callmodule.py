@@ -55,13 +55,13 @@ skip_days = []
 scores = {"Good Day Score": float(.90), "Upper Bound": float(1.25),
 'Good Night Score':float(.70)}
 #Output Filename that saves file locally. Usually used when testing.
-save_date = "04-15-19"
+save_date = "09-30-19-Warehouse"
 #Used to indicate a end of day for split day function.
 #You will have to write a script to figure out END OF DAY
 end_day_indicator = '12:54 AM'
 debug = True
-start_date ='2019-04-15'
-end_date = '2019-04-19'
+start_date ='2019-09-30'
+end_date = '2019-10-05'
 week_df = get_inputs(start_date, end_date)
 week_df = week_df.sort_index(axis=1)
 week_df.to_csv('testing.csv')

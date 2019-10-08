@@ -50,15 +50,12 @@ def pivot_df(df):
     df = df.append(top_row)
     df = df.sort_index()
     df = df.loc[cut_date:]
-    df.to_csv('after_new_head.csv')
     #mask = (df.index > cut_date)
     #df = df.loc[mask]
     #first_date = df.first_valid_index()
-    df.to_csv('0_before_warehouse.csv')
     df = df.resample('7T').sum()
     df = df.fillna(0)
     df = df.apply(pd.to_numeric, errors='ignore')
-    df.to_csv('after_resample.csv')
     return df
 
 def find_6min_intervals(df, ssmax):
@@ -102,7 +99,7 @@ def get_ssmax(start_date, end_date):
     AVG(STUDENTS_QUEUED) as Students_in_Queue_Avg,
     CAST(ROUND(AVG(AVG_SESSIONS_PER_TEACHER),2) AS float(1)) as SS_Avg,
     CAST(ROUND(AVG(MAX_SESSIONS_PER_TEACHER),2) AS float(1)) as SS_Max_Avg
-    FROM LIVE_TEACHING_ARCHIVE
+    FROM LIVE_TEACHING_ARCHIVE_2019
     WHERE
     DATEPART(dw,MEASUREMENT_DATE) BETWEEN 2 AND 6
     AND DATEPART(dw,UPLOAD_DATE) BETWEEN 3 AND 7
@@ -128,11 +125,9 @@ def get_ssmax(start_date, end_date):
 def get_inputs(start_date, end_date):
     ssmax = get_ssmax(start_date, end_date)
     df = make_connection(start_date, end_date)
-    df.to_csv('df.csv')
     df = pivot_df(df)
+    df.to_csv('raw.csv')
     ssmax_cols = find_6min_intervals(df, ssmax)
-    ssmax_cols.to_csv('ss.csv')
-    df.to_csv('sdata.csv')
     result = pd.concat([df, ssmax_cols], axis=1, sort=False)
     result.index = result.index.map(lambda x: x.strftime('%m/%d/%y %a %I:%M %p'))
     all_columns = ['*SSMax', 'Laura Gardiner',  'Caren Glowa', 'Crystal Boris', 'Jamie Weston', 'Kay Plinta-Howard', 'Marcella Parks', 'Melissa Mitchell', 'Michelle Amigh', 'Stacy Good',  
